@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
 
 import '../../../data/datasources/my_storage.dart';
-import '../../../data/models/my_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,6 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state.loadState == LoadState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  if (state.list.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "Empty",
+                        style: TextStyle(fontSize: 30, color: Colors.black),
+                      ),
+                    );
+                  }
                   return ConstrainedBox(
                     constraints:
                         BoxConstraints(minHeight: constraints.maxHeight),
@@ -69,10 +76,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) {
                                 final item = state.list[index];
-                                return expanseItem(
-                                  Icons.add,
-                                  item.title.isEmpty ? item.type : item.title,
-                                  item.number,
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      'detail',
+                                      arguments: item,
+                                    ).whenComplete(
+                                      () async => await cubit.refreshData(),
+                                    );
+                                  },
+                                  child: expanseItem(
+                                    Icons.add,
+                                    item.title.isEmpty ? item.type : item.title,
+                                    item.number,
+                                  ),
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -94,7 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                showAddNoteDialog(blocContext);
+                Navigator.pushNamed(context, '/add').whenComplete(
+                  () async => await cubit.refreshData(),
+                );
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
@@ -149,120 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  void showAddNoteDialog(BuildContext ctx) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).cardColor,
-      builder: (context) {
-        return BlocProvider.value(
-          value: BlocProvider.of<HomeCubit>(ctx),
-          child: BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        controller: titleController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: "Title",
-                          labelStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.grey, width: 0.8),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.blue, width: 0.8),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        controller: numberController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: "Number",
-                          labelStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.grey, width: 0.8),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.blue, width: 0.8),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      InkWell(
-                        onTap: () async {
-                          final title = titleController.text.toString().trim();
-                          final number =
-                              numberController.text.toString().trim();
-
-                          await cubit.addData(ExpenseModel(
-                              title: title,
-                              description: "description",
-                              number: int.tryParse(number) ?? 0,
-                              type: "",
-                              createdTime: DateTime.now(),
-                              photo: ""));
-                          await cubit.refreshData();
-
-                          numberController.clear();
-                          titleController.clear();
-
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Save",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
+import 'package:money_manager_clone/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
           child: child ?? Container(),
         );
       },
+      onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
       home: const SplashScreen(),
     );
   }

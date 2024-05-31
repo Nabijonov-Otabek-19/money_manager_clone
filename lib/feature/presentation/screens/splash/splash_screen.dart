@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager_clone/feature/presentation/screens/main/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,11 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigate() async {
     await Future.delayed(const Duration(seconds: 2));
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ));
+    Navigator.pushReplacementNamed(context, '/main');
   }
 
   @override

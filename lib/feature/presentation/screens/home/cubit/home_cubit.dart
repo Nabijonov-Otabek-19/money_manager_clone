@@ -16,13 +16,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> refreshData() async {
     emit(state.copyWith(loadState: LoadState.loading));
 
-    final data = await storage.readAllNotes();
+    final List<ExpenseModel> data = await storage.readAllNotes();
     emit(state.copyWith(list: data));
 
     emit(state.copyWith(loadState: LoadState.loaded));
-  }
-
-  Future<void> addData(ExpenseModel model) async {
-    await storage.create(model);
   }
 }
