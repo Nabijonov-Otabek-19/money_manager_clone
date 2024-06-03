@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../themes/fonts.dart';
+
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
 
@@ -14,11 +16,11 @@ class _ReportScreenState extends State<ReportScreen> {
       appBar: AppBar(
         title: const Text("Reports"),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
           child: Text(
             "Report screen",
-            style: TextStyle(fontSize: 24),
+            style: pregular.copyWith(fontSize: 24),
           ),
         ),
       ),

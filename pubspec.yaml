@@ -21,8 +21,6 @@ dependencies:
   path: ^1.9.0
 
 
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -37,3 +35,24 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+
+  fonts:
+    - family: interbold
+      fonts:
+        - asset: assets/fonts/Inter-Bold.ttf
+          
+    - family: intermedium
+      fonts:
+        - asset: assets/fonts/Inter-Medium.ttf
+
+    - family: interregular
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+
+    - family: intersemibold
+      fonts:
+        - asset: assets/fonts/Inter-SemiBold.ttf
+
+    - family: interlight
+      fonts:
+        - asset: assets/fonts/Inter-Light.ttf

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
 import 'package:money_manager_clone/routes.dart';
 
+import 'feature/presentation/themes/theme.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -58,14 +60,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Money manager clone',
-      theme: ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.orangeAccent,
-          titleTextStyle: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-      ),
+      themeMode: ThemeMode.light,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(

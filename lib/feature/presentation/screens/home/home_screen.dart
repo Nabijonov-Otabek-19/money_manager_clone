@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../../data/datasources/my_storage.dart';
 
@@ -47,10 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state.list.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         "Empty",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
+                        style: pmedium.copyWith(
+                          fontSize: 30,
+                          color: Colors.black,
+                        ),
                       ),
                     );
                   }
@@ -61,11 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
                               "Expenses",
-                              style: TextStyle(
+                              style: pmedium.copyWith(
                                 fontSize: 20,
                                 color: Colors.black,
                               ),
@@ -144,7 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 6,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -160,13 +167,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 8),
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 14, color: Colors.black),
                 ),
               ],
             ),
             Text(
               expense.toString(),
-              style: const TextStyle(fontSize: 14, color: Colors.black),
+              style: pmedium.copyWith(fontSize: 14, color: Colors.black),
             ),
           ],
         ),

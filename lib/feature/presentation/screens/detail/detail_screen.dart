@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../themes/fonts.dart';
+
 class DetailScreen extends StatefulWidget {
   final ExpenseModel model;
 
@@ -17,7 +19,6 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details"),
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -39,7 +40,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Text(
                   widget.model.title,
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
@@ -47,13 +48,13 @@ class _DetailScreenState extends State<DetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Type",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                 ),
                 Text(
                   widget.model.type,
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
@@ -61,13 +62,13 @@ class _DetailScreenState extends State<DetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Amount",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                 ),
                 Text(
                   widget.model.number.toString(),
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
@@ -75,13 +76,13 @@ class _DetailScreenState extends State<DetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Date",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                 ),
                 Text(
                   convertDateTime(widget.model.createdTime),
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
@@ -89,19 +90,19 @@ class _DetailScreenState extends State<DetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Note",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                 ),
                 Text(
                   widget.model.note,
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+                  style: pregular.copyWith(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
             const Spacer(),
             const Divider(
-              height: 1,
+              height: 8,
               thickness: 1,
               color: Colors.black12,
             ),
@@ -112,20 +113,27 @@ class _DetailScreenState extends State<DetailScreen> {
                     onPressed: () {
                       // Edit model
                     },
-                    child: const Text(
+                    child: Text(
                       "Edit",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: TextButton(
                     onPressed: () {
                       // Delete model
                     },
-                    child: const Text(
+                    child: Text(
                       "Delete",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),

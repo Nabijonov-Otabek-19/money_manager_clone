@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../themes/colors.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -22,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.orangeAccent,
+      color: AppColors.orange,
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height,
       child: const Center(

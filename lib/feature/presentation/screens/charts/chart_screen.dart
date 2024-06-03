@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../themes/fonts.dart';
+
 class ChartScreen extends StatefulWidget {
   const ChartScreen({super.key});
 
@@ -14,11 +16,11 @@ class _ChartScreenState extends State<ChartScreen> {
       appBar: AppBar(
         title: const Text("Chart"),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
           child: Text(
             "Chart screen",
-            style: TextStyle(fontSize: 24),
+            style: pregular.copyWith(fontSize: 24),
           ),
         ),
       ),

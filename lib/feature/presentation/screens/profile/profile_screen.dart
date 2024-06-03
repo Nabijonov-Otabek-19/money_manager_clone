@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,11 +15,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text("Profile"),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
           child: Text(
             "Profile screen",
-            style: TextStyle(fontSize: 24),
+            style: pregular.copyWith(fontSize: 24),
           ),
         ),
       ),

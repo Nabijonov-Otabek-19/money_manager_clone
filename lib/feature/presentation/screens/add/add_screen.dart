@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_manager_clone/feature/presentation/screens/add/cubit/add_cubit.dart';
 
 import '../../../data/models/my_model.dart';
+import '../../themes/fonts.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -36,9 +37,9 @@ class _AddScreenState extends State<AddScreen> {
               centerTitle: true,
               leading: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text(
+                child: Text(
                   "Cancel",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: pregular.copyWith(color: Colors.black, fontSize: 16),
                 ),
               ),
               leadingWidth: 80,
@@ -62,7 +63,7 @@ class _AddScreenState extends State<AddScreen> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   labelText: "Title",
-                                  labelStyle: const TextStyle(
+                                  labelStyle: pregular.copyWith(
                                     fontSize: 14,
                                     color: Colors.grey,
                                   ),
@@ -85,7 +86,7 @@ class _AddScreenState extends State<AddScreen> {
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   labelText: "Number",
-                                  labelStyle: const TextStyle(
+                                  labelStyle: pregular.copyWith(
                                     fontSize: 14,
                                     color: Colors.grey,
                                   ),
@@ -130,11 +131,13 @@ class _AddScreenState extends State<AddScreen> {
                                     color: Colors.blue,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       "Save",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
+                                      style: pregular.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
                                 ),
