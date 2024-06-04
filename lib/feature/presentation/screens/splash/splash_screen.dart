@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 
 import '../../themes/colors.dart';
 
@@ -27,10 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
       color: AppColors.orange,
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height,
-      child: const Center(
-        child: Icon(
-          Icons.monetization_on_outlined,
-          size: 100,
+      child: Center(
+        child: Image.asset(
+          'wallet'.pngIcon,
+          width: 120,
+          height: 120,
         ),
       ),
     );
