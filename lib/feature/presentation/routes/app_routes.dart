@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
-import 'feature/presentation/screens/screens.dart';
+import '../screens/screens.dart';
 
 class RouteManager {
   static generateRoute(RouteSettings settings) {

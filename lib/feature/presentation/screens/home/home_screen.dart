@@ -53,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         "Empty",
                         style: pmedium.copyWith(
                           fontSize: 30,
-                          color: Colors.black,
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
                         ),
                       ),
                     );
@@ -71,7 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               "Expenses",
                               style: pmedium.copyWith(
                                 fontSize: 20,
-                                color: Colors.black,
+                                color: Theme.of(context)
+                                    .appBarTheme
+                                    .titleTextStyle
+                                    ?.color,
                               ),
                             ),
                           ),
@@ -135,18 +141,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget expanseItem(IconData icon, String title, int expense) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
+    return Card(
+      elevation: 2,
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
@@ -167,13 +165,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 8),
                 Text(
                   title,
-                  style: pregular.copyWith(fontSize: 14, color: Colors.black),
+                  style: pregular.copyWith(
+                    fontSize: 14,
+                    color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                  ),
                 ),
               ],
             ),
             Text(
               expense.toString(),
-              style: pmedium.copyWith(fontSize: 14, color: Colors.black),
+              style: pmedium.copyWith(
+                fontSize: 14,
+                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+              ),
             ),
           ],
         ),

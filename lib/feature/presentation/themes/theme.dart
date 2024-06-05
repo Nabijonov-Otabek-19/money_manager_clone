@@ -8,6 +8,7 @@ class AppThemes {
   static final lightTheme = ThemeData(
     useMaterial3: true,
     primaryColor: AppColors.orange,
+    cardColor: Colors.white,
     textTheme: const TextTheme(),
     fontFamily: 'Poppinsregular',
     scaffoldBackgroundColor: AppColors.scaffoldBackLight,
@@ -22,6 +23,12 @@ class AppThemes {
       ),
       color: AppColors.orange,
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      elevation: 12,
+      selectedItemColor: Colors.orangeAccent,
+      unselectedItemColor: Colors.grey,
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: Colors.transparent,
@@ -34,6 +41,7 @@ class AppThemes {
   static final darkTheme = ThemeData(
     useMaterial3: true,
     primaryColor: AppColors.orange,
+    cardColor: Colors.grey.shade600,
     fontFamily: 'Poppinsregular',
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.scaffoldBackDark,
@@ -44,9 +52,15 @@ class AppThemes {
       elevation: 0,
       titleTextStyle: pregular.copyWith(
         color: AppColors.white,
-        fontSize: 15,
+        fontSize: 20,
       ),
       color: AppColors.orange,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.black,
+      elevation: 12,
+      selectedItemColor: Colors.orangeAccent,
+      unselectedItemColor: Colors.grey,
     ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,

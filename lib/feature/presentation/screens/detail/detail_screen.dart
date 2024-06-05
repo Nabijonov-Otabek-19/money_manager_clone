@@ -46,7 +46,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Text(
                     widget.model.title,
-                    style: pregular.copyWith(fontSize: 20, color: Colors.black),
+                    style: pregular.copyWith(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
                   ),
                 ],
               ),
@@ -60,7 +64,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Text(
                     widget.model.type,
-                    style: pregular.copyWith(fontSize: 20, color: Colors.black),
+                    style: pregular.copyWith(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
                   ),
                 ],
               ),
@@ -74,7 +82,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Text(
                     widget.model.number.toString(),
-                    style: pregular.copyWith(fontSize: 20, color: Colors.black),
+                    style: pregular.copyWith(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
                   ),
                 ],
               ),
@@ -88,7 +100,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Text(
                     convertDateTime(widget.model.createdTime),
-                    style: pregular.copyWith(fontSize: 20, color: Colors.black),
+                    style: pregular.copyWith(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
                   ),
                 ],
               ),
@@ -102,7 +118,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Text(
                     widget.model.note,
-                    style: pregular.copyWith(fontSize: 20, color: Colors.black),
+                    style: pregular.copyWith(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
                   ),
                 ],
               ),
@@ -110,7 +130,7 @@ class _DetailScreenState extends State<DetailScreen> {
               const Divider(
                 height: 8,
                 thickness: 1,
-                color: Colors.black12,
+                color: Colors.grey,
               ),
               Row(
                 children: [
@@ -124,7 +144,10 @@ class _DetailScreenState extends State<DetailScreen> {
                         "Edit",
                         style: pregular.copyWith(
                           fontSize: 16,
-                          color: Colors.black,
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
                         ),
                       ),
                     ),
@@ -140,7 +163,10 @@ class _DetailScreenState extends State<DetailScreen> {
                         "Delete",
                         style: pregular.copyWith(
                           fontSize: 16,
-                          color: Colors.black,
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
                         ),
                       ),
                     ),

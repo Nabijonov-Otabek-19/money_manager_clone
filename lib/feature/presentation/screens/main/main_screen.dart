@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/presentation/screens/charts/chart_screen.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/home_screen.dart';
 import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
@@ -31,6 +32,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => cubit,
       child: BlocBuilder<MainCubit, MainState>(
@@ -49,10 +52,12 @@ class _MainScreenState extends State<MainScreen> {
                 children: screens,
               ),
               bottomNavigationBar: BottomNavigationBar(
-                elevation: 12,
-                backgroundColor: Colors.white,
-                selectedItemColor: Colors.orangeAccent,
-                unselectedItemColor: Colors.grey,
+                elevation: theme.bottomNavigationBarTheme.elevation,
+                backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
+                selectedItemColor:
+                    theme.bottomNavigationBarTheme.selectedItemColor,
+                unselectedItemColor:
+                    theme.bottomNavigationBarTheme.unselectedItemColor,
                 type: BottomNavigationBarType.fixed,
                 currentIndex: state.selectedIndex,
                 onTap: (value) => cubit.onTappedScreen(value),

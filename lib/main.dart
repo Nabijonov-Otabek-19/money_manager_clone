@@ -1,9 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
-import 'package:money_manager_clone/routes.dart';
+import 'package:money_manager_clone/main_cubit/app_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/routes/app_routes.dart';
 
+import 'core/extensions/my_extensions.dart';
+import 'core/modules/app_module.dart';
+import 'core/modules/storage_module.dart';
+import 'feature/data/datasources/app_preference.dart';
 import 'feature/presentation/themes/theme.dart';
 
 Future<void> main() async {
@@ -13,6 +20,10 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  await Hive.initFlutter();
+  await StorageModule.initBoxes();
+  await initDI();
 
   // When some error occurs,
   // screen will show custom error widget, not red screen
@@ -55,24 +66,35 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Money manager clone',
-      themeMode: ThemeMode.light,
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0),
-          ),
-          child: child ?? Container(),
-        );
-      },
-      onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
-      home: const SplashScreen(),
+    final preferences = inject<AppPreferences>();
+
+    return BlocProvider(
+      create: (context) => AppCubit(
+        isDarkMode: preferences.theme == ThemeMode.dark,
+      ),
+      child: BlocBuilder<AppCubit, AppState>(
+        buildWhen: (pr, cr) => pr.isDarkMode != cr.isDarkMode,
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Money manager clone',
+            themeMode: preferences.theme,
+            theme: AppThemes.lightTheme,
+            darkTheme: AppThemes.darkTheme,
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: const TextScaler.linear(1.0),
+                ),
+                child: child ?? Container(),
+              );
+            },
+            onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
+            home: const SplashScreen(),
+          );
+        },
+      ),
     );
   }
 

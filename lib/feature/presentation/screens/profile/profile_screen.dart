@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
+import 'package:money_manager_clone/feature/data/datasources/app_preference.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
+import 'package:money_manager_clone/main_cubit/app_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,10 +14,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isDark = false;
   final GlobalKey _menuKeyTheme = GlobalKey();
 
   final List<String> list = ["Uzbek", "English", "Russian"];
+
+  final preferences = inject<AppPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 CircleAvatar(
                   backgroundColor: Colors.grey.shade200,
                   radius: 40,
-                  child: const Icon(Icons.person, size: 40),
+                  child: const Icon(
+                    Icons.person,
+                    size: 40,
+                    color: AppColors.orange,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -54,9 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildThemeChangeItem() {
     return Card(
       elevation: 4,
-      color: Colors.grey.shade200,
-      surfaceTintColor: Colors.grey.shade200,
-      shadowColor: Colors.grey.shade200,
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -71,21 +78,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               "Theme",
-              style: pmedium.copyWith(fontSize: 18),
-            ),
-            Switch(
-              value: isDark,
-              activeColor: Colors.deepOrangeAccent,
-              activeTrackColor: Colors.orangeAccent,
-              inactiveTrackColor: Colors.grey.shade300,
-              inactiveThumbColor: Colors.grey,
-              trackOutlineColor: WidgetStatePropertyAll(
-                isDark ? Colors.orange : Colors.grey,
+              style: pmedium.copyWith(
+                fontSize: 18,
+                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
               ),
-              onChanged: (value) {
-                setState(() {
-                  isDark = value;
-                });
+            ),
+            BlocBuilder<AppCubit, AppState>(
+              builder: (context, state) {
+                return Switch(
+                  value: state.isDarkMode,
+                  activeColor: Colors.deepOrangeAccent,
+                  activeTrackColor: Colors.orangeAccent,
+                  inactiveTrackColor: Colors.grey.shade300,
+                  inactiveThumbColor: Colors.grey,
+                  trackOutlineColor: WidgetStatePropertyAll(
+                    state.isDarkMode ? Colors.orange : Colors.grey,
+                  ),
+                  onChanged: (value) {
+                    BlocProvider.of<AppCubit>(context).updateTheme(value);
+                  },
+                );
               },
             ),
           ],
@@ -97,9 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildLanguageChangeItem() {
     return Card(
       elevation: 4,
-      color: Colors.grey.shade200,
-      surfaceTintColor: Colors.grey.shade200,
-      shadowColor: Colors.grey.shade200,
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -114,7 +124,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               "Language",
-              style: pmedium.copyWith(fontSize: 18),
+              style: pmedium.copyWith(
+                fontSize: 18,
+                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+              ),
             ),
             PopupMenuButton<String>(
               surfaceTintColor: AppColors.transparent,
@@ -127,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 "Light",
                 style: pregular.copyWith(
                   fontSize: 16,
-                  color: Colors.black,
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 ),
               ),
               itemBuilder: (context) {
