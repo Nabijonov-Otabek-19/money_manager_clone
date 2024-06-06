@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
 import 'package:money_manager_clone/main_cubit/app_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:money_manager_clone/feature/presentation/routes/app_routes.dart'
 import 'core/extensions/my_extensions.dart';
 import 'core/modules/app_module.dart';
 import 'core/modules/storage_module.dart';
+import 'core/translations/app_translation.dart';
 import 'feature/data/datasources/app_preference.dart';
 import 'feature/presentation/themes/theme.dart';
 
@@ -63,13 +65,18 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final preferences = inject<AppPreferences>();
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  final preferences = inject<AppPreferences>();
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AppCubit(
         isDarkMode: preferences.theme == ThemeMode.dark,
@@ -77,11 +84,14 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen: (pr, cr) => pr.isDarkMode != cr.isDarkMode,
         builder: (context, state) {
-          return MaterialApp(
+          return GetMaterialApp(
             title: 'Money manager clone',
             themeMode: preferences.theme,
             theme: AppThemes.lightTheme,
             darkTheme: AppThemes.darkTheme,
+            fallbackLocale: const Locale('en', 'EN'),
+            locale: Locale(preferences.lang!),
+            translations: AppTranslation(),
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(
@@ -96,6 +106,16 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    initTools(context);
+    super.didChangeDependencies();
+  }
+
+  void initTools(BuildContext context) async {
+    preferences.lang ??= "English";
   }
 
   Widget _unFocusWrapper(Widget? child) {

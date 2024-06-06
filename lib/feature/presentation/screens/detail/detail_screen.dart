@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_clone/feature/presentation/screens/detail/cubit/detail_cubit.dart';
@@ -59,7 +60,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Type",
+                    "Type".tr,
                     style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                   ),
                   Text(
@@ -77,7 +78,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Amount",
+                    "Amount".tr,
                     style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                   ),
                   Text(
@@ -95,7 +96,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Date",
+                    "Date".tr,
                     style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                   ),
                   Text(
@@ -113,7 +114,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Note",
+                    "Note".tr,
                     style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                   ),
                   Text(
@@ -141,7 +142,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         // Navigator.pushReplacementNamed(context, '/add');
                       },
                       child: Text(
-                        "Edit",
+                        "Edit".tr,
                         style: pregular.copyWith(
                           fontSize: 16,
                           color: Theme.of(context)
@@ -160,7 +161,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        "Delete",
+                        "Delete".tr,
                         style: pregular.copyWith(
                           fontSize: 16,
                           color: Theme.of(context)

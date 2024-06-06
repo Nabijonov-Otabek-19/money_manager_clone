@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (blocContext, state) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text("Home"),
+              title: Text("Home".tr),
             ),
             body: SafeArea(
               child: LayoutBuilder(
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state.list.isEmpty) {
                     return Center(
                       child: Text(
-                        "Empty",
+                        "Empty".tr,
                         style: pmedium.copyWith(
                           fontSize: 30,
                           color: Theme.of(context)
@@ -100,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: expanseItem(
                                     Icons.add,
-                                    item.title.isEmpty ? item.type : item.title,
+                                    item.note.isEmpty ? item.title : item.note,
                                     item.number,
                                   ),
                                 );

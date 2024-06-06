@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/datasources/app_preference.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
@@ -14,17 +15,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final GlobalKey _menuKeyTheme = GlobalKey();
-
-  final List<String> list = ["Uzbek", "English", "Russian"];
-
   final preferences = inject<AppPreferences>();
+  final GlobalKey _menuKeyLang = GlobalKey();
+  String currentLang = "";
+
+  final List<String> languages = ["Русский", "O'zbek", "English"];
+
+  Map<String, String> languageMap = {
+    "Русский": "ru",
+    "O'zbek": "uz",
+    "English": "en",
+  };
 
   @override
   Widget build(BuildContext context) {
+    if (Get.locale?.languageCode == 'ru') {
+      currentLang = languages[0];
+    } else if (Get.locale?.languageCode == 'uz') {
+      currentLang = languages[1];
+    } else {
+      currentLang = languages[2];
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile"),
+        title: Text("Profile".tr),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "Username",
+                  "Username".tr,
                   style: pmedium.copyWith(fontSize: 24),
                 ),
                 const SizedBox(height: 40),
@@ -77,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Theme",
+              "Theme".tr,
               style: pmedium.copyWith(
                 fontSize: 18,
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
@@ -123,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Language",
+              "Language".tr,
               style: pmedium.copyWith(
                 fontSize: 18,
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
@@ -131,20 +146,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             PopupMenuButton<String>(
               surfaceTintColor: AppColors.transparent,
-              key: _menuKeyTheme,
+              key: _menuKeyLang,
               color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
-                "Light",
+                currentLang,
                 style: pregular.copyWith(
                   fontSize: 16,
                   color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 ),
               ),
               itemBuilder: (context) {
-                return list.map((choice) {
+                return languages.map((choice) {
                   return PopupMenuItem(
                     value: choice,
                     child: Text(
@@ -155,7 +170,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }).toList();
               },
               onSelected: (value) {
-                //
+                String localeCode = languageMap[value] ?? "en";
+                Get.updateLocale(Locale(localeCode));
+                preferences.lang = value;
               },
             ),
           ],
