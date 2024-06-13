@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
-import 'package:money_manager_clone/main_cubit/app_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/routes/app_routes.dart';
 
 import 'core/extensions/my_extensions.dart';
@@ -77,34 +75,29 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppCubit(
-        isDarkMode: preferences.theme == ThemeMode.dark,
-      ),
-      child: BlocBuilder<AppCubit, AppState>(
-        buildWhen: (pr, cr) => pr.isDarkMode != cr.isDarkMode,
-        builder: (context, state) {
-          return GetMaterialApp(
-            title: 'Money manager clone',
-            themeMode: preferences.theme,
-            theme: AppThemes.lightTheme,
-            darkTheme: AppThemes.darkTheme,
-            fallbackLocale: const Locale('en', 'EN'),
-            locale: Locale(preferences.lang!),
-            translations: AppTranslation(),
-            builder: (context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  textScaler: const TextScaler.linear(1.0),
-                ),
-                child: child ?? Container(),
-              );
-            },
-            onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
-            home: const SplashScreen(),
-          );
-        },
-      ),
+    return ValueListenableBuilder(
+      valueListenable: preferences.themeListenable(),
+      builder: (context, value, child) {
+        return GetMaterialApp(
+          title: 'Money manager clone',
+          themeMode: preferences.theme,
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          fallbackLocale: const Locale('en', 'EN'),
+          locale: Locale(preferences.lang!),
+          translations: AppTranslation(),
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1.0),
+              ),
+              child: child ?? Container(),
+            );
+          },
+          onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 
@@ -116,13 +109,5 @@ class _MyAppState extends State<MyApp> {
 
   void initTools(BuildContext context) async {
     preferences.lang ??= "English";
-  }
-
-  Widget _unFocusWrapper(Widget? child) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: child,
-    );
   }
 }

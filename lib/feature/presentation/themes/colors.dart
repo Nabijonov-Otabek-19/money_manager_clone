@@ -9,4 +9,6 @@ class AppColors {
   static const scaffoldBackDark = Color(0xff121212);
 
   static const orange = Colors.orangeAccent;
+
+  static const grey = Colors.black12;
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   },
                                   child: expanseItem(
-                                    Icons.add,
+                                    item.icon,
                                     item.note.isEmpty ? item.title : item.note,
                                     item.number,
                                   ),
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget expanseItem(IconData icon, String title, int expense) {
+  Widget expanseItem(String icon, String title, int expense) {
     return Card(
       elevation: 2,
       color: Theme.of(context).cardColor,
@@ -152,27 +154,34 @@ class _HomeScreenState extends State<HomeScreen> {
           vertical: 6,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: ColoredBox(
-                    color: Colors.green.shade300,
-                    child: Icon(icon, size: 32),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: ColoredBox(
+                color: Colors.green.shade300,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    icon.svgIcon,
+                    width: 30,
+                    height: 30,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: pregular.copyWith(
-                    fontSize: 14,
-                    color: Theme.of(context).appBarTheme.titleTextStyle?.color,
-                  ),
-                ),
-              ],
+              ),
             ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: pregular.copyWith(
+                  fontSize: 14,
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            const SizedBox(width: 16),
             Text(
               expense.toString(),
               style: pmedium.copyWith(

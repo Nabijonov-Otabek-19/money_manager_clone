@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/datasources/app_preference.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
-import 'package:money_manager_clone/main_cubit/app_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -98,22 +96,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
               ),
             ),
-            BlocBuilder<AppCubit, AppState>(
-              builder: (context, state) {
-                return Switch(
-                  value: state.isDarkMode,
+             Switch(
+                  value: context.isDarkMode,
                   activeColor: Colors.deepOrangeAccent,
                   activeTrackColor: Colors.orangeAccent,
                   inactiveTrackColor: Colors.grey.shade300,
                   inactiveThumbColor: Colors.grey,
                   trackOutlineColor: WidgetStatePropertyAll(
-                    state.isDarkMode ? Colors.orange : Colors.grey,
+                    context.isDarkMode ? Colors.orange : Colors.grey,
                   ),
                   onChanged: (value) {
-                    BlocProvider.of<AppCubit>(context).updateTheme(value);
+                    preferences.changeTheme(value);
+                    //setState(() {});
                   },
-                );
-              },
+
             ),
           ],
         ),

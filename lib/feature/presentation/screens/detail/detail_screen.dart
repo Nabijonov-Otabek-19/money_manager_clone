@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_clone/feature/presentation/screens/detail/cubit/detail_cubit.dart';
@@ -39,10 +41,17 @@ class _DetailScreenState extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(80),
                     child: ColoredBox(
                       color: Colors.green.shade300,
-                      child: const Icon(Icons.add, size: 32),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SvgPicture.asset(
+                          widget.model.icon.svgIcon,
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
                     ),
                   ),
                   Text(
@@ -117,12 +126,42 @@ class _DetailScreenState extends State<DetailScreen> {
                     "Note".tr,
                     style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
                   ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      widget.model.note,
+                      style: pregular.copyWith(
+                        fontSize: 20,
+                        color:
+                            Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Text(
-                    widget.model.note,
-                    style: pregular.copyWith(
-                      fontSize: 20,
-                      color:
-                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    "Photo".tr,
+                    style: pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      widget.model.photo ?? "",
+                      style: pregular.copyWith(
+                        fontSize: 20,
+                        color:
+                        Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],

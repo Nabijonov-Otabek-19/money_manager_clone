@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class AppPreferences {
@@ -40,8 +41,14 @@ class AppPreferences {
 
   void handleThemeSelection(String value) {
     ThemeMode selectedTheme = _parseTheme(value.toLowerCase());
-    //Get.changeThemeMode(selectedTheme);
+    Get.changeThemeMode(selectedTheme);
     theme = selectedTheme; // Using the setter to save theme
+  }
+
+  void changeTheme(bool value) {
+    final selectedTheme = value ? ThemeMode.dark : ThemeMode.light;
+    Get.changeThemeMode(selectedTheme);
+    theme = selectedTheme;
   }
 }
 

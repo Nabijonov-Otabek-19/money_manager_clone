@@ -34,6 +34,7 @@ class ExpenseStorage {
 CREATE TABLE ${ExpenseFields.tableName} ( 
   ${ExpenseFields.id} $idType,
   ${ExpenseFields.title} $textType,
+  ${ExpenseFields.icon} $textType,
   ${ExpenseFields.type} $textType,
   ${ExpenseFields.note} $textType,
   ${ExpenseFields.number} $numberType,

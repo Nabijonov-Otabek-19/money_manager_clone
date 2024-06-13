@@ -3,6 +3,7 @@ class ExpenseFields {
 
   static const id = "id";
   static const title = "title";
+  static const icon = "icon";
   static const number = "number";
   static const type = "type";
   static const note = "note";
@@ -11,6 +12,6 @@ class ExpenseFields {
 
   static final List<String> values = [
     /// Add all fields
-    id, title, number, type, note, createdTime, photo,
+    id, title, icon, number, type, note, createdTime, photo,
   ];
 }

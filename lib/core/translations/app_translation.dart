@@ -15,6 +15,7 @@ class AppTranslation extends Translations {
           'Amount': 'Amount',
           'Date': 'Date',
           'Note': 'Note',
+          'Photo': 'Photo',
         },
         'ru_RU': {
           'Empty': 'Пустой',
@@ -28,6 +29,7 @@ class AppTranslation extends Translations {
           'Amount': 'Количество',
           'Date': 'Дата',
           'Note': 'Примечание',
+          'Photo': 'Фото',
         },
         'uz_UZ': {
           'Empty': 'Bo\'sh',
@@ -41,6 +43,7 @@ class AppTranslation extends Translations {
           'Amount': 'Qiymat',
           'Date': 'Sana',
           'Note': 'Eslatma',
+          'Photo': 'Surat',
         },
       };
 }
