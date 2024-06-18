@@ -71,7 +71,7 @@ CREATE TABLE ${ExpenseFields.tableName} (
   Future<List<ExpenseModel>> readAllNotes() async {
     final db = await instance.database;
 
-    const orderBy = '${ExpenseFields.createdTime} ASC';
+    const orderBy = '${ExpenseFields.createdTime} DESC';
     final result = await db.query(ExpenseFields.tableName, orderBy: orderBy);
 
     return result.map((json) => ExpenseModel.fromJson(json)).toList();

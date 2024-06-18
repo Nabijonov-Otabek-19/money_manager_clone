@@ -21,4 +21,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     emit(state.copyWith(loadState: LoadState.loaded));
   }
+
+  Future<void> deleteModel(int id) async {
+    await storage.delete(id);
+  }
 }

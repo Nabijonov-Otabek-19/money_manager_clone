@@ -19,7 +19,7 @@ class RouteManager {
         return PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 400),
           pageBuilder: (context, animation, secondaryAnimation) {
-            return const AddScreen();
+            return AddScreen(model: args as ExpenseModel?);
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
@@ -35,7 +35,7 @@ class RouteManager {
         return PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 400),
           pageBuilder: (context, animation, secondaryAnimation) {
-            return DetailScreen(model: args as ExpenseModel);
+            return DetailScreen(modelId: args as int);
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(

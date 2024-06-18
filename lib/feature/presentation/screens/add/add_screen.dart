@@ -9,7 +9,9 @@ import '../../../data/models/my_model.dart';
 import '../../themes/fonts.dart';
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({super.key});
+  final ExpenseModel? model;
+
+  const AddScreen({super.key, required this.model});
 
   @override
   State<AddScreen> createState() => _AddScreenState();
@@ -20,8 +22,9 @@ class _AddScreenState extends State<AddScreen> {
   TextEditingController amountController = TextEditingController();
 
   final cubit = AddCubit();
-
   int currentIndex = -1;
+  String type = "Expense";
+  bool isExpense = true;
 
   final titleList = [
     "Snack",
@@ -30,7 +33,6 @@ class _AddScreenState extends State<AddScreen> {
     "Beauty",
     "Transportation",
     "Education",
-    "Settings",
   ];
   final iconList = [
     "snack",
@@ -39,8 +41,31 @@ class _AddScreenState extends State<AddScreen> {
     "beauty",
     "transportation",
     "education",
-    "setting",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.model != null) {
+      noteController.text = widget.model!.note;
+      amountController.text = widget.model!.number.toString();
+      currentIndex = checkType(widget.model!.type);
+    }
+  }
+
+  int checkType(String type) {
+    Map<String, int> typeMap = {
+      "Snack": 0,
+      "Health": 1,
+      "Food": 2,
+      "Beauty": 3,
+      "Transportation": 4,
+      "Education": 5,
+      "Settings": 6,
+    };
+
+    return typeMap[type] ?? 0;
+  }
 
   @override
   void dispose() {
@@ -74,6 +99,98 @@ class _AddScreenState extends State<AddScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              splashColor: AppColors.transparent,
+                              highlightColor: AppColors.transparent,
+                              onTap: () {
+                                setState(() {
+                                  if (!isExpense) {
+                                    isExpense = true;
+                                    type = "Expense";
+                                  }
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColors.black,
+                                    width: 1,
+                                  ),
+                                  color: isExpense
+                                      ? AppColors.orange
+                                      : AppColors.white,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Expense",
+                                    style: pregular.copyWith(
+                                      fontSize: 12,
+                                      color: AppColors.black,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              splashColor: AppColors.transparent,
+                              highlightColor: AppColors.transparent,
+                              onTap: () {
+                                setState(() {
+                                  if (isExpense) {
+                                    isExpense = false;
+                                    type = "Income";
+                                  }
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColors.black,
+                                    width: 1,
+                                  ),
+                                  color: isExpense
+                                      ? AppColors.white
+                                      : AppColors.orange,
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Income",
+                                    style: pregular.copyWith(
+                                      fontSize: 12,
+                                      color: AppColors.black,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     Expanded(
                       child: GridView.builder(
                         itemCount: titleList.length,
@@ -105,7 +222,7 @@ class _AddScreenState extends State<AddScreen> {
                       controller: noteController,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        labelText: "Title",
+                        labelText: "Note",
                         labelStyle: pregular.copyWith(
                           fontSize: 14,
                           color: Colors.grey,
@@ -153,20 +270,35 @@ class _AddScreenState extends State<AddScreen> {
                         final number = amountController.text.toString().trim();
                         final title = titleList[currentIndex];
                         final icon = iconList[currentIndex];
-                        final type = "Expense";
 
-                        if (note.isNotEmpty &&
-                            number.isNotEmpty &&
-                            currentIndex != -1) {
-                          await cubit.addData(ExpenseModel(
-                            title: title,
-                            icon: icon,
-                            number: int.tryParse(number) ?? 0,
-                            type: type,
-                            note: note,
-                            createdTime: DateTime.now(),
-                            photo: "",
-                          ));
+                        if (widget.model == null) {
+                          // Add
+                          if (number.isNotEmpty && currentIndex != -1) {
+                            await cubit.addData(ExpenseModel(
+                              title: title,
+                              icon: icon,
+                              number: int.tryParse(number) ?? 0,
+                              type: type,
+                              note: note,
+                              createdTime: DateTime.now(),
+                              photo: "",
+                            ));
+                          }
+                        } else {
+                          // Edit
+                          if (number.isNotEmpty && currentIndex != -1) {
+                            await cubit.editModel(ExpenseModel(
+                              id: widget.model!.id,
+                              title: title,
+                              icon: icon,
+                              number: int.tryParse(number) ?? 0,
+                              type: type,
+                              note: note,
+                              //createdTime: DateTime.now(),
+                              createdTime: widget.model!.createdTime,
+                              photo: "",
+                            ));
+                          }
                         }
 
                         amountController.clear();
@@ -183,7 +315,7 @@ class _AddScreenState extends State<AddScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            "Save",
+                            widget.model == null ? "Save" : "Update",
                             style: pregular.copyWith(
                               color: Colors.white,
                               fontSize: 14,
