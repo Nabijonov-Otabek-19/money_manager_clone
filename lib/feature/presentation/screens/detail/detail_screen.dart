@@ -76,7 +76,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       Text(
                         state.model!.title,
                         style: pregular.copyWith(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Theme.of(context)
                               .appBarTheme
                               .titleTextStyle
@@ -91,13 +91,15 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         "Type".tr,
-                        style:
-                            pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                        style: pmedium.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                       ),
                       Text(
                         state.model!.type,
                         style: pregular.copyWith(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Theme.of(context)
                               .appBarTheme
                               .titleTextStyle
@@ -113,12 +115,12 @@ class _DetailScreenState extends State<DetailScreen> {
                       Text(
                         "Amount".tr,
                         style:
-                            pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
                       ),
                       Text(
-                        state.model!.number.toString(),
+                        separateBalance(state.model!.number.toString()),
                         style: pregular.copyWith(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Theme.of(context)
                               .appBarTheme
                               .titleTextStyle
@@ -134,12 +136,12 @@ class _DetailScreenState extends State<DetailScreen> {
                       Text(
                         "Date".tr,
                         style:
-                            pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
                       ),
                       Text(
                         convertDateTime(state.model!.createdTime),
                         style: pregular.copyWith(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Theme.of(context)
                               .appBarTheme
                               .titleTextStyle
@@ -155,14 +157,14 @@ class _DetailScreenState extends State<DetailScreen> {
                       Text(
                         "Note".tr,
                         style:
-                            pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           state.model!.note,
                           style: pregular.copyWith(
-                            fontSize: 20,
+                            fontSize: 18,
                             color: Theme.of(context)
                                 .appBarTheme
                                 .titleTextStyle
@@ -182,14 +184,14 @@ class _DetailScreenState extends State<DetailScreen> {
                       Text(
                         "Photo".tr,
                         style:
-                            pmedium.copyWith(fontSize: 20, color: Colors.grey),
+                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           state.model!.photo ?? "",
                           style: pregular.copyWith(
-                            fontSize: 20,
+                            fontSize: 18,
                             color: Theme.of(context)
                                 .appBarTheme
                                 .titleTextStyle

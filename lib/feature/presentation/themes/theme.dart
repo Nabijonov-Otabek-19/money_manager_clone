@@ -17,9 +17,9 @@ class AppThemes {
       iconTheme: const IconThemeData(color: AppColors.black),
       centerTitle: true,
       elevation: 0,
-      titleTextStyle: pregular.copyWith(
+      titleTextStyle: pmedium.copyWith(
         color: AppColors.black,
-        fontSize: 20,
+        fontSize: 16,
       ),
       color: AppColors.orange,
     ),
@@ -52,7 +52,7 @@ class AppThemes {
       elevation: 0,
       titleTextStyle: pregular.copyWith(
         color: AppColors.white,
-        fontSize: 20,
+        fontSize: 16,
       ),
       color: AppColors.orange,
     ),

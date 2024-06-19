@@ -34,6 +34,13 @@ class _AddScreenState extends State<AddScreen> {
     "Transportation",
     "Education",
   ];
+  final titleList2 = [
+    "Salary",
+    "Investment",
+    "Awards",
+    "Others",
+  ];
+
   final iconList = [
     "snack",
     "health",
@@ -42,6 +49,29 @@ class _AddScreenState extends State<AddScreen> {
     "transportation",
     "education",
   ];
+  final iconList2 = [
+    "salary",
+    "investment",
+    "awards",
+    "others",
+  ];
+
+  Map<String, int> expenseTypeMap = {
+    "Snack": 0,
+    "Health": 1,
+    "Food": 2,
+    "Beauty": 3,
+    "Transportation": 4,
+    "Education": 5,
+    "Settings": 6,
+  };
+
+  Map<String, int> incomeTypeMap = {
+    "Salary": 0,
+    "Investment": 1,
+    "Awards": 2,
+    "Others": 3,
+  };
 
   @override
   void initState() {
@@ -54,17 +84,11 @@ class _AddScreenState extends State<AddScreen> {
   }
 
   int checkType(String type) {
-    Map<String, int> typeMap = {
-      "Snack": 0,
-      "Health": 1,
-      "Food": 2,
-      "Beauty": 3,
-      "Transportation": 4,
-      "Education": 5,
-      "Settings": 6,
-    };
-
-    return typeMap[type] ?? 0;
+    if (type == "Expense") {
+      return expenseTypeMap[type] ?? 0;
+    } else {
+      return incomeTypeMap[type] ?? 0;
+    }
   }
 
   @override
@@ -80,257 +104,221 @@ class _AddScreenState extends State<AddScreen> {
       create: (context) => cubit,
       child: BlocBuilder<AddCubit, AddState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Add"),
-              centerTitle: true,
-              leading: TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  "Cancel",
-                  style: pregular.copyWith(color: Colors.black, fontSize: 16),
-                ),
-              ),
-              leadingWidth: 80,
-              //toolbarHeight: 100,
-            ),
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              splashColor: AppColors.transparent,
-                              highlightColor: AppColors.transparent,
-                              onTap: () {
-                                setState(() {
-                                  if (!isExpense) {
-                                    isExpense = true;
-                                    type = "Expense";
-                                  }
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColors.black,
-                                    width: 1,
-                                  ),
-                                  color: isExpense
-                                      ? AppColors.orange
-                                      : AppColors.white,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Expense",
-                                    style: pregular.copyWith(
-                                      fontSize: 12,
-                                      color: AppColors.black,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              splashColor: AppColors.transparent,
-                              highlightColor: AppColors.transparent,
-                              onTap: () {
-                                setState(() {
-                                  if (isExpense) {
-                                    isExpense = false;
-                                    type = "Income";
-                                  }
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColors.black,
-                                    width: 1,
-                                  ),
-                                  color: isExpense
-                                      ? AppColors.white
-                                      : AppColors.orange,
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Income",
-                                    style: pregular.copyWith(
-                                      fontSize: 12,
-                                      color: AppColors.black,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: GridView.builder(
-                        itemCount: titleList.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          final title = titleList[index];
-                          final icon = iconList[index];
-
-                          return GridTile(
-                            child: InkWell(
-                              splashColor: AppColors.transparent,
-                              onTap: () {
-                                currentIndex =
-                                    currentIndex != index ? index : -1;
-                                setState(() {});
-                              },
-                              child: _buildTypeItem(title, index, icon),
-                            ),
-                          );
-                        },
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      controller: noteController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        labelText: "Note",
-                        labelStyle: pregular.copyWith(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 0.8),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.blue, width: 0.8),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: "Number",
-                        labelStyle: pregular.copyWith(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 0.8),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.blue, width: 0.8),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    InkWell(
-                      onTap: () async {
-                        final note = noteController.text.toString().trim();
-                        final number = amountController.text.toString().trim();
-                        final title = titleList[currentIndex];
-                        final icon = iconList[currentIndex];
-
-                        if (widget.model == null) {
-                          // Add
-                          if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.addData(ExpenseModel(
-                              title: title,
-                              icon: icon,
-                              number: int.tryParse(number) ?? 0,
-                              type: type,
-                              note: note,
-                              createdTime: DateTime.now(),
-                              photo: "",
-                            ));
-                          }
-                        } else {
-                          // Edit
-                          if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.editModel(ExpenseModel(
-                              id: widget.model!.id,
-                              title: title,
-                              icon: icon,
-                              number: int.tryParse(number) ?? 0,
-                              type: type,
-                              note: note,
-                              //createdTime: DateTime.now(),
-                              createdTime: widget.model!.createdTime,
-                              photo: "",
-                            ));
-                          }
-                        }
-
-                        amountController.clear();
-                        noteController.clear();
-
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.model == null ? "Save" : "Update",
-                            style: pregular.copyWith(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text("Add"),
+                centerTitle: true,
+                bottom: TabBar(
+                  onTap: (value) {
+                    if (value == 0) {
+                      type = "Expense";
+                    } else {
+                      type = "Income";
+                    }
+                  },
+                  labelStyle: pregular.copyWith(
+                    fontSize: 14,
+                    color: AppColors.black,
+                  ),
+                  unselectedLabelStyle: pregular.copyWith(
+                    fontSize: 14,
+                    color: AppColors.black,
+                  ),
+                  tabAlignment: TabAlignment.fill,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.black, width: 1),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: AppColors.transparent,
+                  indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
+                  overlayColor:
+                      const WidgetStatePropertyAll(AppColors.transparent),
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 8,
+                  ),
+                  tabs: const [
+                    Tab(text: "Expense"),
+                    Tab(text: "Income"),
                   ],
+                ),
+                leading: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Cancel",
+                    style: pregular.copyWith(color: Colors.black, fontSize: 16),
+                  ),
+                ),
+                leadingWidth: 80,
+              ),
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            GridView.builder(
+                              itemCount: titleList.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                final title = titleList[index];
+                                final icon = iconList[index];
+
+                                return GridTile(
+                                  child: InkWell(
+                                    splashColor: AppColors.transparent,
+                                    onTap: () {
+                                      currentIndex =
+                                          currentIndex != index ? index : -1;
+                                      setState(() {});
+                                    },
+                                    child: _buildTypeItem(title, index, icon),
+                                  ),
+                                );
+                              },
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                              ),
+                            ),
+                            GridView.builder(
+                              itemCount: titleList2.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                final title = titleList2[index];
+                                final icon = iconList2[index];
+
+                                return GridTile(
+                                  child: InkWell(
+                                    splashColor: AppColors.transparent,
+                                    onTap: () {
+                                      currentIndex =
+                                          currentIndex != index ? index : -1;
+                                      setState(() {});
+                                    },
+                                    child: _buildTypeItem(title, index, icon),
+                                  ),
+                                );
+                              },
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextFormField(
+                        controller: noteController,
+                        keyboardType: TextInputType.text,
+                        decoration: _inputDecoration("Note"),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [MoneyTextFormatter()],
+                        decoration: _inputDecoration("Number"),
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () async {
+                          final note = noteController.text.toString().trim();
+                          final number = amountController.text
+                              .toString()
+                              .trim()
+                              .replaceAll(" ", "");
+                          final title = titleList[currentIndex];
+                          final icon = iconList[currentIndex];
+
+                          if (widget.model == null) {
+                            // Add
+                            if (number.isNotEmpty && currentIndex != -1) {
+                              await cubit.addData(ExpenseModel(
+                                title: title,
+                                icon: icon,
+                                number: int.tryParse(number) ?? 0,
+                                type: type,
+                                note: note,
+                                createdTime: DateTime.now(),
+                                photo: "",
+                              ));
+                            }
+                          } else {
+                            // Edit
+                            if (number.isNotEmpty && currentIndex != -1) {
+                              await cubit.editModel(ExpenseModel(
+                                id: widget.model!.id,
+                                title: title,
+                                icon: icon,
+                                number: int.tryParse(number) ?? 0,
+                                type: type,
+                                note: note,
+                                //createdTime: DateTime.now(),
+                                createdTime: widget.model!.createdTime,
+                                photo: "",
+                              ));
+                            }
+                          }
+
+                          amountController.clear();
+                          noteController.clear();
+
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.model == null ? "Save" : "Update",
+                              style: pregular.copyWith(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: pregular.copyWith(
+        fontSize: 14,
+        color: Colors.grey,
+      ),
+      filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.grey, width: 0.8),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue, width: 0.8),
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
       valueListenable: preferences.themeListenable(),
       builder: (context, value, child) {
         return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Money manager clone',
           themeMode: preferences.theme,
           theme: AppThemes.lightTheme,

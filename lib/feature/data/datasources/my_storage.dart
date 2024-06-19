@@ -68,6 +68,38 @@ CREATE TABLE ${ExpenseFields.tableName} (
     }
   }
 
+  Future<int> getExpense() async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      ExpenseFields.tableName,
+      columns: ExpenseFields.values,
+      where: '${ExpenseFields.type} = ?',
+      whereArgs: ["Expense"],
+    );
+
+    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
+    final totalExpense = list.fold(0, (sum, model) => sum + model.number);
+
+    return totalExpense;
+  }
+
+  Future<int> getIncome() async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      ExpenseFields.tableName,
+      columns: ExpenseFields.values,
+      where: '${ExpenseFields.type} = ?',
+      whereArgs: ["Income"],
+    );
+
+    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
+    final totalIncome = list.fold(0, (sum, model) => sum + model.number);
+
+    return totalIncome;
+  }
+
   Future<List<ExpenseModel>> readAllNotes() async {
     final db = await instance.database;
 

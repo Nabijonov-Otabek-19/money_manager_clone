@@ -17,7 +17,15 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(loadState: LoadState.loading));
 
     final List<ExpenseModel> data = await storage.readAllNotes();
-    emit(state.copyWith(list: data));
+    final expense = await storage.getExpense();
+    final income = await storage.getIncome();
+
+    emit(state.copyWith(
+      expense: expense,
+      income: income,
+      balance: income - expense,
+      list: data,
+    ));
 
     emit(state.copyWith(loadState: LoadState.loaded));
   }

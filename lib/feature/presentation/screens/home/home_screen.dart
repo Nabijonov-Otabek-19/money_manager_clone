@@ -44,7 +44,94 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (blocContext, state) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("Home".tr),
+              title: const Text("Money manager clone"),
+              leading: IconButton(
+                onPressed: () {
+                  //
+                },
+                icon: const Icon(Icons.search, size: 26),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    //
+                  },
+                  icon: const Icon(Icons.calendar_month, size: 26),
+                ),
+              ],
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                    bottom: 14,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            "Income",
+                            style: pregular.copyWith(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            separateBalance(state.income.toString()),
+                            style: pmedium.copyWith(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "Expenses",
+                            style: pregular.copyWith(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            separateBalance(state.expense.toString()),
+                            style: pmedium.copyWith(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "Balance",
+                            style: pregular.copyWith(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            separateBalance(state.balance.toString()),
+                            style: pmedium.copyWith(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
             body: SafeArea(
               child: LayoutBuilder(
@@ -70,10 +157,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          "Expense",
-                          style: pmedium.copyWith(fontSize: 20),
+                        padding: const EdgeInsets.only(
+                          left: 12,
+                          right: 12,
+                          top: 6,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Expense",
+                              style: pmedium.copyWith(fontSize: 14),
+                            ),
+                            Text(
+                              "DateTime",
+                              style: pmedium.copyWith(fontSize: 14),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
@@ -171,7 +271,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Card(
         elevation: 2,
         color: Theme.of(context).cardColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 8,
@@ -207,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 16),
               Text(
-                model.number.toString(),
+                separateBalance(model.number.toString()),
                 style: pmedium.copyWith(
                   fontSize: 14,
                   color: Theme.of(context).appBarTheme.titleTextStyle?.color,

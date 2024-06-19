@@ -18,6 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeState {
   LoadState get loadState => throw _privateConstructorUsedError;
   List<ExpenseModel> get list => throw _privateConstructorUsedError;
+  int get expense => throw _privateConstructorUsedError;
+  int get income => throw _privateConstructorUsedError;
+  int get balance => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -29,7 +32,12 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({LoadState loadState, List<ExpenseModel> list});
+  $Res call(
+      {LoadState loadState,
+      List<ExpenseModel> list,
+      int expense,
+      int income,
+      int balance});
 }
 
 /// @nodoc
@@ -47,6 +55,9 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   $Res call({
     Object? loadState = null,
     Object? list = null,
+    Object? expense = null,
+    Object? income = null,
+    Object? balance = null,
   }) {
     return _then(_value.copyWith(
       loadState: null == loadState
@@ -57,6 +68,18 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
               as List<ExpenseModel>,
+      expense: null == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as int,
+      income: null == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as int,
+      balance: null == balance
+          ? _value.balance
+          : balance // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -69,7 +92,12 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LoadState loadState, List<ExpenseModel> list});
+  $Res call(
+      {LoadState loadState,
+      List<ExpenseModel> list,
+      int expense,
+      int income,
+      int balance});
 }
 
 /// @nodoc
@@ -85,6 +113,9 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   $Res call({
     Object? loadState = null,
     Object? list = null,
+    Object? expense = null,
+    Object? income = null,
+    Object? balance = null,
   }) {
     return _then(_$HomeStateImpl(
       loadState: null == loadState
@@ -95,6 +126,18 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
               as List<ExpenseModel>,
+      expense: null == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as int,
+      income: null == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as int,
+      balance: null == balance
+          ? _value.balance
+          : balance // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -104,7 +147,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {this.loadState = LoadState.loaded,
-      final List<ExpenseModel> list = const []})
+      final List<ExpenseModel> list = const [],
+      this.expense = 0,
+      this.income = 0,
+      this.balance = 0})
       : _list = list;
 
   @override
@@ -120,8 +166,18 @@ class _$HomeStateImpl implements _HomeState {
   }
 
   @override
+  @JsonKey()
+  final int expense;
+  @override
+  @JsonKey()
+  final int income;
+  @override
+  @JsonKey()
+  final int balance;
+
+  @override
   String toString() {
-    return 'HomeState(loadState: $loadState, list: $list)';
+    return 'HomeState(loadState: $loadState, list: $list, expense: $expense, income: $income, balance: $balance)';
   }
 
   @override
@@ -131,12 +187,15 @@ class _$HomeStateImpl implements _HomeState {
             other is _$HomeStateImpl &&
             (identical(other.loadState, loadState) ||
                 other.loadState == loadState) &&
-            const DeepCollectionEquality().equals(other._list, _list));
+            const DeepCollectionEquality().equals(other._list, _list) &&
+            (identical(other.expense, expense) || other.expense == expense) &&
+            (identical(other.income, income) || other.income == income) &&
+            (identical(other.balance, balance) || other.balance == balance));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, loadState, const DeepCollectionEquality().hash(_list));
+  int get hashCode => Object.hash(runtimeType, loadState,
+      const DeepCollectionEquality().hash(_list), expense, income, balance);
 
   @JsonKey(ignore: true)
   @override
@@ -148,12 +207,21 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final LoadState loadState,
-      final List<ExpenseModel> list}) = _$HomeStateImpl;
+      final List<ExpenseModel> list,
+      final int expense,
+      final int income,
+      final int balance}) = _$HomeStateImpl;
 
   @override
   LoadState get loadState;
   @override
   List<ExpenseModel> get list;
+  @override
+  int get expense;
+  @override
+  int get income;
+  @override
+  int get balance;
   @override
   @JsonKey(ignore: true)
   _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>
