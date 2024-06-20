@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_clone/feature/presentation/screens/detail/cubit/detail_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 
 import '../../themes/fonts.dart';
 
@@ -62,7 +63,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(80),
                         child: ColoredBox(
-                          color: Colors.green.shade300,
+                          color: AppColors.orange,
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: SvgPicture.asset(
@@ -114,8 +115,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         "Amount".tr,
-                        style:
-                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
+                        style: pmedium.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                       ),
                       Text(
                         separateBalance(state.model!.number.toString()),
@@ -135,8 +138,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         "Date".tr,
-                        style:
-                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
+                        style: pmedium.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                       ),
                       Text(
                         convertDateTime(state.model!.createdTime),
@@ -156,8 +161,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         "Note".tr,
-                        style:
-                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
+                        style: pmedium.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -183,8 +190,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         "Photo".tr,
-                        style:
-                            pmedium.copyWith(fontSize: 18, color: Colors.grey,),
+                        style: pmedium.copyWith(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       Expanded(

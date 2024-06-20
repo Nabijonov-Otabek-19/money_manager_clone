@@ -11,4 +11,10 @@ class AppColors {
   static const orange = Colors.orangeAccent;
 
   static const grey = Colors.black12;
+
+  static const green = Colors.greenAccent;
+  static const purple = Colors.purpleAccent;
+  static const pink = Colors.pinkAccent;
+  static const yellow = Colors.yellowAccent;
+  static const blue = Colors.lightBlueAccent;
 }

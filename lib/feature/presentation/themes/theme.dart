@@ -47,11 +47,11 @@ class AppThemes {
     scaffoldBackgroundColor: AppColors.scaffoldBackDark,
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
-      iconTheme: const IconThemeData(color: AppColors.white),
+      iconTheme: const IconThemeData(color: AppColors.black),
       centerTitle: true,
       elevation: 0,
       titleTextStyle: pregular.copyWith(
-        color: AppColors.white,
+        color: AppColors.black,
         fontSize: 16,
       ),
       color: AppColors.orange,

@@ -9,6 +9,7 @@ import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../../data/datasources/my_storage.dart';
+import '../../themes/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -164,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               "Expense",
@@ -176,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
+                      Divider(height: 1, color: Colors.grey.shade300),
                       Expanded(
                         child: ListView.separated(
                           scrollDirection: Axis.vertical,
@@ -284,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: ColoredBox(
-                  color: Colors.green.shade300,
+                  color: AppColors.orange,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(

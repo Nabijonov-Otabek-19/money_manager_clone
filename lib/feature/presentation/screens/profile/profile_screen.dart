@@ -37,7 +37,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile".tr),
+        toolbarHeight: 180,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.grey.shade200,
+              radius: 40,
+              child: const Icon(
+                Icons.person,
+                size: 40,
+                color: AppColors.orange,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "Username".tr,
+              style: pmedium.copyWith(fontSize: 20),
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -45,26 +65,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                CircleAvatar(
-                  backgroundColor: Colors.grey.shade200,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.person,
-                    size: 40,
-                    color: AppColors.orange,
-                  ),
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 8),
                 Text(
-                  "Username".tr,
-                  style: pmedium.copyWith(fontSize: 24),
+                  "Version : 1.0.0",
+                  style: pregular.copyWith(fontSize: 12),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 8),
                 _buildThemeChangeItem(),
                 const SizedBox(height: 4),
                 _buildLanguageChangeItem(),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -75,10 +84,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildThemeChangeItem() {
     return Card(
-      elevation: 4,
+      elevation: 2,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -92,24 +101,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               "Theme".tr,
               style: pmedium.copyWith(
-                fontSize: 18,
+                fontSize: 16,
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
               ),
             ),
-             Switch(
-                  value: context.isDarkMode,
-                  activeColor: Colors.deepOrangeAccent,
-                  activeTrackColor: Colors.orangeAccent,
-                  inactiveTrackColor: Colors.grey.shade300,
-                  inactiveThumbColor: Colors.grey,
-                  trackOutlineColor: WidgetStatePropertyAll(
-                    context.isDarkMode ? Colors.orange : Colors.grey,
-                  ),
-                  onChanged: (value) {
-                    preferences.changeTheme(value);
-                    //setState(() {});
-                  },
-
+            Switch(
+              value: context.isDarkMode,
+              activeColor: Colors.deepOrangeAccent,
+              activeTrackColor: Colors.orangeAccent,
+              inactiveTrackColor: Colors.grey.shade300,
+              inactiveThumbColor: Colors.grey,
+              trackOutlineColor: WidgetStatePropertyAll(
+                context.isDarkMode ? Colors.orange : Colors.grey,
+              ),
+              onChanged: (value) {
+                preferences.changeTheme(value);
+                //setState(() {});
+              },
             ),
           ],
         ),
@@ -119,10 +127,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildLanguageChangeItem() {
     return Card(
-      elevation: 4,
+      elevation: 2,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -136,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               "Language".tr,
               style: pmedium.copyWith(
-                fontSize: 18,
+                fontSize: 16,
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
               ),
             ),
@@ -150,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 currentLang,
                 style: pregular.copyWith(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 ),
               ),

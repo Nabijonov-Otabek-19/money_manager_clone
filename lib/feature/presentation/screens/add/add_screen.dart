@@ -17,9 +17,11 @@ class AddScreen extends StatefulWidget {
   State<AddScreen> createState() => _AddScreenState();
 }
 
-class _AddScreenState extends State<AddScreen> {
+class _AddScreenState extends State<AddScreen>
+    with SingleTickerProviderStateMixin {
   TextEditingController noteController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+  late TabController _tabController;
 
   final cubit = AddCubit();
   int currentIndex = -1;
@@ -65,7 +67,6 @@ class _AddScreenState extends State<AddScreen> {
     "Education": 5,
     "Settings": 6,
   };
-
   Map<String, int> incomeTypeMap = {
     "Salary": 0,
     "Investment": 1,
@@ -76,10 +77,24 @@ class _AddScreenState extends State<AddScreen> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
     if (widget.model != null) {
       noteController.text = widget.model!.note;
       amountController.text = widget.model!.number.toString();
       currentIndex = checkType(widget.model!.type);
+      isExpense = widget.model!.type == "Expense" ? true : false;
+    }
+  }
+
+  void _handleTabChange() {
+    int currentIndex = _tabController.index;
+    if (currentIndex == 0) {
+      type = "Expense";
+      isExpense = true;
+    } else {
+      type = "Income";
+      isExpense = false;
     }
   }
 
@@ -93,6 +108,8 @@ class _AddScreenState extends State<AddScreen> {
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
     noteController.dispose();
     amountController.dispose();
     super.dispose();
@@ -104,197 +121,213 @@ class _AddScreenState extends State<AddScreen> {
       create: (context) => cubit,
       child: BlocBuilder<AddCubit, AddState>(
         builder: (context, state) {
-          return DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text("Add"),
-                centerTitle: true,
-                bottom: TabBar(
-                  onTap: (value) {
-                    if (value == 0) {
-                      type = "Expense";
-                    } else {
-                      type = "Income";
-                    }
-                  },
-                  labelStyle: pregular.copyWith(
-                    fontSize: 14,
-                    color: AppColors.black,
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Add"),
+              centerTitle: true,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: Container(
+                  height: 35,
+                  margin: const EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                    bottom: 12,
                   ),
-                  unselectedLabelStyle: pregular.copyWith(
-                    fontSize: 14,
-                    color: AppColors.black,
-                  ),
-                  tabAlignment: TabAlignment.fill,
-                  indicator: BoxDecoration(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AppColors.black, width: 1),
                   ),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: AppColors.transparent,
-                  indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
-                  overlayColor:
-                      const WidgetStatePropertyAll(AppColors.transparent),
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 8,
-                  ),
-                  tabs: const [
-                    Tab(text: "Expense"),
-                    Tab(text: "Income"),
-                  ],
-                ),
-                leading: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "Cancel",
-                    style: pregular.copyWith(color: Colors.black, fontSize: 16),
-                  ),
-                ),
-                leadingWidth: 80,
-              ),
-              body: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            GridView.builder(
-                              itemCount: titleList.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                final title = titleList[index];
-                                final icon = iconList[index];
-
-                                return GridTile(
-                                  child: InkWell(
-                                    splashColor: AppColors.transparent,
-                                    onTap: () {
-                                      currentIndex =
-                                          currentIndex != index ? index : -1;
-                                      setState(() {});
-                                    },
-                                    child: _buildTypeItem(title, index, icon),
-                                  ),
-                                );
-                              },
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                              ),
-                            ),
-                            GridView.builder(
-                              itemCount: titleList2.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                final title = titleList2[index];
-                                final icon = iconList2[index];
-
-                                return GridTile(
-                                  child: InkWell(
-                                    splashColor: AppColors.transparent,
-                                    onTap: () {
-                                      currentIndex =
-                                          currentIndex != index ? index : -1;
-                                      setState(() {});
-                                    },
-                                    child: _buildTypeItem(title, index, icon),
-                                  ),
-                                );
-                              },
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        controller: noteController,
-                        keyboardType: TextInputType.text,
-                        decoration: _inputDecoration("Note"),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: amountController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [MoneyTextFormatter()],
-                        decoration: _inputDecoration("Number"),
-                      ),
-                      const SizedBox(height: 8),
-                      InkWell(
-                        onTap: () async {
-                          final note = noteController.text.toString().trim();
-                          final number = amountController.text
-                              .toString()
-                              .trim()
-                              .replaceAll(" ", "");
-                          final title = titleList[currentIndex];
-                          final icon = iconList[currentIndex];
-
-                          if (widget.model == null) {
-                            // Add
-                            if (number.isNotEmpty && currentIndex != -1) {
-                              await cubit.addData(ExpenseModel(
-                                title: title,
-                                icon: icon,
-                                number: int.tryParse(number) ?? 0,
-                                type: type,
-                                note: note,
-                                createdTime: DateTime.now(),
-                                photo: "",
-                              ));
-                            }
-                          } else {
-                            // Edit
-                            if (number.isNotEmpty && currentIndex != -1) {
-                              await cubit.editModel(ExpenseModel(
-                                id: widget.model!.id,
-                                title: title,
-                                icon: icon,
-                                number: int.tryParse(number) ?? 0,
-                                type: type,
-                                note: note,
-                                //createdTime: DateTime.now(),
-                                createdTime: widget.model!.createdTime,
-                                photo: "",
-                              ));
-                            }
-                          }
-
-                          amountController.clear();
-                          noteController.clear();
-
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Center(
-                            child: Text(
-                              widget.model == null ? "Save" : "Update",
-                              style: pregular.copyWith(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                  child: TabBar(
+                    controller: _tabController,
+                    onTap: (value) {
+                      debugPrint(value.toString());
+                      if (value == 0) {
+                        type = "Expense";
+                        isExpense = true;
+                      } else {
+                        type = "Income";
+                        isExpense = false;
+                      }
+                    },
+                    labelStyle: pregular.copyWith(
+                      fontSize: 14,
+                      color: AppColors.orange,
+                    ),
+                    unselectedLabelStyle: pregular.copyWith(
+                      fontSize: 14,
+                      color: AppColors.black,
+                    ),
+                    tabAlignment: TabAlignment.fill,
+                    indicator: BoxDecoration(
+                      color: AppColors.black,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.black, width: 1),
+                    ),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: AppColors.transparent,
+                    overlayColor:
+                        const WidgetStatePropertyAll(AppColors.transparent),
+                    tabs: const [
+                      Tab(text: "Expense"),
+                      Tab(text: "Income"),
                     ],
                   ),
+                ),
+              ),
+              leading: TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "Cancel",
+                  style: pregular.copyWith(color: Colors.black, fontSize: 16),
+                ),
+              ),
+              leadingWidth: 80,
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          GridView.builder(
+                            itemCount: titleList.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              final title = titleList[index];
+                              final icon = iconList[index];
+
+                              return GridTile(
+                                child: InkWell(
+                                  splashColor: AppColors.transparent,
+                                  onTap: () {
+                                    currentIndex =
+                                        currentIndex != index ? index : -1;
+                                    setState(() {});
+                                  },
+                                  child: _buildTypeItem(title, index, icon),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                            ),
+                          ),
+                          GridView.builder(
+                            itemCount: titleList2.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              final title = titleList2[index];
+                              final icon = iconList2[index];
+
+                              return GridTile(
+                                child: InkWell(
+                                  splashColor: AppColors.transparent,
+                                  onTap: () {
+                                    currentIndex =
+                                        currentIndex != index ? index : -1;
+                                    setState(() {});
+                                  },
+                                  child: _buildTypeItem(title, index, icon),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      controller: noteController,
+                      keyboardType: TextInputType.text,
+                      decoration: _inputDecoration("Note"),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [MoneyTextFormatter()],
+                      decoration: _inputDecoration("Number"),
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () async {
+                        final note = noteController.text.toString().trim();
+                        final number = amountController.text
+                            .toString()
+                            .trim()
+                            .replaceAll(" ", "");
+                        final title = isExpense
+                            ? titleList[currentIndex]
+                            : titleList2[currentIndex];
+                        final icon = isExpense
+                            ? iconList[currentIndex]
+                            : iconList2[currentIndex];
+
+                        if (widget.model == null) {
+                          // Add
+                          if (number.isNotEmpty && currentIndex != -1) {
+                            await cubit.addData(ExpenseModel(
+                              title: title,
+                              icon: icon,
+                              number: int.tryParse(number) ?? 0,
+                              type: type,
+                              note: note,
+                              createdTime: DateTime.now(),
+                              photo: "",
+                            ));
+                          }
+                        } else {
+                          // Edit
+                          if (number.isNotEmpty && currentIndex != -1) {
+                            await cubit.editModel(ExpenseModel(
+                              id: widget.model!.id,
+                              title: title,
+                              icon: icon,
+                              number: int.tryParse(number) ?? 0,
+                              type: type,
+                              note: note,
+                              //createdTime: DateTime.now(),
+                              createdTime: widget.model!.createdTime,
+                              photo: "",
+                            ));
+                          }
+                        }
+
+                        amountController.clear();
+                        noteController.clear();
+
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: Text(
+                            widget.model == null ? "Save" : "Update",
+                            style: pregular.copyWith(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
               ),
             ),
@@ -331,10 +364,24 @@ class _AddScreenState extends State<AddScreen> {
         ClipRRect(
           borderRadius: BorderRadius.circular(80),
           child: ColoredBox(
-            color: currentIndex == index ? AppColors.orange : AppColors.grey,
+            color: context.isDarkThemeMode
+                ? currentIndex == index
+                    ? AppColors.orange
+                    : Colors.grey.shade600
+                : AppColors.grey,
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: SvgPicture.asset(icon.svgIcon, width: 30, height: 30),
+              child: SvgPicture.asset(
+                icon.svgIcon,
+                width: 30,
+                height: 30,
+                colorFilter: ColorFilter.mode(
+                  context.isDarkThemeMode
+                      ? Colors.grey.shade200
+                      : Colors.grey.shade700,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
         ),

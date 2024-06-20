@@ -17,7 +17,7 @@ class RouteManager {
         );
       case '/add':
         return PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 400),
+          transitionDuration: const Duration(milliseconds: 200),
           pageBuilder: (context, animation, secondaryAnimation) {
             return AddScreen(model: args as ExpenseModel?);
           },
@@ -33,7 +33,7 @@ class RouteManager {
         );
       case 'detail':
         return PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 400),
+          transitionDuration: const Duration(milliseconds: 200),
           pageBuilder: (context, animation, secondaryAnimation) {
             return DetailScreen(modelId: args as int);
           },
