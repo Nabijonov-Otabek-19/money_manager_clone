@@ -14,10 +14,10 @@ class AddCubit extends Cubit<AddState> {
   final ExpenseStorage storage = ExpenseStorage.instance;
 
   Future<void> addData(ExpenseModel model) async {
-    await storage.create(model);
+    await storage.addExpense(model);
   }
 
   Future<void> editModel(ExpenseModel model) async {
-    await storage.update(model);
+    await storage.updateExpense(model);
   }
 }

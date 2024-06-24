@@ -17,10 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   LoadState get loadState => throw _privateConstructorUsedError;
-  List<ExpenseModel> get list => throw _privateConstructorUsedError;
-  int get expense => throw _privateConstructorUsedError;
-  int get income => throw _privateConstructorUsedError;
-  int get balance => throw _privateConstructorUsedError;
+  List<MonthModel> get list => throw _privateConstructorUsedError;
+  int get currentMonthExpense => throw _privateConstructorUsedError;
+  int get currentMonthIncome => throw _privateConstructorUsedError;
+  int get currentMonthBalance => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -34,10 +34,10 @@ abstract class $HomeStateCopyWith<$Res> {
   @useResult
   $Res call(
       {LoadState loadState,
-      List<ExpenseModel> list,
-      int expense,
-      int income,
-      int balance});
+      List<MonthModel> list,
+      int currentMonthExpense,
+      int currentMonthIncome,
+      int currentMonthBalance});
 }
 
 /// @nodoc
@@ -55,9 +55,9 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   $Res call({
     Object? loadState = null,
     Object? list = null,
-    Object? expense = null,
-    Object? income = null,
-    Object? balance = null,
+    Object? currentMonthExpense = null,
+    Object? currentMonthIncome = null,
+    Object? currentMonthBalance = null,
   }) {
     return _then(_value.copyWith(
       loadState: null == loadState
@@ -67,18 +67,18 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       list: null == list
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ExpenseModel>,
-      expense: null == expense
-          ? _value.expense
-          : expense // ignore: cast_nullable_to_non_nullable
+              as List<MonthModel>,
+      currentMonthExpense: null == currentMonthExpense
+          ? _value.currentMonthExpense
+          : currentMonthExpense // ignore: cast_nullable_to_non_nullable
               as int,
-      income: null == income
-          ? _value.income
-          : income // ignore: cast_nullable_to_non_nullable
+      currentMonthIncome: null == currentMonthIncome
+          ? _value.currentMonthIncome
+          : currentMonthIncome // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: null == balance
-          ? _value.balance
-          : balance // ignore: cast_nullable_to_non_nullable
+      currentMonthBalance: null == currentMonthBalance
+          ? _value.currentMonthBalance
+          : currentMonthBalance // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -94,10 +94,10 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {LoadState loadState,
-      List<ExpenseModel> list,
-      int expense,
-      int income,
-      int balance});
+      List<MonthModel> list,
+      int currentMonthExpense,
+      int currentMonthIncome,
+      int currentMonthBalance});
 }
 
 /// @nodoc
@@ -113,9 +113,9 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   $Res call({
     Object? loadState = null,
     Object? list = null,
-    Object? expense = null,
-    Object? income = null,
-    Object? balance = null,
+    Object? currentMonthExpense = null,
+    Object? currentMonthIncome = null,
+    Object? currentMonthBalance = null,
   }) {
     return _then(_$HomeStateImpl(
       loadState: null == loadState
@@ -125,18 +125,18 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ExpenseModel>,
-      expense: null == expense
-          ? _value.expense
-          : expense // ignore: cast_nullable_to_non_nullable
+              as List<MonthModel>,
+      currentMonthExpense: null == currentMonthExpense
+          ? _value.currentMonthExpense
+          : currentMonthExpense // ignore: cast_nullable_to_non_nullable
               as int,
-      income: null == income
-          ? _value.income
-          : income // ignore: cast_nullable_to_non_nullable
+      currentMonthIncome: null == currentMonthIncome
+          ? _value.currentMonthIncome
+          : currentMonthIncome // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: null == balance
-          ? _value.balance
-          : balance // ignore: cast_nullable_to_non_nullable
+      currentMonthBalance: null == currentMonthBalance
+          ? _value.currentMonthBalance
+          : currentMonthBalance // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -147,19 +147,19 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {this.loadState = LoadState.loaded,
-      final List<ExpenseModel> list = const [],
-      this.expense = 0,
-      this.income = 0,
-      this.balance = 0})
+      final List<MonthModel> list = const [],
+      this.currentMonthExpense = 0,
+      this.currentMonthIncome = 0,
+      this.currentMonthBalance = 0})
       : _list = list;
 
   @override
   @JsonKey()
   final LoadState loadState;
-  final List<ExpenseModel> _list;
+  final List<MonthModel> _list;
   @override
   @JsonKey()
-  List<ExpenseModel> get list {
+  List<MonthModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -167,17 +167,17 @@ class _$HomeStateImpl implements _HomeState {
 
   @override
   @JsonKey()
-  final int expense;
+  final int currentMonthExpense;
   @override
   @JsonKey()
-  final int income;
+  final int currentMonthIncome;
   @override
   @JsonKey()
-  final int balance;
+  final int currentMonthBalance;
 
   @override
   String toString() {
-    return 'HomeState(loadState: $loadState, list: $list, expense: $expense, income: $income, balance: $balance)';
+    return 'HomeState(loadState: $loadState, list: $list, currentMonthExpense: $currentMonthExpense, currentMonthIncome: $currentMonthIncome, currentMonthBalance: $currentMonthBalance)';
   }
 
   @override
@@ -188,14 +188,22 @@ class _$HomeStateImpl implements _HomeState {
             (identical(other.loadState, loadState) ||
                 other.loadState == loadState) &&
             const DeepCollectionEquality().equals(other._list, _list) &&
-            (identical(other.expense, expense) || other.expense == expense) &&
-            (identical(other.income, income) || other.income == income) &&
-            (identical(other.balance, balance) || other.balance == balance));
+            (identical(other.currentMonthExpense, currentMonthExpense) ||
+                other.currentMonthExpense == currentMonthExpense) &&
+            (identical(other.currentMonthIncome, currentMonthIncome) ||
+                other.currentMonthIncome == currentMonthIncome) &&
+            (identical(other.currentMonthBalance, currentMonthBalance) ||
+                other.currentMonthBalance == currentMonthBalance));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, loadState,
-      const DeepCollectionEquality().hash(_list), expense, income, balance);
+  int get hashCode => Object.hash(
+      runtimeType,
+      loadState,
+      const DeepCollectionEquality().hash(_list),
+      currentMonthExpense,
+      currentMonthIncome,
+      currentMonthBalance);
 
   @JsonKey(ignore: true)
   @override
@@ -207,21 +215,21 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final LoadState loadState,
-      final List<ExpenseModel> list,
-      final int expense,
-      final int income,
-      final int balance}) = _$HomeStateImpl;
+      final List<MonthModel> list,
+      final int currentMonthExpense,
+      final int currentMonthIncome,
+      final int currentMonthBalance}) = _$HomeStateImpl;
 
   @override
   LoadState get loadState;
   @override
-  List<ExpenseModel> get list;
+  List<MonthModel> get list;
   @override
-  int get expense;
+  int get currentMonthExpense;
   @override
-  int get income;
+  int get currentMonthIncome;
   @override
-  int get balance;
+  int get currentMonthBalance;
   @override
   @JsonKey(ignore: true)
   _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>

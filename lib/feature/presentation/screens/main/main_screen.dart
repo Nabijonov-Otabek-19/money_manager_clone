@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:money_manager_clone/feature/presentation/screens/charts/chart_screen.dart';
-import 'package:money_manager_clone/feature/presentation/screens/home/home_screen.dart';
-import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
-import 'package:money_manager_clone/feature/presentation/screens/profile/profile_screen.dart';
-import 'package:money_manager_clone/feature/presentation/screens/report/report_screen.dart';
+
+import '../screens.dart';
+import 'cubit/main_cubit.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +15,6 @@ class _MainScreenState extends State<MainScreen> {
   final screens = const <Widget>[
     HomeScreen(),
     ChartScreen(),
-    ReportScreen(),
     ProfileScreen(),
   ];
 
@@ -68,10 +65,6 @@ class _MainScreenState extends State<MainScreen> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.add_chart),
                     label: "Chart",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.request_page_outlined),
-                    label: "Report",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person),

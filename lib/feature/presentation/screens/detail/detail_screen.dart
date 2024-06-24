@@ -78,10 +78,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         state.model!.title,
                         style: pregular.copyWith(
                           fontSize: 18,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
+                          color: Theme.of(context).canvasColor,
                         ),
                       ),
                     ],
@@ -101,10 +98,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         state.model!.type,
                         style: pregular.copyWith(
                           fontSize: 18,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
+                          color: Theme.of(context).canvasColor,
                         ),
                       ),
                     ],
@@ -124,10 +118,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         separateBalance(state.model!.number.toString()),
                         style: pregular.copyWith(
                           fontSize: 18,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
+                          color: Theme.of(context).canvasColor,
                         ),
                       ),
                     ],
@@ -147,10 +138,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         convertDateTime(state.model!.createdTime),
                         style: pregular.copyWith(
                           fontSize: 18,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
+                          color: Theme.of(context).canvasColor,
                         ),
                       ),
                     ],
@@ -172,10 +160,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           state.model!.note,
                           style: pregular.copyWith(
                             fontSize: 18,
-                            color: Theme.of(context)
-                                .appBarTheme
-                                .titleTextStyle
-                                ?.color,
+                            color: Theme.of(context).canvasColor,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -201,10 +186,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           state.model!.photo ?? "",
                           style: pregular.copyWith(
                             fontSize: 18,
-                            color: Theme.of(context)
-                                .appBarTheme
-                                .titleTextStyle
-                                ?.color,
+                            color: Theme.of(context).canvasColor,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -238,10 +220,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             "Edit".tr,
                             style: pregular.copyWith(
                               fontSize: 16,
-                              color: Theme.of(context)
-                                  .appBarTheme
-                                  .titleTextStyle
-                                  ?.color,
+                              color: Theme.of(context).canvasColor,
                             ),
                           ),
                         ),
@@ -257,10 +236,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             "Delete".tr,
                             style: pregular.copyWith(
                               fontSize: 16,
-                              color: Theme.of(context)
-                                  .appBarTheme
-                                  .titleTextStyle
-                                  ?.color,
+                              color: Theme.of(context).canvasColor,
                             ),
                           ),
                         ),

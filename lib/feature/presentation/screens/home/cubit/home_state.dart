@@ -4,10 +4,10 @@ part of 'home_cubit.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     @Default(LoadState.loaded) LoadState loadState,
-    @Default([]) List<ExpenseModel> list,
-    @Default(0) int expense,
-    @Default(0) int income,
-    @Default(0) int balance,
+    @Default([]) List<MonthModel> list,
+    @Default(0) int currentMonthExpense,
+    @Default(0) int currentMonthIncome,
+    @Default(0) int currentMonthBalance,
   }) = _HomeState;
 }
 

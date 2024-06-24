@@ -35,6 +35,13 @@ String separateBalance(String number) {
   }
 }
 
+String convertDate(String inputDate) {
+  DateTime date = DateTime.parse(inputDate);
+  DateFormat formatter = DateFormat('dd MMMM EEEE');
+  String formattedDate = formatter.format(date);
+  return formattedDate;
+}
+
 class MoneyTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

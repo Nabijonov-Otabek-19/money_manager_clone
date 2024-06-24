@@ -64,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 preferredSize: const Size.fromHeight(60),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 24,
-                    right: 24,
+                    left: 12,
+                    right: 12,
                     bottom: 14,
                   ),
                   child: Row(
@@ -83,7 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            separateBalance(state.income.toString()),
+                            separateBalance(
+                                state.currentMonthIncome.toString()),
                             style: pmedium.copyWith(
                               color: Colors.black,
                               fontSize: 16,
@@ -102,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            separateBalance(state.expense.toString()),
+                            separateBalance(
+                                state.currentMonthExpense.toString()),
                             style: pmedium.copyWith(
                               color: Colors.black,
                               fontSize: 16,
@@ -121,7 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            separateBalance(state.balance.toString()),
+                            separateBalance(
+                                state.currentMonthBalance.toString()),
                             style: pmedium.copyWith(
                               color: Colors.black,
                               fontSize: 16,
@@ -154,62 +157,94 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 12,
-                          right: 12,
-                          top: 6,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Expense",
-                              style: pmedium.copyWith(fontSize: 14),
-                            ),
-                            Text(
-                              "DateTime",
-                              style: pmedium.copyWith(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(height: 1, color: Colors.grey.shade300),
-                      Expanded(
-                        child: ListView.separated(
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final item = state.list[index];
-                            return InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  'detail',
-                                  arguments: item.id,
-                                ).whenComplete(
-                                  () async => await cubit.refreshData(),
-                                );
-                              },
-                              child: expanseItem(item),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider(
-                              height: 4,
-                              thickness: 0.2,
-                              color: Colors.grey,
-                            );
-                          },
-                          itemCount: state.list.length,
-                        ),
-                      ),
-                    ],
+
+                  final monthModels = state.list.first;
+
+                  return ListView.builder(
+                    itemCount: state.list.first.listDayModel.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, dayIndex) {
+                      final dayModels = monthModels.listDayModel;
+                      final expenseModels =
+                          dayModels[dayIndex].listExpenseModel;
+
+                      final expense = calculateExpense(
+                          dayModels[dayIndex].listExpenseModel);
+                      final income =
+                          calculateIncome(dayModels[dayIndex].listExpenseModel);
+
+                      return Column(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                  right: 12,
+                                  top: 8,
+                                  bottom: 8,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      convertDate(dayModels[dayIndex]
+                                          .dayTime
+                                          .toIso8601String()),
+                                      style: pmedium.copyWith(fontSize: 12),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Expense: $expense",
+                                          style: pregular.copyWith(
+                                            fontSize: 12,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          "Income: $income",
+                                          style: pregular.copyWith(
+                                            fontSize: 12,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 1, color: Colors.grey.shade300),
+                            ],
+                          ),
+                          ListView.builder(
+                            itemCount: expenseModels.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, modelIndex) {
+                              return InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    'detail',
+                                    arguments: expenseModels[modelIndex].id,
+                                  ).whenComplete(
+                                    () async => await cubit.refreshData(),
+                                  );
+                                },
+                                child: expanseItem(expenseModels[modelIndex]),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               ),
@@ -231,6 +266,26 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  int calculateExpense(List<ExpenseModel> list) {
+    int expense = 0;
+    list.map((model) {
+      if (model.type == "Expense") {
+        expense += model.number;
+      }
+    }).toList();
+    return expense;
+  }
+
+  int calculateIncome(List<ExpenseModel> list) {
+    int income = 0;
+    list.map((model) {
+      if (model.type == "Income") {
+        income += model.number;
+      }
+    }).toList();
+    return income;
   }
 
   Widget expanseItem(ExpenseModel model) {
@@ -272,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       child: Card(
-        elevation: 2,
+        elevation: 1.2,
         color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -304,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   model.note.isEmpty ? model.title : model.note,
                   style: pregular.copyWith(
                     fontSize: 14,
-                    color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    color: Theme.of(context).canvasColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -315,7 +370,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 separateBalance(model.number.toString()),
                 style: pmedium.copyWith(
                   fontSize: 14,
-                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                  color: Theme.of(context).canvasColor,
                 ),
               ),
             ],

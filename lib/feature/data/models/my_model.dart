@@ -1,5 +1,66 @@
 import '../../../core/utils/constants.dart';
 
+class MonthModel {
+  final int? id;
+  final DateTime monthTime;
+  final List<DayModel> listDayModel;
+
+  const MonthModel({
+    this.id,
+    required this.monthTime,
+    required this.listDayModel,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'monthTime': monthTime.toIso8601String(),
+    };
+  }
+
+  static MonthModel fromJson(
+    Map<String, dynamic> json,
+    List<DayModel> listModel,
+  ) {
+    return MonthModel(
+      id: json['id'],
+      monthTime: DateTime.parse(json['monthTime']),
+      listDayModel: listModel,
+    );
+  }
+}
+
+class DayModel {
+  final int? id;
+  final DateTime dayTime;
+  final List<ExpenseModel> listExpenseModel;
+
+  const DayModel({
+    this.id,
+    required this.dayTime,
+    required this.listExpenseModel,
+  });
+
+  Map<String, dynamic> toJson(int monthId) {
+    return {
+      'id': id,
+      'dayTime': dayTime.toIso8601String(),
+      'monthId': monthId,
+    };
+  }
+
+  static DayModel fromJson(
+    Map<String, dynamic> json,
+    List<ExpenseModel> listModel,
+  ) {
+    return DayModel(
+      id: json['id'],
+      dayTime: DateTime.parse(json['dayTime']),
+      listExpenseModel: listModel,
+    );
+  }
+}
+
 class ExpenseModel {
   final int? id;
   final String title;
@@ -43,25 +104,30 @@ class ExpenseModel {
     );
   }
 
-  static ExpenseModel fromJson(Map<String, Object?> json) => ExpenseModel(
-        id: json[ExpenseFields.id] as int?,
-        title: json[ExpenseFields.title] as String,
-        icon: json[ExpenseFields.icon] as String,
-        number: json[ExpenseFields.number] as int,
-        type: json[ExpenseFields.type] as String,
-        note: json[ExpenseFields.note] as String,
-        createdTime: DateTime.parse(json[ExpenseFields.createdTime] as String),
-        photo: json[ExpenseFields.photo] as String,
-      );
+  static ExpenseModel fromJson(Map<String, dynamic> json) {
+    return ExpenseModel(
+      id: json[ExpenseFields.id],
+      title: json[ExpenseFields.title],
+      icon: json[ExpenseFields.icon],
+      number: json[ExpenseFields.number],
+      type: json[ExpenseFields.type],
+      note: json[ExpenseFields.note],
+      createdTime: DateTime.parse(json[ExpenseFields.createdTime]),
+      photo: json[ExpenseFields.photo],
+    );
+  }
 
-  Map<String, Object?> toJson() => {
-        ExpenseFields.id: id,
-        ExpenseFields.title: title,
-        ExpenseFields.icon: icon,
-        ExpenseFields.number: number,
-        ExpenseFields.type: type,
-        ExpenseFields.note: note,
-        ExpenseFields.createdTime: createdTime.toIso8601String(),
-        ExpenseFields.photo: photo,
-      };
+  Map<String, dynamic> toJson(int dayId) {
+    return {
+      ExpenseFields.id: id,
+      ExpenseFields.title: title,
+      ExpenseFields.icon: icon,
+      ExpenseFields.number: number,
+      ExpenseFields.type: type,
+      ExpenseFields.note: note,
+      ExpenseFields.createdTime: createdTime.toIso8601String(),
+      ExpenseFields.photo: photo,
+      ExpenseFields.dayId: dayId,
+    };
+  }
 }

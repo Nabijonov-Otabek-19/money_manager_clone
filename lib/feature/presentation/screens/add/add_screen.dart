@@ -205,8 +205,7 @@ class _AddScreenState extends State<AddScreen>
                                 child: InkWell(
                                   splashColor: AppColors.transparent,
                                   onTap: () {
-                                    currentIndex =
-                                        currentIndex != index ? index : -1;
+                                    currentIndex = index;
                                     setState(() {});
                                   },
                                   child: _buildTypeItem(title, index, icon),
@@ -229,8 +228,7 @@ class _AddScreenState extends State<AddScreen>
                                 child: InkWell(
                                   splashColor: AppColors.transparent,
                                   onTap: () {
-                                    currentIndex =
-                                        currentIndex != index ? index : -1;
+                                    currentIndex = index;
                                     setState(() {});
                                   },
                                   child: _buildTypeItem(title, index, icon),
@@ -274,7 +272,7 @@ class _AddScreenState extends State<AddScreen>
                             : iconList2[currentIndex];
 
                         if (widget.model == null) {
-                          // Add
+                          // Add expense
                           if (number.isNotEmpty && currentIndex != -1) {
                             await cubit.addData(ExpenseModel(
                               title: title,
@@ -287,7 +285,7 @@ class _AddScreenState extends State<AddScreen>
                             ));
                           }
                         } else {
-                          // Edit
+                          // Edit expense
                           if (number.isNotEmpty && currentIndex != -1) {
                             await cubit.editModel(ExpenseModel(
                               id: widget.model!.id,
@@ -296,7 +294,6 @@ class _AddScreenState extends State<AddScreen>
                               number: int.tryParse(number) ?? 0,
                               type: type,
                               note: note,
-                              //createdTime: DateTime.now(),
                               createdTime: widget.model!.createdTime,
                               photo: "",
                             ));
@@ -364,11 +361,9 @@ class _AddScreenState extends State<AddScreen>
         ClipRRect(
           borderRadius: BorderRadius.circular(80),
           child: ColoredBox(
-            color: context.isDarkThemeMode
-                ? currentIndex == index
+            color: currentIndex == index
                     ? AppColors.orange
-                    : Colors.grey.shade600
-                : AppColors.grey,
+                    : Colors.grey.shade400,
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: SvgPicture.asset(
@@ -376,9 +371,7 @@ class _AddScreenState extends State<AddScreen>
                 width: 30,
                 height: 30,
                 colorFilter: ColorFilter.mode(
-                  context.isDarkThemeMode
-                      ? Colors.grey.shade200
-                      : Colors.grey.shade700,
+                  Colors.grey.shade700,
                   BlendMode.srcIn,
                 ),
               ),

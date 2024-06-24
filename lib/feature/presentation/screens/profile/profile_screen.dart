@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               "Theme".tr,
               style: pmedium.copyWith(
                 fontSize: 16,
-                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                color: Theme.of(context).canvasColor,
               ),
             ),
             Switch(
@@ -145,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               "Language".tr,
               style: pmedium.copyWith(
                 fontSize: 16,
-                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                color: Theme.of(context).canvasColor,
               ),
             ),
             PopupMenuButton<String>(
@@ -159,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 currentLang,
                 style: pregular.copyWith(
                   fontSize: 14,
-                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                  color: Theme.of(context).canvasColor,
                 ),
               ),
               itemBuilder: (context) {

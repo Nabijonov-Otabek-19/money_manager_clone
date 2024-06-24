@@ -16,14 +16,22 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> refreshData() async {
     emit(state.copyWith(loadState: LoadState.loading));
 
-    final List<ExpenseModel> data = await storage.readAllNotes();
-    final expense = await storage.getExpense();
-    final income = await storage.getIncome();
+    final List<Future> futures = [
+      storage.getAllExpenses(),
+      storage.getCurrentMonthExpenses(),
+      storage.getCurrentMonthIncomes(),
+    ];
+
+    final List<dynamic> results = await Future.wait(futures);
+
+    final List<MonthModel> data = results[0];
+    final expense = results[1];
+    final income = results[2];
 
     emit(state.copyWith(
-      expense: expense,
-      income: income,
-      balance: income - expense,
+      currentMonthExpense: expense,
+      currentMonthIncome: income,
+      currentMonthBalance: income - expense,
       list: data,
     ));
 
@@ -31,6 +39,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> deleteModel(int id) async {
-    await storage.delete(id);
+    await storage.deleteExpense(id);
   }
 }
