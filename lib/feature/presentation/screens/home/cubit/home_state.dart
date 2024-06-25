@@ -10,5 +10,3 @@ class HomeState with _$HomeState {
     @Default(0) int currentMonthBalance,
   }) = _HomeState;
 }
-
-enum LoadState { loading, loaded }

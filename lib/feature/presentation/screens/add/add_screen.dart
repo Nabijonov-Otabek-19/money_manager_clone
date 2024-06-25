@@ -28,7 +28,7 @@ class _AddScreenState extends State<AddScreen>
   String type = "Expense";
   bool isExpense = true;
 
-  final titleList = [
+  final titleExpenseList = [
     "Snack",
     "Health",
     "Food",
@@ -36,14 +36,14 @@ class _AddScreenState extends State<AddScreen>
     "Transportation",
     "Education",
   ];
-  final titleList2 = [
+  final titleIncomeList = [
     "Salary",
     "Investment",
     "Awards",
     "Others",
   ];
 
-  final iconList = [
+  final iconExpenseList = [
     "snack",
     "health",
     "food",
@@ -51,7 +51,7 @@ class _AddScreenState extends State<AddScreen>
     "transportation",
     "education",
   ];
-  final iconList2 = [
+  final iconIncomeList = [
     "salary",
     "investment",
     "awards",
@@ -141,7 +141,6 @@ class _AddScreenState extends State<AddScreen>
                   child: TabBar(
                     controller: _tabController,
                     onTap: (value) {
-                      debugPrint(value.toString());
                       if (value == 0) {
                         type = "Expense";
                         isExpense = true;
@@ -195,11 +194,11 @@ class _AddScreenState extends State<AddScreen>
                         controller: _tabController,
                         children: [
                           GridView.builder(
-                            itemCount: titleList.length,
+                            itemCount: titleExpenseList.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
-                              final title = titleList[index];
-                              final icon = iconList[index];
+                              final title = titleExpenseList[index];
+                              final icon = iconExpenseList[index];
 
                               return GridTile(
                                 child: InkWell(
@@ -218,11 +217,11 @@ class _AddScreenState extends State<AddScreen>
                             ),
                           ),
                           GridView.builder(
-                            itemCount: titleList2.length,
+                            itemCount: titleIncomeList.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
-                              final title = titleList2[index];
-                              final icon = iconList2[index];
+                              final title = titleIncomeList[index];
+                              final icon = iconIncomeList[index];
 
                               return GridTile(
                                 child: InkWell(
@@ -265,11 +264,11 @@ class _AddScreenState extends State<AddScreen>
                             .trim()
                             .replaceAll(" ", "");
                         final title = isExpense
-                            ? titleList[currentIndex]
-                            : titleList2[currentIndex];
+                            ? titleExpenseList[currentIndex]
+                            : titleIncomeList[currentIndex];
                         final icon = isExpense
-                            ? iconList[currentIndex]
-                            : iconList2[currentIndex];
+                            ? iconExpenseList[currentIndex]
+                            : iconIncomeList[currentIndex];
 
                         if (widget.model == null) {
                           // Add expense
@@ -383,7 +382,7 @@ class _AddScreenState extends State<AddScreen>
           title,
           style: pregular.copyWith(
             fontSize: 12,
-            color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+            color: Theme.of(context).canvasColor,
           ),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,

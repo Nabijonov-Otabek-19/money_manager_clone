@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../data/models/my_enums.dart';
 import '../../home/cubit/home_cubit.dart';
 
 part 'main_state.dart';

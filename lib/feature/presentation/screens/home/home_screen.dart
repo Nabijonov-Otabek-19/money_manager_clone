@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../../data/datasources/my_storage.dart';
+import '../../../data/models/my_enums.dart';
 import '../../themes/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -145,15 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   if (state.list.isEmpty) {
                     return Center(
-                      child: Text(
-                        "Empty".tr,
-                        style: pmedium.copyWith(
-                          fontSize: 30,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
-                        ),
+                      child: Image.asset(
+                        'empty3'.pngIcon,
+                        width: 140,
+                        height: 140,
                       ),
                     );
                   }
@@ -202,7 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           "Expense: $expense",
                                           style: pregular.copyWith(
                                             fontSize: 12,
-                                            color: Colors.black45,
+                                            color: context.isDarkThemeMode
+                                                ? AppColors.white
+                                                : Colors.black45,
                                           ),
                                         ),
                                         const SizedBox(width: 6),
@@ -210,7 +207,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           "Income: $income",
                                           style: pregular.copyWith(
                                             fontSize: 12,
-                                            color: Colors.black45,
+                                            color: context.isDarkThemeMode
+                                                ? AppColors.white
+                                                : Colors.black45,
                                           ),
                                         ),
                                       ],
@@ -260,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(100),
               ),
               backgroundColor: Colors.orangeAccent,
-              child: const Icon(Icons.add),
+              child: const Icon(Icons.add, color: AppColors.black),
             ),
           );
         },

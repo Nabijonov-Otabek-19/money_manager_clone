@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 
 import '../../../../data/datasources/my_storage.dart';
-import '../../home/cubit/home_cubit.dart';
+import '../../../../data/models/my_enums.dart';
 
 part 'detail_state.dart';
 

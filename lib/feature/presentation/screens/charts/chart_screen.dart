@@ -1,5 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:money_manager_clone/core/extensions/my_extensions.dart';
+import 'package:money_manager_clone/feature/presentation/screens/charts/cubit/chart_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../themes/colors.dart';
@@ -12,211 +15,189 @@ class ChartScreen extends StatefulWidget {
 }
 
 class _ChartScreenState extends State<ChartScreen> {
-  int touchedIndex = -1;
+  final cubit = ChartCubit();
+
+  final GlobalKey _menuKeyLang = GlobalKey();
+
+  final List<String> types = ["Expense", "Income"];
+
+  @override
+  void initState() {
+    cubit.getAllTypeModels();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Chart"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: PieChart(
-                    PieChartData(
-                      pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                          setState(() {
-                            if (!event.isInterestedForInteractions ||
-                                pieTouchResponse == null ||
-                                pieTouchResponse.touchedSection == null) {
-                              touchedIndex = -1;
-                              return;
-                            }
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!.touchedSectionIndex;
-                          });
-                        },
-                      ),
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 30,
-                      sections: showingSections(),
+    return BlocProvider(
+      create: (context) => cubit,
+      child: BlocBuilder<ChartCubit, ChartState>(
+        buildWhen: (pr, cr) =>
+            pr.loadState != cr.loadState || pr.moneyType != cr.moneyType,
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: InkWell(
+                highlightColor: AppColors.transparent,
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  // show menu button
+                  dynamic state = _menuKeyLang.currentState;
+                  state
+                      .showButtonMenu(); // This opens the dropdown menu programmatically.
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: PopupMenuButton<String>(
+                    surfaceTintColor: AppColors.transparent,
+                    shadowColor: AppColors.transparent,
+                    key: _menuKeyLang,
+                    color: Theme.of(context).cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
+                    child: Text(
+                      "${state.moneyType} ▼",
+                      style: pmedium.copyWith(
+                        fontSize: 16,
+                        color:
+                            Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      ),
+                    ),
+                    itemBuilder: (context) {
+                      return types.map((choice) {
+                        return PopupMenuItem(
+                          value: choice,
+                          child: Text(
+                            choice,
+                            style: pmedium.copyWith(fontSize: 14),
+                          ),
+                        );
+                      }).toList();
+                    },
+                    onSelected: (value) async {
+                      if (value != state.moneyType) {
+                        cubit.changeType(value);
+                        await cubit.getAllTypeModels();
+                      }
+                    },
                   ),
                 ),
-                const Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 50),
-                    Indicator(
-                      color: AppColors.blue,
-                      text: 'First',
-                      isSquare: true,
-                    ),
-                    SizedBox(height: 4),
-                    Indicator(
-                      color: AppColors.yellow,
-                      text: 'Second',
-                      isSquare: true,
-                    ),
-                    SizedBox(height: 4),
-                    Indicator(
-                      color: AppColors.purple,
-                      text: 'Third',
-                      isSquare: true,
-                    ),
-                    SizedBox(height: 4),
-                    Indicator(
-                      color: AppColors.green,
-                      text: 'Fourth',
-                      isSquare: true,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 12),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 12,
               ),
-              child: ListView.builder(
-                itemCount: 10,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Index : $index",
-                          style: pregular.copyWith(fontSize: 16),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(50),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    bottom: 16,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Total:",
+                        style: pmedium.copyWith(
+                          fontSize: 16,
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
                         ),
-                        const Icon(Icons.ac_unit),
-                      ],
+                      ),
+                      Text(
+                        separateBalance(state.totalExpense.toString()),
+                        style: pmedium.copyWith(
+                          fontSize: 16,
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            body: Builder(
+              builder: (context) {
+                if (state.list.isEmpty) {
+                  return Center(
+                    child: Image.asset(
+                      'empty3'.pngIcon,
+                      width: 140,
+                      height: 140,
                     ),
                   );
-                },
-              ),
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                  child: ListView.builder(
+                    itemCount: state.list.length,
+                    itemBuilder: (context, index) {
+                      final model = state.list[index];
+                      return Card(
+                        elevation: 1,
+                        color: Theme.of(context).cardColor,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: ColoredBox(
+                                      color: AppColors.orange,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          model.icon.svgIcon,
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    model.title,
+                                    style: pregular.copyWith(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                separateBalance(model.number.toString()),
+                                style: pregular.copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          );
+        },
       ),
-    );
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 22.0 : 14.0;
-      final radius = isTouched ? 50.0 : 40.0;
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: AppColors.blue,
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: AppColors.black,
-            ),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: AppColors.yellow,
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: AppColors.black,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: AppColors.purple,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: AppColors.black,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: AppColors.green,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: AppColors.black,
-            ),
-          );
-        default:
-          throw Error();
-      }
-    });
-  }
-}
-
-class Indicator extends StatelessWidget {
-  const Indicator({
-    super.key,
-    required this.color,
-    required this.text,
-    required this.isSquare,
-    this.size = 16,
-    this.textColor,
-  });
-  final Color color;
-  final String text;
-  final bool isSquare;
-  final double size;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
-            color: color,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: textColor,
-          ),
-        )
-      ],
     );
   }
 }

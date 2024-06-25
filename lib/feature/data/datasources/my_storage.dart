@@ -66,7 +66,7 @@ class ExpenseStorage {
     await db.execute(expenseTable);
   }
 
-  Future<int> createMonth(MonthModel month) async {
+  Future<int> _createMonth(MonthModel month) async {
     final db = await instance.database;
 
     // Check if month exists
@@ -83,7 +83,7 @@ class ExpenseStorage {
     return await db.insert('months', month.toJson());
   }
 
-  Future<int> createDay(DayModel day, int monthId) async {
+  Future<int> _createDay(DayModel day, int monthId) async {
     final db = await instance.database;
 
     // Check if day exists
@@ -100,7 +100,7 @@ class ExpenseStorage {
     return await db.insert('days', day.toJson(monthId));
   }
 
-  Future<int> createExpense(ExpenseModel expense, int dayId) async {
+  Future<int> _createExpense(ExpenseModel expense, int dayId) async {
     final db = await instance.database;
     return await db.insert(ExpenseFields.tableName, expense.toJson(dayId));
   }
@@ -115,15 +115,15 @@ class ExpenseStorage {
         expense.createdTime.month, expense.createdTime.day);
 
     // Create or get month
-    int monthId = await createMonth(
+    int monthId = await _createMonth(
         MonthModel(monthTime: currentMonth, listDayModel: []));
 
     // Create or get day
-    int dayId = await createDay(
+    int dayId = await _createDay(
         DayModel(dayTime: currentDay, listExpenseModel: []), monthId);
 
     // Create expense
-    await createExpense(expense, dayId);
+    await _createExpense(expense, dayId);
   }
 
   Future<List<MonthModel>> getAllExpenses() async {
@@ -139,10 +139,12 @@ class ExpenseStorage {
       List<DayModel> days = [];
 
       // Fetch all days for the current month
+      const orderBy = 'dayTime DESC';
       final dayMaps = await db.query(
         'days',
         where: 'monthId = ?',
         whereArgs: [monthId],
+        orderBy: orderBy,
       );
 
       for (var dayMap in dayMaps) {
@@ -222,6 +224,20 @@ class ExpenseStorage {
     final totalExpense = list.fold(0, (sum, model) => sum + model.number);
 
     return totalExpense;
+  }
+
+  Future<List<ExpenseModel>> getModelsByTitle(String type) async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      ExpenseFields.tableName,
+      columns: ExpenseFields.values,
+      where: '${ExpenseFields.type} = ?',
+      whereArgs: [type],
+    );
+
+    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
+    return list;
   }
 
   Future<int> getCurrentMonthIncomes() async {

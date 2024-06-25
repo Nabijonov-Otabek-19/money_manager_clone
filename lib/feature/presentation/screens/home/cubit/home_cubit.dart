@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../data/datasources/my_storage.dart';
+import '../../../../data/models/my_enums.dart';
 import '../../../../data/models/my_model.dart';
 
 part 'home_state.dart';

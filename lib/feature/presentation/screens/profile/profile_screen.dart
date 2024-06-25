@@ -148,36 +148,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Theme.of(context).canvasColor,
               ),
             ),
-            PopupMenuButton<String>(
-              surfaceTintColor: AppColors.transparent,
-              key: _menuKeyLang,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                currentLang,
-                style: pregular.copyWith(
-                  fontSize: 14,
-                  color: Theme.of(context).canvasColor,
+            InkWell(
+              //splashColor: AppColors.transparent,
+              highlightColor: AppColors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                // show menu button
+                dynamic state = _menuKeyLang.currentState;
+                state
+                    .showButtonMenu(); // This opens the dropdown menu programmatically.
+              },
+              child: PopupMenuButton<String>(
+                surfaceTintColor: AppColors.transparent,
+                shadowColor: AppColors.transparent,
+                key: _menuKeyLang,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
+                child: Text(
+                  currentLang,
+                  style: pregular.copyWith(
+                    fontSize: 14,
+                    color: Theme.of(context).canvasColor,
+                  ),
+                ),
+                itemBuilder: (context) {
+                  return languages.map((choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(
+                        choice,
+                        style: pregular.copyWith(fontSize: 14),
+                      ),
+                    );
+                  }).toList();
+                },
+                onSelected: (value) {
+                  String localeCode = languageMap[value] ?? "en";
+                  Get.updateLocale(Locale(localeCode));
+                  preferences.lang = value;
+                },
               ),
-              itemBuilder: (context) {
-                return languages.map((choice) {
-                  return PopupMenuItem(
-                    value: choice,
-                    child: Text(
-                      choice,
-                      style: pregular.copyWith(fontSize: 14),
-                    ),
-                  );
-                }).toList();
-              },
-              onSelected: (value) {
-                String localeCode = languageMap[value] ?? "en";
-                Get.updateLocale(Locale(localeCode));
-                preferences.lang = value;
-              },
             ),
           ],
         ),
