@@ -100,9 +100,9 @@ class _AddScreenState extends State<AddScreen>
 
   int checkType(String type) {
     if (type == "Expense") {
-      return expenseTypeMap[type] ?? 0;
+      return expenseTypeMap[widget.model?.title] ?? 0;
     } else {
-      return incomeTypeMap[type] ?? 0;
+      return incomeTypeMap[widget.model?.title] ?? 0;
     }
   }
 
@@ -242,7 +242,66 @@ class _AddScreenState extends State<AddScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 1),
+                        IconButton(
+                          onPressed: () {
+                            // pick photo
+                          },
+                          icon: Icon(
+                            Icons.photo_library_outlined,
+                            size: 26,
+                            color: context.isDarkThemeMode
+                                ? Colors.grey
+                                : Colors.black45,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        InkWell(
+                          onTap: () {
+                            // set or change date
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.blue,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 0),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 12,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  widget.model == null
+                                      ? convertDate2(
+                                          DateTime.now().toIso8601String())
+                                      : convertDate2(widget.model!.createdTime
+                                          .toIso8601String()),
+                                  style: pregular.copyWith(
+                                    fontSize: 14,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: noteController,
                       keyboardType: TextInputType.text,
@@ -309,7 +368,7 @@ class _AddScreenState extends State<AddScreen>
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.blue,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
                           child: Text(
@@ -340,6 +399,7 @@ class _AddScreenState extends State<AddScreen>
         fontSize: 14,
         color: Colors.grey,
       ),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
       filled: true,
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(color: Colors.grey, width: 0.8),
@@ -360,9 +420,8 @@ class _AddScreenState extends State<AddScreen>
         ClipRRect(
           borderRadius: BorderRadius.circular(80),
           child: ColoredBox(
-            color: currentIndex == index
-                    ? AppColors.orange
-                    : Colors.grey.shade400,
+            color:
+                currentIndex == index ? AppColors.orange : Colors.grey.shade400,
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: SvgPicture.asset(

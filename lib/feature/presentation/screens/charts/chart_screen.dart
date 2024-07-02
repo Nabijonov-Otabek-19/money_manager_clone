@@ -138,60 +138,58 @@ class _ChartScreenState extends State<ChartScreen> {
                     ),
                   );
                 }
-                return Padding(
+                return ListView.builder(
+                  itemCount: state.list.length,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 12,
                   ),
-                  child: ListView.builder(
-                    itemCount: state.list.length,
-                    itemBuilder: (context, index) {
-                      final model = state.list[index];
-                      return Card(
-                        elevation: 1,
-                        color: Theme.of(context).cardColor,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: ColoredBox(
-                                      color: AppColors.orange,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SvgPicture.asset(
-                                          model.icon.svgIcon,
-                                          width: 20,
-                                          height: 20,
-                                        ),
+                  itemBuilder: (context, index) {
+                    final model = state.list[index];
+                    return Card(
+                      elevation: 1,
+                      color: Theme.of(context).cardColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(40),
+                                  child: ColoredBox(
+                                    color: AppColors.orange,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset(
+                                        model.icon.svgIcon,
+                                        width: 20,
+                                        height: 20,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    model.title,
-                                    style: pregular.copyWith(fontSize: 14),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                separateBalance(model.number.toString()),
-                                style: pregular.copyWith(fontSize: 14),
-                              ),
-                            ],
-                          ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  model.title,
+                                  style: pregular.copyWith(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              separateBalance(model.number.toString()),
+                              style: pregular.copyWith(fontSize: 14),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

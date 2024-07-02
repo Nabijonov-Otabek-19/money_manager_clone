@@ -42,6 +42,13 @@ String convertDate(String inputDate) {
   return formattedDate;
 }
 
+String convertDate2(String inputDate) {
+  DateTime date = DateTime.parse(inputDate);
+  DateFormat formatter = DateFormat('dd MMMM');
+  String formattedDate = formatter.format(date);
+  return formattedDate;
+}
+
 class MoneyTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

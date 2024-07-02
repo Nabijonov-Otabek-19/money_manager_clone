@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    cubit.refreshData();
+    refresh();
   }
 
   @override
@@ -82,14 +85,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
+                          AnimatedDigitWidget(
+                            value: state.currentMonthIncome,
+                            enableSeparator: true,
+                            separateSymbol: " ",
+                            textStyle: pmedium.copyWith(
+                              color: AppColors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                          /*Text(
                             separateBalance(
                                 state.currentMonthIncome.toString()),
                             style: pmedium.copyWith(
                               color: Colors.black,
                               fontSize: 16,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Column(
@@ -102,11 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            separateBalance(
-                                state.currentMonthExpense.toString()),
-                            style: pmedium.copyWith(
-                              color: Colors.black,
+                          AnimatedDigitWidget(
+                            value: state.currentMonthExpense,
+                            enableSeparator: true,
+                            separateSymbol: " ",
+                            textStyle: pmedium.copyWith(
+                              color: AppColors.black,
                               fontSize: 16,
                             ),
                           ),
@@ -122,11 +135,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            separateBalance(
-                                state.currentMonthBalance.toString()),
-                            style: pmedium.copyWith(
-                              color: Colors.black,
+                          AnimatedDigitWidget(
+                            value: state.currentMonthBalance,
+                            enableSeparator: true,
+                            separateSymbol: " ",
+                            textStyle: pmedium.copyWith(
+                              color: AppColors.black,
                               fontSize: 16,
                             ),
                           ),
@@ -143,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state.loadState == LoadState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (state.list.isEmpty) {
+                  if (state.dayModels.isEmpty) {
                     return Center(
                       child: Image.asset(
                         'empty3'.pngIcon,
@@ -153,13 +167,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
 
-                  final monthModels = state.list.first;
-
                   return ListView.builder(
-                    itemCount: state.list.first.listDayModel.length,
+                    itemCount: state.dayModels.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, dayIndex) {
-                      final dayModels = monthModels.listDayModel;
+                      final dayModels = state.dayModels;
                       final expenseModels =
                           dayModels[dayIndex].listExpenseModel;
 
@@ -233,9 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     'detail',
                                     arguments: expenseModels[modelIndex].id,
-                                  ).whenComplete(
-                                    () async => await cubit.refreshData(),
-                                  );
+                                  ).whenComplete(() async => await refresh());
                                 },
                                 child: expanseItem(expenseModels[modelIndex]),
                               );
@@ -252,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 Navigator.pushNamed(context, '/add', arguments: null)
                     .whenComplete(
-                  () async => await cubit.refreshData(),
+                  () async => await refresh(),
                 );
               },
               shape: RoundedRectangleBorder(
@@ -265,6 +275,10 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  Future<void> refresh() async {
+    cubit.refreshData(DateTime(DateTime.now().year, DateTime.now().month));
   }
 
   int calculateExpense(List<ExpenseModel> list) {
@@ -296,9 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SlidableAction(
             onPressed: (context) {
               Navigator.pushNamed(context, '/add', arguments: model)
-                  .whenComplete(
-                () async => await cubit.refreshData(),
-              );
+                  .whenComplete(() async => await refresh());
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12),
@@ -312,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SlidableAction(
             onPressed: (context) async {
               await cubit.deleteModel(model.id ?? -1);
-              await cubit.refreshData();
+              await refresh();
             },
             borderRadius: const BorderRadius.only(
               topRight: Radius.circular(12),
@@ -326,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       child: Card(
-        elevation: 1.2,
+        elevation: 1,
         color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

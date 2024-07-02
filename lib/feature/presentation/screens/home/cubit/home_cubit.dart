@@ -14,26 +14,26 @@ class HomeCubit extends Cubit<HomeState> {
 
   final ExpenseStorage storage = ExpenseStorage.instance;
 
-  Future<void> refreshData() async {
+  Future<void> refreshData(DateTime monthTime) async {
     emit(state.copyWith(loadState: LoadState.loading));
 
     final List<Future> futures = [
-      storage.getAllExpenses(),
+      storage.getDaysByMonth(monthTime),
       storage.getCurrentMonthExpenses(),
       storage.getCurrentMonthIncomes(),
     ];
 
     final List<dynamic> results = await Future.wait(futures);
 
-    final List<MonthModel> data = results[0];
+    final List<DayModel> data = results[0];
     final expense = results[1];
     final income = results[2];
 
     emit(state.copyWith(
+      dayModels: data,
       currentMonthExpense: expense,
       currentMonthIncome: income,
       currentMonthBalance: income - expense,
-      list: data,
     ));
 
     emit(state.copyWith(loadState: LoadState.loaded));

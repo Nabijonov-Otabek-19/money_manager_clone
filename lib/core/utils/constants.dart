@@ -3,7 +3,9 @@ import 'dart:ui';
 import '../../feature/presentation/themes/colors.dart';
 
 class ExpenseFields {
-  static const tableName = "my_expense";
+  static const expenseTableName = "expenses";
+  static const dayTableName = "days";
+  static const monthTableName = "months";
 
   static const id = "id";
   static const dayId = "dayId";
