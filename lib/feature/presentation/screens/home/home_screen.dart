@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
+import 'package:money_manager_clone/core/utils/constants.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
@@ -302,6 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget expanseItem(ExpenseModel model) {
+    final random = Random().nextInt(6);
     return Slidable(
       key: const ValueKey(0),
       endActionPane: ActionPane(
@@ -353,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: ColoredBox(
-                  color: AppColors.orange,
+                  color: colorList[random],
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
