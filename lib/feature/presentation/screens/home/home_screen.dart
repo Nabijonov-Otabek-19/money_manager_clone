@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/core/utils/constants.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
-import 'package:money_manager_clone/feature/presentation/screens/home/cubit/home_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../../data/datasources/my_storage.dart';
@@ -24,16 +24,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final cubit = HomeCubit();
-
   TextEditingController titleController = TextEditingController();
   TextEditingController numberController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    refresh();
-  }
+  late MainCubit mainCubit;
 
   @override
   void dispose() {
@@ -43,9 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    mainCubit = context.read<MainCubit>();
+
     return BlocProvider(
-      create: (context) => cubit,
-      child: BlocBuilder<HomeCubit, HomeState>(
+      create: (context) => mainCubit,
+      child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) => pr.loadState != cr.loadState,
         builder: (blocContext, state) {
           return Scaffold(
@@ -242,12 +238,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               return InkWell(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
-                                onTap: () {
-                                  Navigator.pushNamed(
+                                onTap: () async {
+                                  final needRefresh = await Navigator.pushNamed(
                                     context,
                                     'detail',
                                     arguments: expenseModels[modelIndex].id,
-                                  ).whenComplete(() async => await refresh());
+                                  );
+                                  if(needRefresh != null){
+                                    await refresh();
+                                  }
                                 },
                                 child: expanseItem(expenseModels[modelIndex]),
                               );
@@ -262,10 +261,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                Navigator.pushNamed(context, '/add', arguments: null)
-                    .whenComplete(
-                  () async => await refresh(),
-                );
+                final needRefresh = await Navigator.pushNamed(
+                      context,
+                      '/add',
+                      arguments: null,
+                    );
+                if (needRefresh != null) {
+                  await refresh();
+                }
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
@@ -280,7 +283,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> refresh() async {
-    cubit.refreshData(DateTime(DateTime.now().year, DateTime.now().month));
+    await mainCubit.refreshData(DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+    ));
+    await mainCubit.getAllTypeModels();
   }
 
   int calculateExpense(List<ExpenseModel> list) {
@@ -311,9 +318,11 @@ class _HomeScreenState extends State<HomeScreen> {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) {
-              Navigator.pushNamed(context, '/add', arguments: model)
-                  .whenComplete(() async => await refresh());
+            onPressed: (context)async {
+              final needRefresh = await Navigator.pushNamed(context, '/add', arguments: model);
+              if(needRefresh != null){
+                await refresh();
+              }
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12),
@@ -326,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SlidableAction(
             onPressed: (context) async {
-              await cubit.deleteModel(model.id ?? -1);
+              await mainCubit.deleteModel(model.id ?? -1);
               await refresh();
             },
             borderRadius: const BorderRadius.only(

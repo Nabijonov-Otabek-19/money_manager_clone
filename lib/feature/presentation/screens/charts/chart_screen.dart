@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
-import 'package:money_manager_clone/feature/presentation/screens/charts/cubit/chart_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
 import '../../themes/colors.dart';
@@ -15,29 +15,24 @@ class ChartScreen extends StatefulWidget {
 }
 
 class _ChartScreenState extends State<ChartScreen> {
-  final cubit = ChartCubit();
-
   final GlobalKey _menuKeyLang = GlobalKey();
+
+  late MainCubit mainCubit;
 
   final List<String> types = ["Expense", "Income"];
 
   @override
   void initState() {
-    cubit.getAllTypeModels();
     super.initState();
   }
 
   @override
-  void dispose() {
-    cubit.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    mainCubit = context.read<MainCubit>();
+
     return BlocProvider(
-      create: (context) => cubit,
-      child: BlocBuilder<ChartCubit, ChartState>(
+      create: (context) => mainCubit,
+      child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) =>
             pr.loadState != cr.loadState || pr.moneyType != cr.moneyType,
         builder: (context, state) {
@@ -83,8 +78,8 @@ class _ChartScreenState extends State<ChartScreen> {
                     },
                     onSelected: (value) async {
                       if (value != state.moneyType) {
-                        cubit.changeType(value);
-                        await cubit.getAllTypeModels();
+                        mainCubit.changeType(value);
+                        await mainCubit.getAllTypeModels();
                       }
                     },
                   ),

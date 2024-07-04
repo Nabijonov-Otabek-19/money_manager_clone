@@ -44,3 +44,49 @@ final List<String> allTypeList = [
   "Awards",
   "Others",
 ];
+
+final titleExpenseList = [
+  "Snack",
+  "Health",
+  "Food",
+  "Beauty",
+  "Transportation",
+  "Education",
+];
+final titleIncomeList = [
+  "Salary",
+  "Investment",
+  "Awards",
+  "Others",
+];
+
+final iconExpenseList = [
+  "snack",
+  "health",
+  "food",
+  "beauty",
+  "transportation",
+  "education",
+];
+final iconIncomeList = [
+  "salary",
+  "investment",
+  "awards",
+  "others",
+];
+
+Map<String, int> expenseTypeMap = {
+  "Snack": 0,
+  "Health": 1,
+  "Food": 2,
+  "Beauty": 3,
+  "Transportation": 4,
+  "Education": 5,
+  "Settings": 6,
+};
+Map<String, int> incomeTypeMap = {
+  "Salary": 0,
+  "Investment": 1,
+  "Awards": 2,
+  "Others": 3,
+};

@@ -18,6 +18,13 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MainState {
   LoadState get loadState => throw _privateConstructorUsedError;
   int get selectedIndex => throw _privateConstructorUsedError;
+  List<DayModel> get dayModels => throw _privateConstructorUsedError;
+  int get currentMonthExpense => throw _privateConstructorUsedError;
+  int get currentMonthIncome => throw _privateConstructorUsedError;
+  int get currentMonthBalance => throw _privateConstructorUsedError;
+  int get totalExpense => throw _privateConstructorUsedError;
+  List<ExpenseModel> get list => throw _privateConstructorUsedError;
+  String get moneyType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MainStateCopyWith<MainState> get copyWith =>
@@ -29,7 +36,16 @@ abstract class $MainStateCopyWith<$Res> {
   factory $MainStateCopyWith(MainState value, $Res Function(MainState) then) =
       _$MainStateCopyWithImpl<$Res, MainState>;
   @useResult
-  $Res call({LoadState loadState, int selectedIndex});
+  $Res call(
+      {LoadState loadState,
+      int selectedIndex,
+      List<DayModel> dayModels,
+      int currentMonthExpense,
+      int currentMonthIncome,
+      int currentMonthBalance,
+      int totalExpense,
+      List<ExpenseModel> list,
+      String moneyType});
 }
 
 /// @nodoc
@@ -47,6 +63,13 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
   $Res call({
     Object? loadState = null,
     Object? selectedIndex = null,
+    Object? dayModels = null,
+    Object? currentMonthExpense = null,
+    Object? currentMonthIncome = null,
+    Object? currentMonthBalance = null,
+    Object? totalExpense = null,
+    Object? list = null,
+    Object? moneyType = null,
   }) {
     return _then(_value.copyWith(
       loadState: null == loadState
@@ -57,6 +80,34 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      dayModels: null == dayModels
+          ? _value.dayModels
+          : dayModels // ignore: cast_nullable_to_non_nullable
+              as List<DayModel>,
+      currentMonthExpense: null == currentMonthExpense
+          ? _value.currentMonthExpense
+          : currentMonthExpense // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentMonthIncome: null == currentMonthIncome
+          ? _value.currentMonthIncome
+          : currentMonthIncome // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentMonthBalance: null == currentMonthBalance
+          ? _value.currentMonthBalance
+          : currentMonthBalance // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalExpense: null == totalExpense
+          ? _value.totalExpense
+          : totalExpense // ignore: cast_nullable_to_non_nullable
+              as int,
+      list: null == list
+          ? _value.list
+          : list // ignore: cast_nullable_to_non_nullable
+              as List<ExpenseModel>,
+      moneyType: null == moneyType
+          ? _value.moneyType
+          : moneyType // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -69,7 +120,16 @@ abstract class _$$MainStateImplCopyWith<$Res>
       __$$MainStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({LoadState loadState, int selectedIndex});
+  $Res call(
+      {LoadState loadState,
+      int selectedIndex,
+      List<DayModel> dayModels,
+      int currentMonthExpense,
+      int currentMonthIncome,
+      int currentMonthBalance,
+      int totalExpense,
+      List<ExpenseModel> list,
+      String moneyType});
 }
 
 /// @nodoc
@@ -85,6 +145,13 @@ class __$$MainStateImplCopyWithImpl<$Res>
   $Res call({
     Object? loadState = null,
     Object? selectedIndex = null,
+    Object? dayModels = null,
+    Object? currentMonthExpense = null,
+    Object? currentMonthIncome = null,
+    Object? currentMonthBalance = null,
+    Object? totalExpense = null,
+    Object? list = null,
+    Object? moneyType = null,
   }) {
     return _then(_$MainStateImpl(
       loadState: null == loadState
@@ -95,6 +162,34 @@ class __$$MainStateImplCopyWithImpl<$Res>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      dayModels: null == dayModels
+          ? _value._dayModels
+          : dayModels // ignore: cast_nullable_to_non_nullable
+              as List<DayModel>,
+      currentMonthExpense: null == currentMonthExpense
+          ? _value.currentMonthExpense
+          : currentMonthExpense // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentMonthIncome: null == currentMonthIncome
+          ? _value.currentMonthIncome
+          : currentMonthIncome // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentMonthBalance: null == currentMonthBalance
+          ? _value.currentMonthBalance
+          : currentMonthBalance // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalExpense: null == totalExpense
+          ? _value.totalExpense
+          : totalExpense // ignore: cast_nullable_to_non_nullable
+              as int,
+      list: null == list
+          ? _value._list
+          : list // ignore: cast_nullable_to_non_nullable
+              as List<ExpenseModel>,
+      moneyType: null == moneyType
+          ? _value.moneyType
+          : moneyType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -103,7 +198,17 @@ class __$$MainStateImplCopyWithImpl<$Res>
 
 class _$MainStateImpl implements _MainState {
   const _$MainStateImpl(
-      {this.loadState = LoadState.loaded, this.selectedIndex = 0});
+      {this.loadState = LoadState.loaded,
+      this.selectedIndex = 0,
+      final List<DayModel> dayModels = const [],
+      this.currentMonthExpense = 0,
+      this.currentMonthIncome = 0,
+      this.currentMonthBalance = 0,
+      this.totalExpense = 0,
+      final List<ExpenseModel> list = const [],
+      this.moneyType = "Expense"})
+      : _dayModels = dayModels,
+        _list = list;
 
   @override
   @JsonKey()
@@ -111,10 +216,43 @@ class _$MainStateImpl implements _MainState {
   @override
   @JsonKey()
   final int selectedIndex;
+  final List<DayModel> _dayModels;
+  @override
+  @JsonKey()
+  List<DayModel> get dayModels {
+    if (_dayModels is EqualUnmodifiableListView) return _dayModels;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_dayModels);
+  }
+
+  @override
+  @JsonKey()
+  final int currentMonthExpense;
+  @override
+  @JsonKey()
+  final int currentMonthIncome;
+  @override
+  @JsonKey()
+  final int currentMonthBalance;
+  @override
+  @JsonKey()
+  final int totalExpense;
+  final List<ExpenseModel> _list;
+  @override
+  @JsonKey()
+  List<ExpenseModel> get list {
+    if (_list is EqualUnmodifiableListView) return _list;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_list);
+  }
+
+  @override
+  @JsonKey()
+  final String moneyType;
 
   @override
   String toString() {
-    return 'MainState(loadState: $loadState, selectedIndex: $selectedIndex)';
+    return 'MainState(loadState: $loadState, selectedIndex: $selectedIndex, dayModels: $dayModels, currentMonthExpense: $currentMonthExpense, currentMonthIncome: $currentMonthIncome, currentMonthBalance: $currentMonthBalance, totalExpense: $totalExpense, list: $list, moneyType: $moneyType)';
   }
 
   @override
@@ -125,11 +263,34 @@ class _$MainStateImpl implements _MainState {
             (identical(other.loadState, loadState) ||
                 other.loadState == loadState) &&
             (identical(other.selectedIndex, selectedIndex) ||
-                other.selectedIndex == selectedIndex));
+                other.selectedIndex == selectedIndex) &&
+            const DeepCollectionEquality()
+                .equals(other._dayModels, _dayModels) &&
+            (identical(other.currentMonthExpense, currentMonthExpense) ||
+                other.currentMonthExpense == currentMonthExpense) &&
+            (identical(other.currentMonthIncome, currentMonthIncome) ||
+                other.currentMonthIncome == currentMonthIncome) &&
+            (identical(other.currentMonthBalance, currentMonthBalance) ||
+                other.currentMonthBalance == currentMonthBalance) &&
+            (identical(other.totalExpense, totalExpense) ||
+                other.totalExpense == totalExpense) &&
+            const DeepCollectionEquality().equals(other._list, _list) &&
+            (identical(other.moneyType, moneyType) ||
+                other.moneyType == moneyType));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, loadState, selectedIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      loadState,
+      selectedIndex,
+      const DeepCollectionEquality().hash(_dayModels),
+      currentMonthExpense,
+      currentMonthIncome,
+      currentMonthBalance,
+      totalExpense,
+      const DeepCollectionEquality().hash(_list),
+      moneyType);
 
   @JsonKey(ignore: true)
   @override
@@ -140,12 +301,34 @@ class _$MainStateImpl implements _MainState {
 
 abstract class _MainState implements MainState {
   const factory _MainState(
-      {final LoadState loadState, final int selectedIndex}) = _$MainStateImpl;
+      {final LoadState loadState,
+      final int selectedIndex,
+      final List<DayModel> dayModels,
+      final int currentMonthExpense,
+      final int currentMonthIncome,
+      final int currentMonthBalance,
+      final int totalExpense,
+      final List<ExpenseModel> list,
+      final String moneyType}) = _$MainStateImpl;
 
   @override
   LoadState get loadState;
   @override
   int get selectedIndex;
+  @override
+  List<DayModel> get dayModels;
+  @override
+  int get currentMonthExpense;
+  @override
+  int get currentMonthIncome;
+  @override
+  int get currentMonthBalance;
+  @override
+  int get totalExpense;
+  @override
+  List<ExpenseModel> get list;
+  @override
+  String get moneyType;
   @override
   @JsonKey(ignore: true)
   _$$MainStateImplCopyWith<_$MainStateImpl> get copyWith =>

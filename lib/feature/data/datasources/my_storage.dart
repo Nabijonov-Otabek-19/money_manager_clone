@@ -140,57 +140,6 @@ class ExpenseStorage {
     await _createExpense(expense, dayId);
   }
 
-  Future<List<MonthModel>> getAllExpenses(DateTime monthTime) async {
-    final db = await instance.database;
-
-    // Fetch all months
-    final monthMaps = await db.query(
-      'months',
-      where: 'monthTime = ?',
-      whereArgs: [monthTime.toIso8601String()],
-    );
-
-    List<MonthModel> months = [];
-
-    for (var monthMap in monthMaps) {
-      int monthId = monthMap['id'] as int;
-      List<DayModel> days = [];
-
-      // Fetch all days for the current month
-      const orderBy = 'dayTime DESC';
-      final dayMaps = await db.query(
-        'days',
-        where: 'monthId = ?',
-        whereArgs: [monthId],
-        orderBy: orderBy,
-      );
-
-      for (var dayMap in dayMaps) {
-        int dayId = dayMap['id'] as int;
-        List<ExpenseModel> expenses = [];
-
-        // Fetch all expenses for the current day
-        const orderBy = '${ExpenseFields.createdTime} DESC';
-        final expenseMaps = await db.query(
-          ExpenseFields.expenseTableName,
-          where: 'dayId = ?',
-          whereArgs: [dayId],
-          orderBy: orderBy,
-        );
-
-        for (var expenseMap in expenseMaps) {
-          expenses.add(ExpenseModel.fromJson(expenseMap));
-        }
-
-        days.add(DayModel.fromJson(dayMap, expenses));
-      }
-
-      months.add(MonthModel.fromJson(monthMap, days));
-    }
-
-    return months;
-  }
-
   Future<List<DayModel>> getDaysByMonth(DateTime monthTime) async {
     final db = await instance.database;
 
@@ -209,10 +158,12 @@ class ExpenseStorage {
     List<DayModel> days = [];
 
     // Fetch all days for the given monthId
+    const orderBy = 'dayTime DESC';
     final dayMaps = await db.query(
       'days',
       where: 'monthId = ?',
       whereArgs: [monthId],
+      orderBy: orderBy,
     );
 
     for (var dayMap in dayMaps) {
@@ -220,10 +171,12 @@ class ExpenseStorage {
       List<ExpenseModel> expenses = [];
 
       // Fetch all expenses for the current day
+      const orderBy = '${ExpenseFields.createdTime} DESC';
       final expenseMaps = await db.query(
         'expenses',
         where: 'dayId = ?',
         whereArgs: [dayId],
+        orderBy: orderBy,
       );
 
       for (var expenseMap in expenseMaps) {

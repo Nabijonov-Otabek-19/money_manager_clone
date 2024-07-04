@@ -2,77 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
-import 'package:money_manager_clone/feature/presentation/screens/add/cubit/add_cubit.dart';
+import 'package:money_manager_clone/feature/presentation/screens/add_edit/cubit/add_edit_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 
+import '../../../../core/utils/constants.dart';
 import '../../../data/models/my_model.dart';
 import '../../themes/fonts.dart';
 
-class AddScreen extends StatefulWidget {
+class AddEditScreen extends StatefulWidget {
   final ExpenseModel? model;
 
-  const AddScreen({super.key, required this.model});
+  const AddEditScreen({super.key, required this.model});
 
   @override
-  State<AddScreen> createState() => _AddScreenState();
+  State<AddEditScreen> createState() => _AddEditScreenState();
 }
 
-class _AddScreenState extends State<AddScreen>
+class _AddEditScreenState extends State<AddEditScreen>
     with SingleTickerProviderStateMixin {
   TextEditingController noteController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   late TabController _tabController;
 
-  final cubit = AddCubit();
+  final cubit = AddEditCubit();
   int currentIndex = -1;
   String type = "Expense";
   bool isExpense = true;
-
-  final titleExpenseList = [
-    "Snack",
-    "Health",
-    "Food",
-    "Beauty",
-    "Transportation",
-    "Education",
-  ];
-  final titleIncomeList = [
-    "Salary",
-    "Investment",
-    "Awards",
-    "Others",
-  ];
-
-  final iconExpenseList = [
-    "snack",
-    "health",
-    "food",
-    "beauty",
-    "transportation",
-    "education",
-  ];
-  final iconIncomeList = [
-    "salary",
-    "investment",
-    "awards",
-    "others",
-  ];
-
-  Map<String, int> expenseTypeMap = {
-    "Snack": 0,
-    "Health": 1,
-    "Food": 2,
-    "Beauty": 3,
-    "Transportation": 4,
-    "Education": 5,
-    "Settings": 6,
-  };
-  Map<String, int> incomeTypeMap = {
-    "Salary": 0,
-    "Investment": 1,
-    "Awards": 2,
-    "Others": 3,
-  };
+  DateTime selectedDateTime = DateTime.now();
 
   @override
   void initState() {
@@ -84,6 +40,7 @@ class _AddScreenState extends State<AddScreen>
       amountController.text = widget.model!.number.toString();
       currentIndex = checkType(widget.model!.type);
       isExpense = widget.model!.type == "Expense" ? true : false;
+      selectedDateTime = widget.model!.createdTime;
     }
   }
 
@@ -119,7 +76,7 @@ class _AddScreenState extends State<AddScreen>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => cubit,
-      child: BlocBuilder<AddCubit, AddState>(
+      child: BlocBuilder<AddEditCubit, AddEditState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -249,10 +206,10 @@ class _AddScreenState extends State<AddScreen>
                         const Spacer(flex: 1),
                         IconButton(
                           onPressed: () {
-                            // pick photo
+                            // pick photo from album or camera
                           },
                           icon: Icon(
-                            Icons.photo_library_outlined,
+                            Icons.camera_alt_outlined,
                             size: 26,
                             color: context.isDarkThemeMode
                                 ? Colors.grey
@@ -261,14 +218,18 @@ class _AddScreenState extends State<AddScreen>
                         ),
                         const SizedBox(width: 12),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             // set or change date
+                            final time = widget.model == null
+                                ? DateTime.now()
+                                : widget.model!.createdTime;
+                            await _openDateTimePicker(time);
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: AppColors.blue,
+                              color: AppColors.orange,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.2),
@@ -287,7 +248,7 @@ class _AddScreenState extends State<AddScreen>
                                 child: Text(
                                   widget.model == null
                                       ? convertDate2(
-                                          DateTime.now().toIso8601String())
+                                          selectedDateTime.toIso8601String())
                                       : convertDate2(widget.model!.createdTime
                                           .toIso8601String()),
                                   style: pregular.copyWith(
@@ -332,27 +293,27 @@ class _AddScreenState extends State<AddScreen>
                         if (widget.model == null) {
                           // Add expense
                           if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.addData(ExpenseModel(
+                            await cubit.addExpense(ExpenseModel(
                               title: title,
                               icon: icon,
                               number: int.tryParse(number) ?? 0,
                               type: type,
                               note: note,
-                              createdTime: DateTime.now(),
+                              createdTime: selectedDateTime,
                               photo: "",
                             ));
                           }
                         } else {
                           // Edit expense
                           if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.editModel(ExpenseModel(
+                            await cubit.updateExpense(ExpenseModel(
                               id: widget.model!.id,
                               title: title,
                               icon: icon,
                               number: int.tryParse(number) ?? 0,
                               type: type,
                               note: note,
-                              createdTime: widget.model!.createdTime,
+                              createdTime: selectedDateTime,
                               photo: "",
                             ));
                           }
@@ -361,7 +322,7 @@ class _AddScreenState extends State<AddScreen>
                         amountController.clear();
                         noteController.clear();
 
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       },
                       child: Container(
                         width: MediaQuery.sizeOf(context).width,
@@ -390,6 +351,41 @@ class _AddScreenState extends State<AddScreen>
         },
       ),
     );
+  }
+
+  Future<void> _openDateTimePicker(DateTime time) async {
+    final firstDate = DateTime.now().year - 2;
+    final lastDate = DateTime.now().year + 2;
+    final DateTime? pickedDateTime = await showDatePicker(
+      context: context,
+      initialDate: time,
+      firstDate: DateTime(firstDate),
+      lastDate: DateTime(lastDate),
+      builder: (context, child) {
+        final themeData = ThemeData.light().copyWith(
+          colorScheme: ColorScheme.light(
+            primary: AppColors.orange,
+            onPrimary: Colors.white,
+            surface:
+                context.isDarkThemeMode ? AppColors.black : AppColors.white,
+            onSurface: context.isDarkThemeMode ? Colors.white : AppColors.black,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor:
+                  context.isDarkThemeMode ? Colors.white : AppColors.black,
+            ),
+          ),
+        );
+        return Theme(data: themeData, child: child!);
+      },
+    );
+
+    if (pickedDateTime != null) {
+      setState(() {
+        selectedDateTime = pickedDateTime;
+      });
+    }
   }
 
   InputDecoration _inputDecoration(String label) {

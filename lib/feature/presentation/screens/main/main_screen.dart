@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     ProfileScreen(),
   ];
 
-  final cubit = MainCubit();
+  final MainCubit cubit = MainCubit();
 
   @override
   void dispose() {
@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     final theme = Theme.of(context);
 
     return BlocProvider(
-      create: (context) => cubit,
+      create: (context) => cubit..initial(),
       child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) => pr.selectedIndex != cr.selectedIndex,
         builder: (context, state) {

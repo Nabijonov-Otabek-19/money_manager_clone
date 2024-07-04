@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'add_cubit.dart';
+part of 'add_edit_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,16 +15,16 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$AddState {}
+mixin _$AddEditState {}
 
 /// @nodoc
 abstract class $AddStateCopyWith<$Res> {
-  factory $AddStateCopyWith(AddState value, $Res Function(AddState) then) =
-      _$AddStateCopyWithImpl<$Res, AddState>;
+  factory $AddStateCopyWith(AddEditState value, $Res Function(AddEditState) then) =
+      _$AddStateCopyWithImpl<$Res, AddEditState>;
 }
 
 /// @nodoc
-class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
+class _$AddStateCopyWithImpl<$Res, $Val extends AddEditState>
     implements $AddStateCopyWith<$Res> {
   _$AddStateCopyWithImpl(this._value, this._then);
 
@@ -52,7 +52,7 @@ class __$$AddStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddStateImpl implements _AddState {
+class _$AddStateImpl implements _AddEditState {
   const _$AddStateImpl();
 
   @override
@@ -70,6 +70,6 @@ class _$AddStateImpl implements _AddState {
   int get hashCode => runtimeType.hashCode;
 }
 
-abstract class _AddState implements AddState {
-  const factory _AddState() = _$AddStateImpl;
+abstract class _AddEditState implements AddEditState {
+  const factory _AddEditState() = _$AddStateImpl;
 }
