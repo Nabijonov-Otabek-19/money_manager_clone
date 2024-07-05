@@ -5,6 +5,7 @@ import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/presentation/screens/add_edit/cubit/add_edit_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 
+import '../../../../core/extensions/image_picker_extension.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../data/models/my_model.dart';
 import '../../themes/fonts.dart';
@@ -29,6 +30,9 @@ class _AddEditScreenState extends State<AddEditScreen>
   String type = "Expense";
   bool isExpense = true;
   DateTime selectedDateTime = DateTime.now();
+  String? photoPath;
+
+  final ImagePickerService _picker = ImagePickerService();
 
   @override
   void initState() {
@@ -205,8 +209,15 @@ class _AddEditScreenState extends State<AddEditScreen>
                       children: [
                         const Spacer(flex: 1),
                         IconButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // pick photo from album or camera
+                            await _openPickImageDialog(
+                              context,
+                              (fromGallery) async {
+                                photoPath =
+                                    await _picker.pickImage(fromGallery);
+                              },
+                            );
                           },
                           icon: Icon(
                             Icons.camera_alt_outlined,
@@ -300,7 +311,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                               type: type,
                               note: note,
                               createdTime: selectedDateTime,
-                              photo: "",
+                              photo: photoPath,
                             ));
                           }
                         } else {
@@ -314,7 +325,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                               type: type,
                               note: note,
                               createdTime: selectedDateTime,
-                              photo: "",
+                              photo: photoPath,
                             ));
                           }
                         }
@@ -350,6 +361,71 @@ class _AddEditScreenState extends State<AddEditScreen>
           );
         },
       ),
+    );
+  }
+
+  Future<void> _openPickImageDialog(
+    BuildContext ctx,
+    Future<void> Function(bool) onClick,
+  ) async {
+    return await showDialog<void>(
+      context: ctx,
+      builder: (context) {
+        return SimpleDialog(
+          insetPadding: const EdgeInsets.all(12),
+          surfaceTintColor: AppColors.transparent,
+          backgroundColor: ctx.isDarkThemeMode
+              ? AppColors.scaffoldBackDark
+              : AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          children: [
+            InkWell(
+              splashColor: AppColors.transparent,
+              highlightColor: AppColors.transparent,
+              onTap: () async {
+                // from camera
+                onClick(false);
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Text(
+                    "Camera",
+                    style: pmedium.copyWith(
+                      fontSize: 18,
+                      color: Theme.of(context).canvasColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              splashColor: AppColors.transparent,
+              highlightColor: AppColors.transparent,
+              onTap: () async {
+                // from gallery
+                onClick(true);
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Text(
+                    "Gallery",
+                    style: pmedium.copyWith(
+                      fontSize: 18,
+                      color: Theme.of(context).canvasColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

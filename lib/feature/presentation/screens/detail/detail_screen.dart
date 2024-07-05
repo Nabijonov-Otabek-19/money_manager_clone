@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,7 +38,7 @@ class _DetailScreenState extends State<DetailScreen> {
       child: PopScope(
         canPop: false,
         onPopInvoked: (didPop) {
-          if(!didPop){
+          if (!didPop) {
             Navigator.pop(context, needRefresh);
           }
         },
@@ -53,7 +55,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     "Empty".tr,
                     style: pmedium.copyWith(
                       fontSize: 30,
-                      color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
                     ),
                   ),
                 );
@@ -164,17 +167,15 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(
-                            state.model!.note,
-                            style: pregular.copyWith(
-                              fontSize: 18,
-                              color: Theme.of(context).canvasColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            textAlign: TextAlign.end,
+                        Text(
+                          state.model!.note,
+                          style: pregular.copyWith(
+                            fontSize: 18,
+                            color: Theme.of(context).canvasColor,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          textAlign: TextAlign.end,
                         ),
                       ],
                     ),
@@ -190,18 +191,13 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(
-                            state.model!.photo ?? "",
-                            style: pregular.copyWith(
-                              fontSize: 18,
-                              color: Theme.of(context).canvasColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
+                        state.model?.photo != null && state.model?.photo != ""
+                            ? Image.file(
+                                File(state.model?.photo ?? ""),
+                                width: 150,
+                                height: 150,
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                     const Spacer(),
@@ -217,7 +213,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: TextButton(
                             onPressed: () async {
                               // Edit model
-                               needRefresh = await Navigator.pushNamed(
+                              needRefresh = await Navigator.pushNamed(
                                 context,
                                 '/add',
                                 arguments: state.model!,
