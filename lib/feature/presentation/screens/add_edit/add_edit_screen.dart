@@ -311,7 +311,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                               type: type,
                               note: note,
                               createdTime: selectedDateTime,
-                              photo: photoPath,
+                              photo: photoPath ?? "",
                             ));
                           }
                         } else {
@@ -325,7 +325,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                               type: type,
                               note: note,
                               createdTime: selectedDateTime,
-                              photo: photoPath,
+                              photo: photoPath ?? "",
                             ));
                           }
                         }

@@ -27,7 +27,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void initState() {
-    cubit.getModel(widget.modelId);
+    cubit.getModelById(widget.modelId);
     super.initState();
   }
 
@@ -220,7 +220,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               );
 
                               if (needRefresh != null) {
-                                await cubit.getModel(widget.modelId);
+                                await cubit.getModelById(widget.modelId);
                               }
                             },
                             child: Text(

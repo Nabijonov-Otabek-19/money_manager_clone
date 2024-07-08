@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
-import 'package:money_manager_clone/core/utils/constants.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
 import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
@@ -28,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController numberController = TextEditingController();
 
   late MainCubit mainCubit;
+  
+  DateTime selectedDate = DateTime.now();
 
   @override
   void dispose() {
@@ -44,19 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
       child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) => pr.loadState != cr.loadState,
         builder: (blocContext, state) {
+           selectedDate = state.selectedTime == null
+              ? DateTime(DateTime.now().year, DateTime.now().month)
+              : state.selectedTime!;
+
           return Scaffold(
             appBar: AppBar(
               title: const Text("Money manager clone"),
               leading: IconButton(
                 onPressed: () {
-                  //
+                  // Search
                 },
                 icon: const Icon(Icons.search, size: 26),
               ),
               actions: [
                 IconButton(
-                  onPressed: () {
-                    //
+                  onPressed: () async {
+                    // month and year picker
                   },
                   icon: const Icon(Icons.calendar_month, size: 26),
                 ),
@@ -65,84 +70,136 @@ class _HomeScreenState extends State<HomeScreen> {
                 preferredSize: const Size.fromHeight(60),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 12,
-                    right: 12,
+                    left: 4,
+                    right: 4,
                     bottom: 14,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            "Income",
-                            style: pregular.copyWith(
-                              fontSize: 14,
-                              color: Colors.black54,
-                            ),
+                      InkWell(
+                        splashColor: AppColors.grey,
+                        highlightColor: AppColors.grey,
+                        onTap: () async {
+                          // month and year picker
+                          await _openMonthPicker();
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                selectedDate.year.toString(),
+                                style: pregular.copyWith(
+                                  fontSize: 12,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 1),
+                              Row(
+                                children: [
+                                  Text(
+                                    convertDate3(
+                                        selectedDate.toIso8601String()),
+                                    style: psemibold.copyWith(
+                                      fontSize: 16,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    "▼",
+                                    style: pregular.copyWith(
+                                      fontSize: 12,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          AnimatedDigitWidget(
-                            value: state.currentMonthIncome,
-                            enableSeparator: true,
-                            separateSymbol: " ",
-                            textStyle: pmedium.copyWith(
-                              color: AppColors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                          /*Text(
-                            separateBalance(
-                                state.currentMonthIncome.toString()),
-                            style: pmedium.copyWith(
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),*/
-                        ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            "Expenses",
-                            style: pregular.copyWith(
-                              fontSize: 14,
-                              color: Colors.black54,
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  "Income",
+                                  style: pregular.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                AnimatedDigitWidget(
+                                  value: state.currentMonthIncome,
+                                  enableSeparator: true,
+                                  separateSymbol: " ",
+                                  textStyle: pmedium.copyWith(
+                                    color: AppColors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                /*Text(
+                              separateBalance(
+                                  state.currentMonthIncome.toString()),
+                              style: pmedium.copyWith(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),*/
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedDigitWidget(
-                            value: state.currentMonthExpense,
-                            enableSeparator: true,
-                            separateSymbol: " ",
-                            textStyle: pmedium.copyWith(
-                              color: AppColors.black,
-                              fontSize: 16,
+                            Column(
+                              children: [
+                                Text(
+                                  "Expenses",
+                                  style: pregular.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                AnimatedDigitWidget(
+                                  value: state.currentMonthExpense,
+                                  enableSeparator: true,
+                                  separateSymbol: " ",
+                                  textStyle: pmedium.copyWith(
+                                    color: AppColors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "Balance",
-                            style: pregular.copyWith(
-                              fontSize: 14,
-                              color: Colors.black54,
+                            Column(
+                              children: [
+                                Text(
+                                  "Balance",
+                                  style: pregular.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                AnimatedDigitWidget(
+                                  value: state.currentMonthBalance,
+                                  enableSeparator: true,
+                                  separateSymbol: " ",
+                                  textStyle: pmedium.copyWith(
+                                    color: AppColors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedDigitWidget(
-                            value: state.currentMonthBalance,
-                            enableSeparator: true,
-                            separateSymbol: " ",
-                            textStyle: pmedium.copyWith(
-                              color: AppColors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -244,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'detail',
                                     arguments: expenseModels[modelIndex].id,
                                   );
-                                  if(needRefresh != null){
+                                  if (needRefresh != null) {
                                     await refresh();
                                   }
                                 },
@@ -262,10 +319,10 @@ class _HomeScreenState extends State<HomeScreen> {
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 final needRefresh = await Navigator.pushNamed(
-                      context,
-                      '/add',
-                      arguments: null,
-                    );
+                  context,
+                  '/add',
+                  arguments: null,
+                );
                 if (needRefresh != null) {
                   await refresh();
                 }
@@ -282,12 +339,43 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _openMonthPicker() async {
+    final firstDate = DateTime.now().year - 2;
+    final lastDate = DateTime.now().year + 2;
+    final currentDate = selectedDate;
+    
+    final DateTime? selected = await showMonthPicker(
+      context: context,
+      initialDate: mainCubit.state.selectedTime ?? DateTime.now(),
+      firstDate: DateTime(firstDate),
+      lastDate: DateTime(lastDate),
+      builder: (context, child) {
+        final themeData = ThemeData.light().copyWith(
+          colorScheme: ColorScheme.light(
+            primary: AppColors.orange,
+            onPrimary: Colors.white,
+            surface:
+                context.isDarkThemeMode ? AppColors.black : AppColors.white,
+            onSurface: context.isDarkThemeMode ? Colors.white : AppColors.black,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor:
+                  context.isDarkThemeMode ? Colors.white : AppColors.black,
+            ),
+          ),
+        );
+        return Theme(data: themeData, child: child!);
+      },
+    );
+    if (selected != null && currentDate != selected) {
+      mainCubit.changeDateTime(DateTime(selected.year, selected.month));
+      await refresh();
+    }
+  }
+
   Future<void> refresh() async {
-    await mainCubit.refreshData(DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-    ));
-    await mainCubit.getAllTypeModels();
+    await mainCubit.refreshData();
   }
 
   int calculateExpense(List<ExpenseModel> list) {
@@ -311,16 +399,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget expanseItem(ExpenseModel model) {
-    final random = Random().nextInt(6);
     return Slidable(
       key: const ValueKey(0),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context)async {
-              final needRefresh = await Navigator.pushNamed(context, '/add', arguments: model);
-              if(needRefresh != null){
+            onPressed: (context) async {
+              final needRefresh =
+                  await Navigator.pushNamed(context, '/add', arguments: model);
+              if (needRefresh != null) {
                 await refresh();
               }
             },
@@ -365,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: ColoredBox(
-                  color: colorList[random],
+                  color: AppColors.orange,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(

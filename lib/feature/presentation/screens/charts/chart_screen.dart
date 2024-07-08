@@ -22,11 +22,6 @@ class _ChartScreenState extends State<ChartScreen> {
   final List<String> types = ["Expense", "Income"];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     mainCubit = context.read<MainCubit>();
 

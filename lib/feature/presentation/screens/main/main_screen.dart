@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     final theme = Theme.of(context);
 
     return BlocProvider(
-      create: (context) => cubit..initial(),
+      create: (context) => cubit..refreshData(),
       child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) => pr.selectedIndex != cr.selectedIndex,
         builder: (context, state) {

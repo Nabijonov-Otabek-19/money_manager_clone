@@ -18,9 +18,11 @@ class DetailCubit extends Cubit<DetailState> {
     await storage.deleteExpense(id);
   }
 
-  Future<void> getModel(int id) async {
+  Future<void> getModelById(int id) async {
     emit(state.copyWith(loadState: LoadState.loading));
+
     final model = await storage.getExpenseById(id);
+
     emit(state.copyWith(model: model, loadState: LoadState.loaded));
   }
 }

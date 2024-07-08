@@ -71,7 +71,7 @@ class ExpenseStorage {
 
     // Check if month exists
     final monthMap = await db.query(
-      'months',
+      ExpenseFields.monthTableName,
       where: 'monthTime = ?',
       whereArgs: [month.monthTime.toIso8601String()],
     );
@@ -80,7 +80,7 @@ class ExpenseStorage {
       return monthMap.first['id'] as int;
     }
 
-    return await db.insert('months', month.toJson());
+    return await db.insert(ExpenseFields.monthTableName, month.toJson());
   }
 
   Future<int> _createDay(DayModel day, int monthId) async {
@@ -88,7 +88,7 @@ class ExpenseStorage {
 
     // Check if day exists
     final dayMap = await db.query(
-      'days',
+      ExpenseFields.dayTableName,
       where: 'dayTime = ? AND monthId = ?',
       whereArgs: [day.dayTime.toIso8601String(), monthId],
     );
@@ -97,13 +97,16 @@ class ExpenseStorage {
       return dayMap.first['id'] as int;
     }
 
-    return await db.insert('days', day.toJson(monthId));
+    return await db.insert(ExpenseFields.dayTableName, day.toJson(monthId));
   }
 
   Future<int> _createExpense(ExpenseModel expense, int dayId) async {
     final db = await instance.database;
+
     return await db.insert(
-        ExpenseFields.expenseTableName, expense.toJson(dayId));
+      ExpenseFields.expenseTableName,
+      expense.toJson(dayId),
+    );
   }
 
   Future<void> addExpense(ExpenseModel expense) async {
@@ -145,14 +148,12 @@ class ExpenseStorage {
 
     // Fetch the month by monthTime
     final monthMaps = await db.query(
-      'months',
+      ExpenseFields.monthTableName,
       where: 'monthTime = ?',
       whereArgs: [monthTime.toIso8601String()],
     );
 
-    if (monthMaps.isEmpty) {
-      return [];
-    }
+    if (monthMaps.isEmpty) return [];
 
     int monthId = monthMaps.first['id'] as int;
     List<DayModel> days = [];
@@ -160,7 +161,7 @@ class ExpenseStorage {
     // Fetch all days for the given monthId
     const orderBy = 'dayTime DESC';
     final dayMaps = await db.query(
-      'days',
+      ExpenseFields.dayTableName,
       where: 'monthId = ?',
       whereArgs: [monthId],
       orderBy: orderBy,
@@ -173,7 +174,7 @@ class ExpenseStorage {
       // Fetch all expenses for the current day
       const orderBy = '${ExpenseFields.createdTime} DESC';
       final expenseMaps = await db.query(
-        'expenses',
+        ExpenseFields.expenseTableName,
         where: 'dayId = ?',
         whereArgs: [dayId],
         orderBy: orderBy,
@@ -284,50 +285,129 @@ class ExpenseStorage {
     return 1;
   }
 
-  Future<int> getCurrentMonthExpenses() async {
+  Future<int> getCurrentMonthExpenses(DateTime monthTime) async {
     final db = await instance.database;
 
-    final maps = await db.query(
-      ExpenseFields.expenseTableName,
-      columns: ExpenseFields.values,
-      where: '${ExpenseFields.type} = ?',
-      whereArgs: ["Expense"],
+    List<ExpenseModel> expenses = [];
+
+    // Fetch the month by monthTime
+    final monthMaps = await db.query(
+      ExpenseFields.monthTableName,
+      where: 'monthTime = ?',
+      whereArgs: [monthTime.toIso8601String()],
     );
 
-    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
-    final totalExpense = list.fold(0, (sum, model) => sum + model.number);
+    if (monthMaps.isEmpty) return 0;
 
+    int monthId = monthMaps.first['id'] as int;
+
+    // Fetch all days for the given monthId
+    final dayMaps = await db.query(
+      ExpenseFields.dayTableName,
+      where: 'monthId = ?',
+      whereArgs: [monthId],
+    );
+
+    for (var dayMap in dayMaps) {
+      int dayId = dayMap['id'] as int;
+
+      // Fetch all expenses for the current day
+      final expenseMaps = await db.query(
+        ExpenseFields.expenseTableName,
+        where: 'dayId = ? AND ${ExpenseFields.type} = ?',
+        whereArgs: [dayId, "Expense"],
+      );
+
+      for (var expenseMap in expenseMaps) {
+        expenses.add(ExpenseModel.fromJson(expenseMap));
+      }
+    }
+
+    final totalExpense = expenses.fold(0, (sum, model) => sum + model.number);
     return totalExpense;
   }
 
-  Future<List<ExpenseModel>> getModelsByTitle(String type) async {
+  Future<int> getCurrentMonthIncomes(DateTime monthTime) async {
     final db = await instance.database;
 
-    final maps = await db.query(
-      ExpenseFields.expenseTableName,
-      columns: ExpenseFields.values,
-      where: '${ExpenseFields.type} = ?',
-      whereArgs: [type],
+    List<ExpenseModel> incomes = [];
+
+    // Fetch the month by monthTime
+    final monthMaps = await db.query(
+      ExpenseFields.monthTableName,
+      where: 'monthTime = ?',
+      whereArgs: [monthTime.toIso8601String()],
     );
 
-    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
-    return list;
+    if (monthMaps.isEmpty) return 0;
+
+    int monthId = monthMaps.first['id'] as int;
+
+    // Fetch all days for the given monthId
+    final dayMaps = await db.query(
+      ExpenseFields.dayTableName,
+      where: 'monthId = ?',
+      whereArgs: [monthId],
+    );
+
+    for (var dayMap in dayMaps) {
+      int dayId = dayMap['id'] as int;
+
+      // Fetch all expenses for the current day
+      final expenseMaps = await db.query(
+        ExpenseFields.expenseTableName,
+        where: 'dayId = ? AND ${ExpenseFields.type} = ?',
+        whereArgs: [dayId, "Income"],
+      );
+
+      for (var expenseMap in expenseMaps) {
+        incomes.add(ExpenseModel.fromJson(expenseMap));
+      }
+    }
+
+    final totalIncome = incomes.fold(0, (sum, model) => sum + model.number);
+    return totalIncome;
   }
 
-  Future<int> getCurrentMonthIncomes() async {
+  Future<List<ExpenseModel>> getModelsByType(
+      String type, DateTime monthTime) async {
     final db = await instance.database;
 
-    final maps = await db.query(
-      ExpenseFields.expenseTableName,
-      columns: ExpenseFields.values,
-      where: '${ExpenseFields.type} = ?',
-      whereArgs: ["Income"],
+    List<ExpenseModel> models = [];
+
+    // Fetch the month by monthTime
+    final monthMaps = await db.query(
+      ExpenseFields.monthTableName,
+      where: 'monthTime = ?',
+      whereArgs: [monthTime.toIso8601String()],
     );
 
-    final list = maps.map((model) => ExpenseModel.fromJson(model)).toList();
-    final totalIncome = list.fold(0, (sum, model) => sum + model.number);
+    if (monthMaps.isEmpty) return [];
 
-    return totalIncome;
+    int monthId = monthMaps.first['id'] as int;
+
+    // Fetch all days for the given monthId
+    final dayMaps = await db.query(
+      ExpenseFields.dayTableName,
+      where: 'monthId = ?',
+      whereArgs: [monthId],
+    );
+
+    for (var dayMap in dayMaps) {
+      int dayId = dayMap['id'] as int;
+
+      // Fetch all expenses for the current day
+      final expenseMaps = await db.query(
+        ExpenseFields.expenseTableName,
+        where: 'dayId = ? AND ${ExpenseFields.type} = ?',
+        whereArgs: [dayId, type],
+      );
+
+      for (var expenseMap in expenseMaps) {
+        models.add(ExpenseModel.fromJson(expenseMap));
+      }
+    }
+    return models;
   }
 
   Future close() async {

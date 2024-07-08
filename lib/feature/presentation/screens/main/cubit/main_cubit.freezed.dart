@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MainState {
   LoadState get loadState => throw _privateConstructorUsedError;
   int get selectedIndex => throw _privateConstructorUsedError;
+  DateTime? get selectedTime => throw _privateConstructorUsedError;
   List<DayModel> get dayModels => throw _privateConstructorUsedError;
   int get currentMonthExpense => throw _privateConstructorUsedError;
   int get currentMonthIncome => throw _privateConstructorUsedError;
@@ -39,6 +40,7 @@ abstract class $MainStateCopyWith<$Res> {
   $Res call(
       {LoadState loadState,
       int selectedIndex,
+      DateTime? selectedTime,
       List<DayModel> dayModels,
       int currentMonthExpense,
       int currentMonthIncome,
@@ -63,6 +65,7 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
   $Res call({
     Object? loadState = null,
     Object? selectedIndex = null,
+    Object? selectedTime = freezed,
     Object? dayModels = null,
     Object? currentMonthExpense = null,
     Object? currentMonthIncome = null,
@@ -80,6 +83,10 @@ class _$MainStateCopyWithImpl<$Res, $Val extends MainState>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      selectedTime: freezed == selectedTime
+          ? _value.selectedTime
+          : selectedTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       dayModels: null == dayModels
           ? _value.dayModels
           : dayModels // ignore: cast_nullable_to_non_nullable
@@ -123,6 +130,7 @@ abstract class _$$MainStateImplCopyWith<$Res>
   $Res call(
       {LoadState loadState,
       int selectedIndex,
+      DateTime? selectedTime,
       List<DayModel> dayModels,
       int currentMonthExpense,
       int currentMonthIncome,
@@ -145,6 +153,7 @@ class __$$MainStateImplCopyWithImpl<$Res>
   $Res call({
     Object? loadState = null,
     Object? selectedIndex = null,
+    Object? selectedTime = freezed,
     Object? dayModels = null,
     Object? currentMonthExpense = null,
     Object? currentMonthIncome = null,
@@ -162,6 +171,10 @@ class __$$MainStateImplCopyWithImpl<$Res>
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      selectedTime: freezed == selectedTime
+          ? _value.selectedTime
+          : selectedTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       dayModels: null == dayModels
           ? _value._dayModels
           : dayModels // ignore: cast_nullable_to_non_nullable
@@ -197,9 +210,10 @@ class __$$MainStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MainStateImpl implements _MainState {
-  const _$MainStateImpl(
+  _$MainStateImpl(
       {this.loadState = LoadState.loaded,
       this.selectedIndex = 0,
+      this.selectedTime = null,
       final List<DayModel> dayModels = const [],
       this.currentMonthExpense = 0,
       this.currentMonthIncome = 0,
@@ -216,6 +230,9 @@ class _$MainStateImpl implements _MainState {
   @override
   @JsonKey()
   final int selectedIndex;
+  @override
+  @JsonKey()
+  final DateTime? selectedTime;
   final List<DayModel> _dayModels;
   @override
   @JsonKey()
@@ -252,7 +269,7 @@ class _$MainStateImpl implements _MainState {
 
   @override
   String toString() {
-    return 'MainState(loadState: $loadState, selectedIndex: $selectedIndex, dayModels: $dayModels, currentMonthExpense: $currentMonthExpense, currentMonthIncome: $currentMonthIncome, currentMonthBalance: $currentMonthBalance, totalExpense: $totalExpense, list: $list, moneyType: $moneyType)';
+    return 'MainState(loadState: $loadState, selectedIndex: $selectedIndex, selectedTime: $selectedTime, dayModels: $dayModels, currentMonthExpense: $currentMonthExpense, currentMonthIncome: $currentMonthIncome, currentMonthBalance: $currentMonthBalance, totalExpense: $totalExpense, list: $list, moneyType: $moneyType)';
   }
 
   @override
@@ -264,6 +281,8 @@ class _$MainStateImpl implements _MainState {
                 other.loadState == loadState) &&
             (identical(other.selectedIndex, selectedIndex) ||
                 other.selectedIndex == selectedIndex) &&
+            (identical(other.selectedTime, selectedTime) ||
+                other.selectedTime == selectedTime) &&
             const DeepCollectionEquality()
                 .equals(other._dayModels, _dayModels) &&
             (identical(other.currentMonthExpense, currentMonthExpense) ||
@@ -284,6 +303,7 @@ class _$MainStateImpl implements _MainState {
       runtimeType,
       loadState,
       selectedIndex,
+      selectedTime,
       const DeepCollectionEquality().hash(_dayModels),
       currentMonthExpense,
       currentMonthIncome,
@@ -300,9 +320,10 @@ class _$MainStateImpl implements _MainState {
 }
 
 abstract class _MainState implements MainState {
-  const factory _MainState(
+  factory _MainState(
       {final LoadState loadState,
       final int selectedIndex,
+      final DateTime? selectedTime,
       final List<DayModel> dayModels,
       final int currentMonthExpense,
       final int currentMonthIncome,
@@ -315,6 +336,8 @@ abstract class _MainState implements MainState {
   LoadState get loadState;
   @override
   int get selectedIndex;
+  @override
+  DateTime? get selectedTime;
   @override
   List<DayModel> get dayModels;
   @override

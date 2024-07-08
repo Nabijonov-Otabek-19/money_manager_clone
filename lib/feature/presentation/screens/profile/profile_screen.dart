@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildThemeChangeItem() {
     return Card(
-      elevation: 2,
+      elevation: 1,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildLanguageChangeItem() {
     return Card(
-      elevation: 2,
+      elevation: 1,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
