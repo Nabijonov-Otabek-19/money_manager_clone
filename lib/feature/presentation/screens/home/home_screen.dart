@@ -89,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 selectedDate.year.toString(),
@@ -128,6 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "Income",
@@ -157,6 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "Expenses",
@@ -178,6 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "Balance",
@@ -245,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   left: 12,
                                   right: 12,
                                   top: 8,
-                                  bottom: 8,
+                                  bottom: 0,
                                 ),
                                 child: Row(
                                   mainAxisAlignment:

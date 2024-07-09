@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -45,6 +47,7 @@ class _AddEditScreenState extends State<AddEditScreen>
       currentIndex = checkType(widget.model!.type);
       isExpense = widget.model!.type == "Expense" ? true : false;
       selectedDateTime = widget.model!.createdTime;
+      photoPath = widget.model!.photo;
     }
   }
 
@@ -145,222 +148,268 @@ class _AddEditScreenState extends State<AddEditScreen>
               leadingWidth: 80,
             ),
             body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          GridView.builder(
-                            itemCount: titleExpenseList.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              final title = titleExpenseList[index];
-                              final icon = iconExpenseList[index];
-
-                              return GridTile(
-                                child: InkWell(
-                                  splashColor: AppColors.transparent,
-                                  onTap: () {
-                                    currentIndex = index;
-                                    setState(() {});
-                                  },
-                                  child: _buildTypeItem(title, index, icon),
-                                ),
-                              );
-                            },
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                            ),
-                          ),
-                          GridView.builder(
-                            itemCount: titleIncomeList.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              final title = titleIncomeList[index];
-                              final icon = iconIncomeList[index];
-
-                              return GridTile(
-                                child: InkWell(
-                                  splashColor: AppColors.transparent,
-                                  onTap: () {
-                                    currentIndex = index;
-                                    setState(() {});
-                                  },
-                                  child: _buildTypeItem(title, index, icon),
-                                ),
-                              );
-                            },
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
                       children: [
-                        const Spacer(flex: 1),
-                        IconButton(
-                          onPressed: () async {
-                            // pick photo from album or camera
-                            await _openPickImageDialog(
-                              context,
-                              (fromGallery) async {
-                                photoPath =
-                                    await _picker.pickImage(fromGallery);
-                              },
+                        GridView.builder(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 12,
+                          ),
+                          itemCount: titleExpenseList.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            final title = titleExpenseList[index];
+                            final icon = iconExpenseList[index];
+
+                            return GridTile(
+                              child: InkWell(
+                                splashColor: AppColors.transparent,
+                                onTap: () async {
+                                  currentIndex = index;
+                                  setState(() {});
+                                  if (currentIndex != -1) {
+                                    await _openAddTextField();
+                                  }
+                                },
+                                child: _buildTypeItem(title, index, icon),
+                              ),
                             );
                           },
-                          icon: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 26,
-                            color: context.isDarkThemeMode
-                                ? Colors.grey
-                                : Colors.black45,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        InkWell(
-                          onTap: () async {
-                            // set or change date
-                            final time = widget.model == null
-                                ? DateTime.now()
-                                : widget.model!.createdTime;
-                            await _openDateTimePicker(time);
+                        GridView.builder(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 12,
+                          ),
+                          itemCount: titleIncomeList.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            final title = titleIncomeList[index];
+                            final icon = iconIncomeList[index];
+
+                            return GridTile(
+                              child: InkWell(
+                                splashColor: AppColors.transparent,
+                                onTap: () async {
+                                  currentIndex = index;
+                                  setState(() {});
+                                  if (currentIndex != -1) {
+                                    await _openAddTextField();
+                                  }
+                                },
+                                child: _buildTypeItem(title, index, icon),
+                              ),
+                            );
                           },
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColors.orange,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 0),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 12,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  widget.model == null
-                                      ? convertDate2(
-                                          selectedDateTime.toIso8601String())
-                                      : convertDate2(widget.model!.createdTime
-                                          .toIso8601String()),
-                                  style: pregular.copyWith(
-                                    fontSize: 14,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: noteController,
-                      keyboardType: TextInputType.text,
-                      decoration: _inputDecoration("Note"),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [MoneyTextFormatter()],
-                      decoration: _inputDecoration("Number"),
-                    ),
-                    const SizedBox(height: 8),
-                    InkWell(
-                      onTap: () async {
-                        final note = noteController.text.toString().trim();
-                        final number = amountController.text
-                            .toString()
-                            .trim()
-                            .replaceAll(" ", "");
-                        final title = isExpense
-                            ? titleExpenseList[currentIndex]
-                            : titleIncomeList[currentIndex];
-                        final icon = isExpense
-                            ? iconExpenseList[currentIndex]
-                            : iconIncomeList[currentIndex];
-
-                        if (widget.model == null) {
-                          // Add expense
-                          if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.addExpense(ExpenseModel(
-                              title: title,
-                              icon: icon,
-                              number: int.tryParse(number) ?? 0,
-                              type: type,
-                              note: note,
-                              createdTime: selectedDateTime,
-                              photo: photoPath ?? "",
-                            ));
-                          }
-                        } else {
-                          // Edit expense
-                          if (number.isNotEmpty && currentIndex != -1) {
-                            await cubit.updateExpense(ExpenseModel(
-                              id: widget.model!.id,
-                              title: title,
-                              icon: icon,
-                              number: int.tryParse(number) ?? 0,
-                              type: type,
-                              note: note,
-                              createdTime: selectedDateTime,
-                              photo: photoPath ?? "",
-                            ));
-                          }
-                        }
-
-                        amountController.clear();
-                        noteController.clear();
-
-                        Navigator.pop(context, true);
-                      },
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.model == null ? "Save" : "Update",
-                            style: pregular.copyWith(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+
+  Future<void> _openAddTextField() async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).cardColor,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: StatefulBuilder(
+            builder: (context, setState) => Padding(
+              padding: EdgeInsets.only(
+                left: 12,
+                right: 12,
+                top: 12,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(flex: 1),
+                      IconButton(
+                        onPressed: () async {
+                          // pick photo from album or camera
+                          await _openPickImageDialog(
+                            context,
+                            (fromGallery) async {
+                              photoPath = await _picker.pickImage(fromGallery);
+                              if(photoPath != null){
+                                setState((){});
+                              }
+                            },
+                          );
+                        },
+                        icon: photoPath != null
+                            ? Image.file(
+                                File(photoPath ?? ""),
+                                width: 30,
+                                height: 30,
+                              )
+                            : Icon(
+                                Icons.camera_alt_outlined,
+                                size: 26,
+                                color: context.isDarkThemeMode
+                                    ? Colors.grey
+                                    : Colors.black45,
+                              ),
+                      ),
+                      const SizedBox(width: 12),
+                      InkWell(
+                        onTap: () async {
+                          // set or change date
+                          final time = widget.model == null
+                              ? DateTime.now()
+                              : widget.model!.createdTime;
+                          await _openDateTimePicker(time);
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.orange,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                offset: const Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 12,
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.model == null
+                                    ? convertDate2(
+                                        selectedDateTime.toIso8601String())
+                                    : convertDate2(widget.model!.createdTime
+                                        .toIso8601String()),
+                                style: pregular.copyWith(
+                                  fontSize: 14,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: noteController,
+                    keyboardType: TextInputType.text,
+                    decoration: _inputDecoration("Note"),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [MoneyTextFormatter()],
+                    decoration: _inputDecoration("Number"),
+                  ),
+                  const SizedBox(height: 8),
+                  InkWell(
+                    onTap: () async {
+                      final note = noteController.text.toString().trim();
+                      final number = amountController.text
+                          .toString()
+                          .trim()
+                          .replaceAll(" ", "");
+                      final title = isExpense
+                          ? titleExpenseList[currentIndex]
+                          : titleIncomeList[currentIndex];
+                      final icon = isExpense
+                          ? iconExpenseList[currentIndex]
+                          : iconIncomeList[currentIndex];
+
+                      if (widget.model == null) {
+                        // Add expense
+                        if (number.isNotEmpty && currentIndex != -1) {
+                          await cubit.addExpense(ExpenseModel(
+                            title: title,
+                            icon: icon,
+                            number: int.tryParse(number) ?? 0,
+                            type: type,
+                            note: note,
+                            createdTime: selectedDateTime,
+                            photo: photoPath ?? "",
+                          ));
+                        }
+                      } else {
+                        // Edit expense
+                        if (number.isNotEmpty && currentIndex != -1) {
+                          await cubit.updateExpense(ExpenseModel(
+                            id: widget.model!.id,
+                            title: title,
+                            icon: icon,
+                            number: int.tryParse(number) ?? 0,
+                            type: type,
+                            note: note,
+                            createdTime: selectedDateTime,
+                            photo: photoPath ?? "",
+                          ));
+                        }
+                      }
+
+                      amountController.clear();
+                      noteController.clear();
+
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        Navigator.pop(context, true);
+                      }
+                    },
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.model == null ? "Save" : "Update",
+                          style: pregular.copyWith(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

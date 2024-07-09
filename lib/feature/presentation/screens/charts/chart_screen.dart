@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
@@ -93,7 +94,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Total:",
+                        "${"Total".tr}:",
                         style: pmedium.copyWith(
                           fontSize: 16,
                           color: Theme.of(context)
