@@ -20,7 +20,7 @@ class _ChartScreenState extends State<ChartScreen> {
 
   late MainCubit mainCubit;
 
-  final List<String> types = ["Expense", "Income"];
+  final List<String> types = ["Expense".tr, "Income".tr];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class _ChartScreenState extends State<ChartScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      "${state.moneyType} ▼",
+                      "${state.moneyType.tr} ▼",
                       style: pmedium.copyWith(
                         fontSize: 16,
                         color:

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/presentation/screens/add_edit/cubit/add_edit_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
@@ -131,9 +132,9 @@ class _AddEditScreenState extends State<AddEditScreen>
                     dividerColor: AppColors.transparent,
                     overlayColor:
                         const WidgetStatePropertyAll(AppColors.transparent),
-                    tabs: const [
-                      Tab(text: "Expense"),
-                      Tab(text: "Income"),
+                    tabs:  [
+                      Tab(text: "Expense".tr),
+                      Tab(text: "Income".tr),
                     ],
                   ),
                 ),
@@ -141,7 +142,7 @@ class _AddEditScreenState extends State<AddEditScreen>
               leading: TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
-                  "Cancel",
+                  "Cancel".tr,
                   style: pregular.copyWith(color: Colors.black, fontSize: 16),
                 ),
               ),
@@ -324,14 +325,14 @@ class _AddEditScreenState extends State<AddEditScreen>
                   TextFormField(
                     controller: noteController,
                     keyboardType: TextInputType.text,
-                    decoration: _inputDecoration("Note"),
+                    decoration: _inputDecoration("Note".tr),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: amountController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [MoneyTextFormatter()],
-                    decoration: _inputDecoration("Number"),
+                    decoration: _inputDecoration("Quantity".tr),
                   ),
                   const SizedBox(height: 8),
                   InkWell(
@@ -394,7 +395,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                       ),
                       child: Center(
                         child: Text(
-                          widget.model == null ? "Save" : "Update",
+                          widget.model == null ? "Save".tr : "Update".tr,
                           style: pregular.copyWith(
                             color: Colors.white,
                             fontSize: 14,

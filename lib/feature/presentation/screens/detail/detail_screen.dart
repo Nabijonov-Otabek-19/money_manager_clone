@@ -44,7 +44,7 @@ class _DetailScreenState extends State<DetailScreen> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Details"),
+            title: Text("Details".tr),
           ),
           body: BlocBuilder<DetailCubit, DetailState>(
             buildWhen: (pr, cr) => pr.loadState != cr.loadState,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/models/my_enums.dart';
 import 'package:money_manager_clone/feature/presentation/screens/search/cubit/search_cubit.dart';
@@ -34,7 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
       create: (context) => cubit,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Search"),
+          title: Text("Search".tr),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(70),
             child: Padding(

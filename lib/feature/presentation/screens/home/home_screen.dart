@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/models/my_model.dart';
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Income",
+                                  "Income".tr,
                                   style: pregular.copyWith(
                                     fontSize: 12,
                                     color: Colors.black,
@@ -166,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Expenses",
+                                  "Expense".tr,
                                   style: pregular.copyWith(
                                     fontSize: 12,
                                     color: Colors.black,
@@ -189,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Balance",
+                                  "Balance".tr,
                                   style: pregular.copyWith(
                                     fontSize: 12,
                                     color: Colors.black,
@@ -270,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          "Expense: $expense",
+                                          "${"Expense".tr}: $expense",
                                           style: pregular.copyWith(
                                             fontSize: 12,
                                             color: context.isDarkThemeMode
@@ -280,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
-                                          "Income: $income",
+                                          "${"Income".tr}: $income",
                                           style: pregular.copyWith(
                                             fontSize: 12,
                                             color: context.isDarkThemeMode
