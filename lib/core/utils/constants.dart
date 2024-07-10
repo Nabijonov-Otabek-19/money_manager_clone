@@ -52,6 +52,12 @@ final titleExpenseList = [
   "Beauty",
   "Transportation",
   "Education",
+  "Gift",
+  "Bills",
+  "Shopping",
+  "Electronics",
+  "Travel",
+  "Donate",
 ];
 final titleIncomeList = [
   "Salary",
@@ -67,6 +73,12 @@ final iconExpenseList = [
   "beauty",
   "transportation",
   "education",
+  "gift",
+  "bills",
+  "shopping",
+  "electronics",
+  "travel",
+  "donate",
 ];
 final iconIncomeList = [
   "salary",

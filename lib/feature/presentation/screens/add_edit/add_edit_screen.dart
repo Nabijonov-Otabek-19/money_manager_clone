@@ -254,8 +254,8 @@ class _AddEditScreenState extends State<AddEditScreen>
                             context,
                             (fromGallery) async {
                               photoPath = await _picker.pickImage(fromGallery);
-                              if(photoPath != null){
-                                setState((){});
+                              if (photoPath != null) {
+                                setState(() {});
                               }
                             },
                           );
@@ -538,20 +538,27 @@ class _AddEditScreenState extends State<AddEditScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(80),
-          child: ColoredBox(
-            color:
-                currentIndex == index ? AppColors.orange : Colors.grey.shade400,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: SvgPicture.asset(
-                icon.svgIcon,
-                width: 30,
-                height: 30,
-                colorFilter: ColorFilter.mode(
-                  Colors.grey.shade700,
-                  BlendMode.srcIn,
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(80),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(80),
+            child: ColoredBox(
+              color: currentIndex == index
+                  ? AppColors.orange
+                  : Colors.grey.shade300,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SvgPicture.asset(
+                  icon.svgIcon,
+                  width: 30,
+                  height: 30,
+                  colorFilter: ColorFilter.mode(
+                    Colors.grey.shade700,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),

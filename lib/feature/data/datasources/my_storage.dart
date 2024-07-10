@@ -285,6 +285,26 @@ class ExpenseStorage {
     return 1;
   }
 
+  Future<List<ExpenseModel>> searchByNote(String note) async {
+    final db = await instance.database;
+
+    List<ExpenseModel> list = [];
+
+    // Perform the search query
+    final maps = await db.query(
+      ExpenseFields.expenseTableName,
+      where: 'LOWER(note) LIKE ?',
+      whereArgs: ['%${note.toLowerCase()}%'],
+    );
+
+    if (maps.isEmpty) return [];
+
+    for (final map in maps) {
+      list.add(ExpenseModel.fromJson(map));
+    }
+    return list;
+  }
+
   Future<int> getCurrentMonthExpenses(DateTime monthTime) async {
     final db = await instance.database;
 

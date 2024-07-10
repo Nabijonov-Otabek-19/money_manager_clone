@@ -5,7 +5,7 @@ class MainState with _$MainState {
    factory MainState({
     @Default(LoadState.loaded) LoadState loadState,
     @Default(0) int selectedIndex,
-    @Default(DateTime) DateTime? selectedTime,
+    @Default(null) DateTime? selectedTime,
     @Default([]) List<DayModel> dayModels,
     @Default(0) int currentMonthExpense,
     @Default(0) int currentMonthIncome,

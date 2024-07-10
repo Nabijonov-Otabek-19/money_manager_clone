@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController numberController = TextEditingController();
 
   late MainCubit mainCubit;
-  
+
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: BlocBuilder<MainCubit, MainState>(
         buildWhen: (pr, cr) => pr.loadState != cr.loadState,
         builder: (blocContext, state) {
-           selectedDate = state.selectedTime == null
+          selectedDate = state.selectedTime == null
               ? DateTime(DateTime.now().year, DateTime.now().month)
               : state.selectedTime!;
 
@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text("Money manager clone"),
               leading: IconButton(
                 onPressed: () {
-                  // Search
+                  // Search screen
+                  Navigator.pushNamed(context, '/search');
                 },
                 icon: const Icon(Icons.search, size: 26),
               ),
@@ -306,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () async {
                                   final needRefresh = await Navigator.pushNamed(
                                     context,
-                                    'detail',
+                                    '/detail',
                                     arguments: expenseModels[modelIndex].id,
                                   );
                                   if (needRefresh != null) {
@@ -351,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final firstDate = DateTime.now().year - 2;
     final lastDate = DateTime.now().year + 2;
     final currentDate = selectedDate;
-    
+
     final DateTime? selected = await showMonthPicker(
       context: context,
       initialDate: mainCubit.state.selectedTime ?? DateTime.now(),
