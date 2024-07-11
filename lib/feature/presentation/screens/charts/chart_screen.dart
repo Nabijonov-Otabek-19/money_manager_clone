@@ -66,15 +66,20 @@ class _ChartScreenState extends State<ChartScreen> {
                         return PopupMenuItem(
                           value: choice,
                           child: Text(
-                            choice,
+                            choice.tr,
                             style: pmedium.copyWith(fontSize: 14),
                           ),
                         );
                       }).toList();
                     },
                     onSelected: (value) async {
-                      if (value != state.moneyType) {
-                        mainCubit.changeType(value);
+                      debugPrint(value);
+                      if (value != state.moneyType.tr) {
+                        if (types[0] == value) {
+                          mainCubit.changeType("Expense");
+                        } else {
+                          mainCubit.changeType("Income");
+                        }
                         await mainCubit.getAllTypeModels();
                       }
                     },

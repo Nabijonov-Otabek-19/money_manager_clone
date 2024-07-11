@@ -82,6 +82,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                 state.model!.icon.svgIcon,
                                 width: 30,
                                 height: 30,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.black87,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),

@@ -428,8 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             backgroundColor: Colors.lightGreen,
             foregroundColor: Colors.white,
-            //icon: Icons.edit,
-            label: 'Edit',
+            icon: Icons.edit,
           ),
           SlidableAction(
             onPressed: (context) async {
@@ -442,8 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
-            // icon: Icons.delete,
-            label: 'Delete',
+            icon: Icons.delete,
           ),
         ],
       ),
@@ -470,6 +468,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       model.icon.svgIcon,
                       width: 30,
                       height: 30,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.black87,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

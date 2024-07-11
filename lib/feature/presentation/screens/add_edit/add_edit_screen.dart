@@ -88,7 +88,7 @@ class _AddEditScreenState extends State<AddEditScreen>
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text("Add"),
+              title: Text(widget.model == null ? "Add".tr : "Edit".tr),
               centerTitle: true,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(60),
@@ -132,7 +132,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                     dividerColor: AppColors.transparent,
                     overlayColor:
                         const WidgetStatePropertyAll(AppColors.transparent),
-                    tabs:  [
+                    tabs: [
                       Tab(text: "Expense".tr),
                       Tab(text: "Income".tr),
                     ],
@@ -146,7 +146,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                   style: pregular.copyWith(color: Colors.black, fontSize: 16),
                 ),
               ),
-              leadingWidth: 80,
+              leadingWidth: 120,
             ),
             body: SafeArea(
               child: Column(
@@ -261,7 +261,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                             },
                           );
                         },
-                        icon: photoPath != null
+                        icon: photoPath != null && photoPath != ""
                             ? Image.file(
                                 File(photoPath ?? ""),
                                 width: 30,
