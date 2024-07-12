@@ -5,6 +5,7 @@ import '../../../../../core/utils/constants.dart';
 import '../../../../data/datasources/my_storage.dart';
 import '../../../../data/models/my_enums.dart';
 import '../../../../data/models/my_model.dart';
+import '../../../themes/colors.dart';
 
 part 'main_state.dart';
 
@@ -69,6 +70,7 @@ class MainCubit extends Cubit<MainState> {
           createdTime: state.selectedTime ??
               DateTime(DateTime.now().year, DateTime.now().month),
           photo: "",
+          color: AppColors.orange,
         ));
       }
     }
@@ -120,6 +122,7 @@ class MainCubit extends Cubit<MainState> {
           createdTime: state.selectedTime ??
               DateTime(DateTime.now().year, DateTime.now().month),
           photo: "",
+          color: AppColors.orange,
         ));
       }
     }
@@ -133,8 +136,8 @@ class MainCubit extends Cubit<MainState> {
     ));
   }
 
-  Future<void> deleteModel(int id) async {
-    await storage.deleteExpense(id);
+  Future<void> deleteModel(int modelId) async {
+    await storage.deleteExpense(modelId);
   }
 
   void changeType(String type) {

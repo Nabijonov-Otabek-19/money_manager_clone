@@ -60,14 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 icon: const Icon(Icons.search, size: 26),
               ),
-              actions: [
-                IconButton(
-                  onPressed: () async {
-                    // month and year picker
-                  },
-                  icon: const Icon(Icons.calendar_month, size: 26),
-                ),
-              ],
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(60),
                 child: Padding(
@@ -362,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, child) {
         final themeData = ThemeData.light().copyWith(
           colorScheme: ColorScheme.light(
-            primary: AppColors.orange,
+            primary: const Color(AppColors.orange),
             onPrimary: Colors.white,
             surface:
                 context.isDarkThemeMode ? AppColors.black : AppColors.white,
@@ -461,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: ColoredBox(
-                  color: AppColors.orange,
+                  color: Color(model.color),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(

@@ -75,7 +75,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(80),
                           child: ColoredBox(
-                            color: AppColors.orange,
+                            color: Color(state.model?.color ?? AppColors.orange),
                             child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: SvgPicture.asset(

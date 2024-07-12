@@ -8,13 +8,15 @@ class AppColors {
   static const scaffoldBackLight = Color(0xffffffff);
   static const scaffoldBackDark = Color(0xff121212);
 
-  static const orange = Colors.orangeAccent;
+  static const orange = 0xFFFFAB40;
 
   static const grey = Colors.black12;
 
-  static const green = Colors.greenAccent;
-  static const purple = Colors.purpleAccent;
-  static const pink = Colors.pinkAccent;
-  static const yellow = Colors.yellowAccent;
-  static const blue = Colors.lightBlueAccent;
+  static const green = 0xFF69F0AE;
+  static const purple = 0xFFE040FB;
+  static const pink = 0xFFFF4081;
+  static const yellow = 0xFFFFFF00;
+  static const blue = 0xFF40C4FF;
+  static const blueGrey = 0xFF546E7A;
+  static const brown = 0xFF8D6E63;
 }

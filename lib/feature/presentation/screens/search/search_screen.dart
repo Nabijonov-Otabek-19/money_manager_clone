@@ -87,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: AppColors.green,
+                        color: const Color(AppColors.green),
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 1,
@@ -166,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
               child: ColoredBox(
-                color: AppColors.orange,
+                color: Color(model.color),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset(

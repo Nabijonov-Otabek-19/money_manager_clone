@@ -34,6 +34,7 @@ class _AddEditScreenState extends State<AddEditScreen>
   bool isExpense = true;
   DateTime selectedDateTime = DateTime.now();
   String? photoPath;
+  int color = AppColors.orange;
 
   final ImagePickerService _picker = ImagePickerService();
 
@@ -49,6 +50,7 @@ class _AddEditScreenState extends State<AddEditScreen>
       isExpense = widget.model!.type == "Expense" ? true : false;
       selectedDateTime = widget.model!.createdTime;
       photoPath = widget.model!.photo;
+      color = widget.model!.color;
     }
   }
 
@@ -116,7 +118,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                     },
                     labelStyle: pregular.copyWith(
                       fontSize: 14,
-                      color: AppColors.orange,
+                      color: const Color(AppColors.orange),
                     ),
                     unselectedLabelStyle: pregular.copyWith(
                       fontSize: 14,
@@ -247,6 +249,35 @@ class _AddEditScreenState extends State<AddEditScreen>
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(80),
+                        onTap: () async {
+                          await _openPickColorDialog(
+                            context,
+                            (clr) async {
+                              setState(() {
+                                color = clr;
+                              });
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Color(color),
+                            borderRadius: BorderRadius.circular(80),
+                            boxShadow: const [
+                              BoxShadow(
+                                offset: Offset(1, 1),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                color: AppColors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       const Spacer(flex: 1),
                       IconButton(
                         onPressed: () async {
@@ -288,7 +319,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: AppColors.orange,
+                            color: const Color(AppColors.orange),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.2),
@@ -360,6 +391,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                             note: note,
                             createdTime: selectedDateTime,
                             photo: photoPath ?? "",
+                            color: color,
                           ));
                         }
                       } else {
@@ -374,6 +406,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                             note: note,
                             createdTime: selectedDateTime,
                             photo: photoPath ?? "",
+                            color: color,
                           ));
                         }
                       }
@@ -409,6 +442,66 @@ class _AddEditScreenState extends State<AddEditScreen>
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _openPickColorDialog(
+    BuildContext ctx,
+    Future<void> Function(int) onClick,
+  ) async {
+    return await showDialog<void>(
+      context: ctx,
+      builder: (context) {
+        return SimpleDialog(
+          insetPadding: const EdgeInsets.all(12),
+          surfaceTintColor: AppColors.transparent,
+          backgroundColor: ctx.isDarkThemeMode
+              ? AppColors.scaffoldBackDark
+              : AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          children: [
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final clr in colorList)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(80),
+                    onTap: () {
+                      onClick(clr);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: clr == color
+                              ? Colors.black87
+                              : AppColors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(80),
+                        boxShadow: const [
+                          BoxShadow(
+                            offset: Offset(1, 1),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            color: AppColors.grey,
+                          ),
+                        ],
+                        color: Color(clr),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -490,7 +583,7 @@ class _AddEditScreenState extends State<AddEditScreen>
       builder: (context, child) {
         final themeData = ThemeData.light().copyWith(
           colorScheme: ColorScheme.light(
-            primary: AppColors.orange,
+            primary: const Color(AppColors.orange),
             onPrimary: Colors.white,
             surface:
                 context.isDarkThemeMode ? AppColors.black : AppColors.white,
@@ -548,7 +641,7 @@ class _AddEditScreenState extends State<AddEditScreen>
             borderRadius: BorderRadius.circular(80),
             child: ColoredBox(
               color: currentIndex == index
-                  ? AppColors.orange
+                  ? const Color(AppColors.orange)
                   : Colors.grey.shade300,
               child: Padding(
                 padding: const EdgeInsets.all(12),

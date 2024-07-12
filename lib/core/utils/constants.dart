@@ -1,11 +1,10 @@
-import 'dart:ui';
-
 import '../../feature/presentation/themes/colors.dart';
 
 class ExpenseFields {
   static const expenseTableName = "expenses";
   static const dayTableName = "days";
   static const monthTableName = "months";
+  static const yearTableName = "years";
 
   static const id = "id";
   static const dayId = "dayId";
@@ -16,20 +15,23 @@ class ExpenseFields {
   static const note = "note";
   static const createdTime = "time";
   static const photo = "photo";
+  static const color = "color";
 
   static final List<String> values = [
     /// Add all fields
-    id, title, icon, number, type, note, createdTime, photo, dayId,
+    id, title, icon, number, type, note, createdTime, photo, color, dayId,
   ];
 }
 
-final List<Color> colorList = [
+final List<int> colorList = [
+  AppColors.orange,
   AppColors.blue,
   AppColors.yellow,
   AppColors.purple,
   AppColors.green,
   AppColors.pink,
-  AppColors.orange,
+  AppColors.brown,
+  AppColors.blueGrey,
 ];
 
 final List<String> allTypeList = [

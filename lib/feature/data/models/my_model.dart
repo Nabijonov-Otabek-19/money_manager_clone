@@ -1,5 +1,35 @@
 import '../../../core/utils/constants.dart';
 
+class YearModel {
+  final int? id;
+  final DateTime yearTime;
+  final List<MonthModel> listMonthModel;
+
+  const YearModel({
+    this.id,
+    required this.yearTime,
+    required this.listMonthModel,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'yearTime': yearTime.toIso8601String(),
+    };
+  }
+
+  static YearModel fromJson(
+    Map<String, dynamic> json,
+    List<MonthModel> listModel,
+  ) {
+    return YearModel(
+      id: json['id'],
+      yearTime: DateTime.parse(json['yearTime']),
+      listMonthModel: listModel,
+    );
+  }
+}
+
 class MonthModel {
   final int? id;
   final DateTime monthTime;
@@ -11,9 +41,10 @@ class MonthModel {
     required this.listDayModel,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(int yearId) {
     return {
       'id': id,
+      'yearId': yearId,
       'monthTime': monthTime.toIso8601String(),
     };
   }
@@ -70,6 +101,7 @@ class ExpenseModel {
   final String note;
   final DateTime createdTime;
   final String? photo;
+  final int color;
 
   const ExpenseModel({
     this.id,
@@ -80,6 +112,7 @@ class ExpenseModel {
     required this.note,
     required this.createdTime,
     required this.photo,
+    required this.color,
   });
 
   ExpenseModel copyWith({
@@ -91,6 +124,7 @@ class ExpenseModel {
     String? note,
     DateTime? createdTime,
     String? photo,
+    required int color,
   }) {
     return ExpenseModel(
       id: id ?? this.id,
@@ -101,6 +135,7 @@ class ExpenseModel {
       note: note ?? this.note,
       createdTime: createdTime ?? this.createdTime,
       photo: photo ?? this.photo,
+      color: color,
     );
   }
 
@@ -114,6 +149,7 @@ class ExpenseModel {
       note: json[ExpenseFields.note],
       createdTime: DateTime.parse(json[ExpenseFields.createdTime]),
       photo: json[ExpenseFields.photo],
+      color: json[ExpenseFields.color],
     );
   }
 
@@ -127,6 +163,7 @@ class ExpenseModel {
       ExpenseFields.note: note,
       ExpenseFields.createdTime: createdTime.toIso8601String(),
       ExpenseFields.photo: photo,
+      ExpenseFields.color: color,
       ExpenseFields.dayId: dayId,
     };
   }

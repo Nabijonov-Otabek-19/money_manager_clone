@@ -43,51 +43,48 @@ class _ChartScreenState extends State<ChartScreen> {
                   state
                       .showButtonMenu(); // This opens the dropdown menu programmatically.
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: PopupMenuButton<String>(
-                    surfaceTintColor: AppColors.transparent,
-                    shadowColor: AppColors.transparent,
-                    key: _menuKeyLang,
-                    color: Theme.of(context).cardColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
-                      "${state.moneyType.tr} ▼",
-                      style: pmedium.copyWith(
-                        fontSize: 16,
-                        color:
-                            Theme.of(context).appBarTheme.titleTextStyle?.color,
-                      ),
-                    ),
-                    itemBuilder: (context) {
-                      return types.map((choice) {
-                        return PopupMenuItem(
-                          value: choice,
-                          child: Text(
-                            choice.tr,
-                            style: pmedium.copyWith(fontSize: 14),
-                          ),
-                        );
-                      }).toList();
-                    },
-                    onSelected: (value) async {
-                      debugPrint(value);
-                      if (value != state.moneyType.tr) {
-                        if (types[0] == value) {
-                          mainCubit.changeType("Expense");
-                        } else {
-                          mainCubit.changeType("Income");
-                        }
-                        await mainCubit.getAllTypeModels();
-                      }
-                    },
+                child: PopupMenuButton<String>(
+                  surfaceTintColor: AppColors.transparent,
+                  shadowColor: AppColors.transparent,
+                  key: _menuKeyLang,
+                  color: Theme.of(context).cardColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  child: Text(
+                    "${state.moneyType.tr} ▼",
+                    style: pmedium.copyWith(
+                      fontSize: 16,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    ),
+                  ),
+                  itemBuilder: (context) {
+                    return types.map((choice) {
+                      return PopupMenuItem(
+                        value: choice,
+                        child: Text(
+                          choice.tr,
+                          style: pmedium.copyWith(fontSize: 14),
+                        ),
+                      );
+                    }).toList();
+                  },
+                  onSelected: (value) async {
+                    debugPrint(value);
+                    if (value != state.moneyType.tr) {
+                      if (types[0] == value) {
+                        mainCubit.changeType("Expense");
+                      } else {
+                        mainCubit.changeType("Income");
+                      }
+                      await mainCubit.getAllTypeModels();
+                    }
+                  },
                 ),
               ),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(50),
+                preferredSize: const Size.fromHeight(60),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 12,
@@ -159,13 +156,17 @@ class _ChartScreenState extends State<ChartScreen> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(40),
                                   child: ColoredBox(
-                                    color: AppColors.orange,
+                                    color: const Color(AppColors.orange),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: SvgPicture.asset(
                                         model.icon.svgIcon,
                                         width: 20,
                                         height: 20,
+                                        colorFilter: const ColorFilter.mode(
+                                          Colors.black87,
+                                          BlendMode.srcIn,
+                                        ),
                                       ),
                                     ),
                                   ),

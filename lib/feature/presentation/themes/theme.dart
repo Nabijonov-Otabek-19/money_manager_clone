@@ -7,7 +7,7 @@ import 'fonts.dart';
 class AppThemes {
   static final lightTheme = ThemeData(
     useMaterial3: true,
-    primaryColor: AppColors.orange,
+    primaryColor: const Color(AppColors.orange),
     cardColor: Colors.white,
     canvasColor: AppColors.black,
     textTheme: const TextTheme(),
@@ -22,7 +22,7 @@ class AppThemes {
         color: AppColors.black,
         fontSize: 16,
       ),
-      color: AppColors.orange,
+      color: const Color(AppColors.orange),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -41,7 +41,7 @@ class AppThemes {
 
   static final darkTheme = ThemeData(
     useMaterial3: true,
-    primaryColor: AppColors.orange,
+    primaryColor: const Color(AppColors.orange),
     cardColor: Colors.grey.shade600,
     canvasColor: AppColors.white,
     fontFamily: 'Poppinsregular',
@@ -56,7 +56,7 @@ class AppThemes {
         color: AppColors.black,
         fontSize: 16,
       ),
-      color: AppColors.orange,
+      color: const Color(AppColors.orange),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.black,
