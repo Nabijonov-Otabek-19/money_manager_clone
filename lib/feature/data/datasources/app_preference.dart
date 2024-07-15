@@ -14,6 +14,14 @@ class AppPreferences {
     "English": "en",
   };
 
+  String get userName => _box.get("user_name", defaultValue: "");
+
+  set userName(String name) => _box.put("user_name", name);
+
+  String get userIcon => _box.get("user_icon", defaultValue: "");
+
+  set userIcon(String iconPath) => _box.put("user_icon", iconPath);
+
   String? get lang => _box.get("lang");
 
   set lang(String? newLang) {

@@ -89,13 +89,17 @@ class MainCubit extends Cubit<MainState> {
     emit(state.copyWith(loadState: LoadState.loaded));
   }
 
-  Future<void> getAllTypeModels() async {
+  Future<void> getAllTypeModels(bool isYear) async {
     emit(state.copyWith(loadState: LoadState.loading));
 
-    final models = await storage.getModelsByType(
-      state.moneyType,
-      state.selectedTime ?? DateTime(DateTime.now().year, DateTime.now().month),
-    );
+    final models = isYear
+        ? await storage.getMonthsByYearId(
+            DateTime(DateTime.now().year), state.moneyType)
+        : await storage.getModelsByType(
+            state.moneyType,
+            state.selectedTime ??
+                DateTime(DateTime.now().year, DateTime.now().month),
+          );
 
     List<ExpenseModel> list = [];
     int totalExpense = 0;

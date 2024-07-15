@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
+import 'package:money_manager_clone/feature/data/models/my_enums.dart';
 import 'package:money_manager_clone/feature/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
 
@@ -19,6 +20,8 @@ class _ChartScreenState extends State<ChartScreen> {
   final GlobalKey _menuKeyLang = GlobalKey();
 
   late MainCubit mainCubit;
+
+  bool isYear = false;
 
   final List<String> types = ["Expense".tr, "Income".tr];
 
@@ -78,42 +81,121 @@ class _ChartScreenState extends State<ChartScreen> {
                       } else {
                         mainCubit.changeType("Income");
                       }
-                      await mainCubit.getAllTypeModels();
+                      await mainCubit.getAllTypeModels(false);
                     }
                   },
                 ),
               ),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(60),
+                preferredSize: const Size.fromHeight(100),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 12,
                     right: 12,
                     bottom: 16,
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text(
-                        "${"Total".tr}:",
-                        style: pmedium.copyWith(
-                          fontSize: 16,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () async {
+                                  setState(() {
+                                    isYear = false;
+                                  });
+                                  await mainCubit.getAllTypeModels(isYear);
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: isYear
+                                        ? AppColors.transparent
+                                        : Colors.black,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    "Month".tr,
+                                    style: pregular.copyWith(
+                                      fontSize: 16,
+                                      color: isYear
+                                          ? Colors.black
+                                          : const Color(AppColors.orange),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () async {
+                                  setState(() {
+                                    isYear = true;
+                                  });
+                                  await mainCubit.getAllTypeModels(isYear);
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: isYear
+                                        ? Colors.black
+                                        : AppColors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    "Year".tr,
+                                    style: pregular.copyWith(
+                                      fontSize: 16,
+                                      color: isYear
+                                          ? const Color(AppColors.orange)
+                                          : Colors.black,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        separateBalance(state.totalExpense.toString()),
-                        style: pmedium.copyWith(
-                          fontSize: 16,
-                          color: Theme.of(context)
-                              .appBarTheme
-                              .titleTextStyle
-                              ?.color,
-                        ),
+                      const SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${"Total".tr}:",
+                            style: pmedium.copyWith(
+                              fontSize: 16,
+                              color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color,
+                            ),
+                          ),
+                          Text(
+                            separateBalance(state.totalExpense.toString()),
+                            style: pmedium.copyWith(
+                              fontSize: 16,
+                              color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -122,6 +204,9 @@ class _ChartScreenState extends State<ChartScreen> {
             ),
             body: Builder(
               builder: (context) {
+                if (state.loadState == LoadState.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 if (state.list.isEmpty) {
                   return Center(
                     child: Image.asset(
@@ -142,6 +227,9 @@ class _ChartScreenState extends State<ChartScreen> {
                     return Card(
                       elevation: 1,
                       color: Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,

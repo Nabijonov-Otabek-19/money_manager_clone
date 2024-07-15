@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
@@ -15,7 +17,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final preferences = inject<AppPreferences>();
   final GlobalKey _menuKeyLang = GlobalKey();
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   String currentLang = "";
+
+  String icon = "guest";
+  String userName = "";
 
   final List<String> languages = ["Русский", "O'zbek", "English"];
 
@@ -24,6 +31,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "O'zbek": "uz",
     "English": "en",
   };
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +49,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
       currentLang = languages[2];
     }
 
+    userName = preferences.userName;
+    icon = preferences.userIcon;
+    _controller.text = preferences.userName;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 180,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade200,
-              radius: 40,
-              child: const Icon(
-                Icons.person,
-                size: 40,
-                color: Color(AppColors.orange),
+        title: InkWell(
+          splashColor: AppColors.transparent,
+          highlightColor: AppColors.transparent,
+          onTap: () async {
+            await _openEditUserInfoDialog(context).whenComplete(
+              () {
+                setState(() {});
+              },
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.grey.shade200,
+                radius: 40,
+                child: preferences.userIcon.isEmpty
+                    ? const Icon(
+                        Icons.person,
+                        size: 40,
+                        color: Color(AppColors.orange),
+                      )
+                    : Image.asset(
+                        preferences.userIcon.pngIcon,
+                        width: 100,
+                        height: 100,
+                      ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              "Username".tr,
-              style: pmedium.copyWith(fontSize: 20),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                preferences.userName.isEmpty
+                    ? "Username".tr
+                    : preferences.userName,
+                style: pmedium.copyWith(fontSize: 20),
+              ),
+            ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -65,11 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const SizedBox(height: 8),
-                Text(
-                  "Version : 1.0.0",
-                  style: pregular.copyWith(fontSize: 12),
-                ),
                 const SizedBox(height: 8),
                 _buildThemeChangeItem(),
                 const SizedBox(height: 4),
@@ -82,12 +114,161 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Future<void> _openEditUserInfoDialog(BuildContext ctx) async {
+    return await showDialog<void>(
+      context: ctx,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          final isMale = icon == "male";
+          return SimpleDialog(
+            insetPadding: const EdgeInsets.all(12),
+            contentPadding: const EdgeInsets.all(12),
+            surfaceTintColor: AppColors.transparent,
+            backgroundColor: ctx.isDarkThemeMode
+                ? AppColors.scaffoldBackDark
+                : AppColors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: Text(
+              "Change Info",
+              style: pmedium.copyWith(
+                fontSize: 20,
+                color: Theme.of(context).canvasColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            children: [
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    splashColor: AppColors.transparent,
+                    highlightColor: AppColors.transparent,
+                    onTap: () {
+                      _focusNode.unfocus();
+                      setState(() {
+                        icon = "male";
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: isMale
+                              ? const Color(AppColors.orange)
+                              : AppColors.transparent,
+                        ),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      padding: const EdgeInsets.all(2),
+                      child: Image.asset(
+                        "male".pngIcon,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    splashColor: AppColors.transparent,
+                    highlightColor: AppColors.transparent,
+                    onTap: () {
+                      _focusNode.unfocus();
+                      setState(() {
+                        icon = "female";
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: isMale
+                              ? AppColors.transparent
+                              : const Color(AppColors.orange),
+                        ),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      padding: const EdgeInsets.all(2),
+                      child: Image.asset(
+                        "female".pngIcon,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: _controller,
+                keyboardType: TextInputType.text,
+                decoration: _inputDecoration("Username".tr),
+              ),
+              const SizedBox(height: 12),
+              InkWell(
+                onTap: () {
+                  final name = _controller.text.trim();
+                  final gender = icon.isNotEmpty;
+                  if (name.isNotEmpty && gender) {
+                    preferences.userName = name;
+                    preferences.userIcon = icon;
+                    _controller.clear();
+                    Navigator.pop(context);
+                  }
+                },
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Save".tr,
+                      style: pregular.copyWith(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: pregular.copyWith(
+        fontSize: 14,
+        color: Colors.grey,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.grey, width: 0.8),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue, width: 0.8),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
   Widget _buildThemeChangeItem() {
     return Card(
       elevation: 1,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -116,7 +297,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               onChanged: (value) {
                 preferences.changeTheme(value);
-                //setState(() {});
               },
             ),
           ],
@@ -130,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       elevation: 1,
       color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(

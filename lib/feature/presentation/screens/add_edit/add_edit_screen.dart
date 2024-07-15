@@ -313,7 +313,14 @@ class _AddEditScreenState extends State<AddEditScreen>
                           final time = widget.model == null
                               ? DateTime.now()
                               : widget.model!.createdTime;
-                          await _openDateTimePicker(time);
+                          await _openDateTimePicker(
+                            time,
+                            (pickedDate) {
+                              setState(() {
+                                selectedDateTime = pickedDate;
+                              });
+                            },
+                          );
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
@@ -523,7 +530,16 @@ class _AddEditScreenState extends State<AddEditScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
+          title: Text(
+            "Pick Image",
+            style: pbold.copyWith(
+              fontSize: 20,
+              color: Theme.of(context).canvasColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
           children: [
+            const SizedBox(height: 12),
             InkWell(
               splashColor: AppColors.transparent,
               highlightColor: AppColors.transparent,
@@ -572,7 +588,10 @@ class _AddEditScreenState extends State<AddEditScreen>
     );
   }
 
-  Future<void> _openDateTimePicker(DateTime time) async {
+  Future<void> _openDateTimePicker(
+    DateTime time,
+    Function(DateTime) onClick,
+  ) async {
     final firstDate = DateTime.now().year - 2;
     final lastDate = DateTime.now().year + 2;
     final DateTime? pickedDateTime = await showDatePicker(
@@ -601,9 +620,7 @@ class _AddEditScreenState extends State<AddEditScreen>
     );
 
     if (pickedDateTime != null) {
-      setState(() {
-        selectedDateTime = pickedDateTime;
-      });
+      onClick(pickedDateTime);
     }
   }
 

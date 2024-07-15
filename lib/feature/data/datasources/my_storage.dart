@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -495,6 +497,60 @@ class ExpenseStorage {
       }
     }
     return models;
+  }
+
+  Future<List<ExpenseModel>> getMonthsByYearId(
+    DateTime yearTime,
+    String type,
+  ) async {
+    final db = await instance.database;
+
+    List<ExpenseModel> totalNumber = [];
+
+    // Fetch the year by yearTime
+    final yearMaps = await db.query(
+      ExpenseFields.yearTableName,
+      where: 'yearTime = ?',
+      whereArgs: [yearTime.toIso8601String()],
+    );
+
+    if (yearMaps.isEmpty) return [];
+
+    int yearId = yearMaps.first['id'] as int;
+
+    // Fetch all months for the given yearId
+    final monthMaps = await db.query(
+      ExpenseFields.monthTableName,
+      where: 'yearId = ?',
+      whereArgs: [yearId],
+    );
+
+    for (var monthMap in monthMaps) {
+      int monthId = monthMap['id'] as int;
+
+      // Fetch all days for the given monthId
+      final dayMaps = await db.query(
+        ExpenseFields.dayTableName,
+        where: 'monthId = ?',
+        whereArgs: [monthId],
+      );
+
+      for (var dayMap in dayMaps) {
+        int dayId = dayMap['id'] as int;
+
+        // Fetch all days for the given monthId
+        final expenseMaps = await db.query(
+          ExpenseFields.expenseTableName,
+          where: 'dayId = ? AND ${ExpenseFields.type} = ?',
+          whereArgs: [dayId, type],
+        );
+
+        for (var expenseMap in expenseMaps) {
+          totalNumber.add(ExpenseModel.fromJson(expenseMap));
+        }
+      }
+    }
+    return totalNumber;
   }
 
   Future close() async {
