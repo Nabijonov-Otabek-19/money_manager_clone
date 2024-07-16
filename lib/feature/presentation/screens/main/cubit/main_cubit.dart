@@ -94,7 +94,8 @@ class MainCubit extends Cubit<MainState> {
 
     final models = isYear
         ? await storage.getMonthsByYearId(
-            DateTime(DateTime.now().year), state.moneyType)
+            DateTime(state.selectedTime?.year ?? DateTime.now().year),
+            state.moneyType)
         : await storage.getModelsByType(
             state.moneyType,
             state.selectedTime ??

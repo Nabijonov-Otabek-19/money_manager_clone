@@ -27,6 +27,7 @@ class AppTranslation extends Translations {
           'Update': 'Update',
           'Details': 'Details',
           'Search': 'Search',
+          'All': 'All',
         },
         'ru_RU': {
           'Empty': 'Пустой',
@@ -52,6 +53,7 @@ class AppTranslation extends Translations {
           'Update': 'Обновлять',
           'Details': 'Подробности',
           'Search': 'Поиск',
+          'All': 'Все',
         },
         'uz_UZ': {
           'Empty': 'Bo\'sh',
@@ -77,6 +79,7 @@ class AppTranslation extends Translations {
           'Update': 'Yangilash',
           'Details': 'Tafsilotlar',
           'Search': 'Qidiruv',
+          'All': 'Barchasi',
         },
       };
 }

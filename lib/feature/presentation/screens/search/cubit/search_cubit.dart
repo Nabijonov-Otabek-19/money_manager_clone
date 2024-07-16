@@ -12,12 +12,12 @@ part 'search_cubit.freezed.dart';
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(const SearchState());
 
-  ExpenseStorage storage = ExpenseStorage.instance;
+  final ExpenseStorage _storage = ExpenseStorage.instance;
 
-  Future<void> searchBy(String note) async {
+  Future<void> searchBy(String note, String type) async {
     emit(state.copyWith(loadState: LoadState.loading));
 
-    final List<ExpenseModel> list = await storage.searchByNote(note);
+    final List<ExpenseModel> list = await _storage.searchByNote(note, type);
 
     emit(state.copyWith(list: list, loadState: LoadState.loaded));
   }

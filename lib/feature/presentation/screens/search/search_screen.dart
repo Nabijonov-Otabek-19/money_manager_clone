@@ -22,6 +22,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   final cubit = SearchCubit();
 
+  final List<String> list = ["All".tr, "Expense".tr, "Income".tr];
+  int currentIndex = 0;
+
   @override
   void dispose() {
     cubit.close();
@@ -78,7 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     onTap: () async {
                       final text = searchController.text.trim();
                       if (text.isNotEmpty) {
-                        await cubit.searchBy(text);
+                        await cubit.searchBy(text, list[currentIndex]);
                       }
                     },
                     child: Container(
@@ -87,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: const Color(AppColors.green),
+                        color: const Color(AppColors.blue),
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 1,
@@ -108,42 +111,113 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
-        body: BlocBuilder<SearchCubit, SearchState>(
-          buildWhen: (pr, cr) => pr.loadState != cr.loadState,
-          builder: (context, state) {
-            if (state.loadState == LoadState.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.list.isEmpty) {
-              return Center(
-                child: Image.asset(
-                  'empty3'.pngIcon,
-                  width: 140,
-                  height: 140,
-                ),
-              );
-            }
-            return ListView.builder(
-              itemCount: state.list.length,
+        body: Column(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(8),
-              itemBuilder: (context, index) {
-                final model = state.list[index];
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      "${"Type".tr}:",
+                      style: pmedium.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                  for (int i = 0; i < list.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: InkWell(
+                        splashColor: AppColors.transparent,
+                        highlightColor: AppColors.transparent,
+                        onTap: () async {
+                          if (currentIndex != i) {
+                            setState(() {
+                              currentIndex = i;
+                            });
+                            final text = searchController.text.trim();
+                            if (text.isNotEmpty) {
+                              await cubit.searchBy(text, list[currentIndex]);
+                            }
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: currentIndex == i
+                                ? Colors.blueAccent.shade700
+                                : Colors.lightBlueAccent.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          child: Center(
+                            child: Text(
+                              list[i],
+                              style: pmedium.copyWith(
+                                fontSize: 16,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            BlocBuilder<SearchCubit, SearchState>(
+              buildWhen: (pr, cr) => pr.loadState != cr.loadState,
+              builder: (context, state) {
+                if (state.loadState == LoadState.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Expanded(
+                  child: BlocBuilder<SearchCubit, SearchState>(
+                    buildWhen: (pr, cr) => pr.loadState != cr.loadState,
+                    builder: (context, state) {
+                      if (state.loadState == LoadState.loading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (state.list.isEmpty) {
+                        return Center(
+                          child: Image.asset(
+                            'empty3'.pngIcon,
+                            width: 140,
+                            height: 140,
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        itemCount: state.list.length,
+                        padding: const EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          final model = state.list[index];
 
-                return InkWell(
-                  splashColor: AppColors.transparent,
-                  highlightColor: AppColors.transparent,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/detail',
-                      arguments: model.id,
-                    );
-                  },
-                  child: expanseItem(model),
+                          return InkWell(
+                            splashColor: AppColors.transparent,
+                            highlightColor: AppColors.transparent,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/detail',
+                                arguments: model.id,
+                              );
+                            },
+                            child: expanseItem(model),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 );
               },
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

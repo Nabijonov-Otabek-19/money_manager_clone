@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -343,16 +344,24 @@ class ExpenseStorage {
     return 1;
   }
 
-  Future<List<ExpenseModel>> searchByNote(String note) async {
+  Future<List<ExpenseModel>> searchByNote(String note, String type) async {
     final db = await instance.database;
 
     List<ExpenseModel> list = [];
 
+    String query = type != "All".tr
+        ? 'LOWER(note) LIKE ? AND ${ExpenseFields.type} = ?'
+        : 'LOWER(note) LIKE ?';
+
+    final args = type != "All".tr
+        ? ['%${note.toLowerCase()}%', type]
+        : ['%${note.toLowerCase()}%'];
+
     // Perform the search query
     final maps = await db.query(
       ExpenseFields.expenseTableName,
-      where: 'LOWER(note) LIKE ?',
-      whereArgs: ['%${note.toLowerCase()}%'],
+      where: query,
+      whereArgs: args,
     );
 
     if (maps.isEmpty) return [];
