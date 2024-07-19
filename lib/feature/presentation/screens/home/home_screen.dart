@@ -424,8 +424,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SlidableAction(
             onPressed: (context) async {
-              await mainCubit.deleteModel(model.id ?? -1);
-              await refresh();
+              await _openSimpleDialog(model.id ?? -1);
             },
             borderRadius: const BorderRadius.only(
               topRight: Radius.circular(12),
@@ -492,6 +491,89 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _openSimpleDialog(int modelId) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          surfaceTintColor: AppColors.transparent,
+          backgroundColor: Theme.of(context).cardColor,
+          contentPadding: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            "Are you sure to delete ?",
+            style: pmedium.copyWith(
+              fontSize: 18,
+              color: Theme.of(context).canvasColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      await mainCubit.deleteModel(modelId);
+                      if (context.mounted) Navigator.pop(context);
+                      await refresh();
+                    },
+                    child: Text(
+                      "Delete",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

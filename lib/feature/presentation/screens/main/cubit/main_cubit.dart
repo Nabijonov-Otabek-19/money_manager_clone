@@ -148,4 +148,9 @@ class MainCubit extends Cubit<MainState> {
   void changeType(String type) {
     emit(state.copyWith(moneyType: type));
   }
+
+  Future<void> clearDatabase()async{
+    await storage.clearAllData();
+    await refreshData();
+  }
 }

@@ -17,7 +17,7 @@ class ExpenseStorage {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('expenses.db');
+    _database = await _initDB(ExpenseFields.dbName);
     return _database!;
   }
 
@@ -457,7 +457,9 @@ class ExpenseStorage {
   }
 
   Future<List<ExpenseModel>> getModelsByType(
-      String type, DateTime monthTime) async {
+    String type,
+    DateTime monthTime,
+  ) async {
     final db = await instance.database;
 
     List<ExpenseModel> models = [];
@@ -560,6 +562,21 @@ class ExpenseStorage {
       }
     }
     return totalNumber;
+  }
+
+  Future<void> clearAllData() async {
+    final db = await instance.database;
+
+    final tables = [
+      ExpenseFields.yearTableName,
+      ExpenseFields.monthTableName,
+      ExpenseFields.dayTableName,
+      ExpenseFields.expenseTableName,
+    ];
+
+    for (var table in tables) {
+      await db.delete(table);
+    }
   }
 
   Future close() async {

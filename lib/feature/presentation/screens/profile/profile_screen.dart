@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:money_manager_clone/core/extensions/my_extensions.dart';
 import 'package:money_manager_clone/feature/data/datasources/app_preference.dart';
 import 'package:money_manager_clone/feature/presentation/themes/colors.dart';
 import 'package:money_manager_clone/feature/presentation/themes/fonts.dart';
+
+import '../main/cubit/main_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -23,6 +26,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String icon = "guest";
   String userName = "";
+
+  late MainCubit mainCubit;
 
   final List<String> languages = ["Русский", "O'zbek", "English"];
 
@@ -52,6 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     userName = preferences.userName;
     icon = preferences.userIcon;
     _controller.text = preferences.userName;
+
+    mainCubit = context.read<MainCubit>();
 
     return Scaffold(
       appBar: AppBar(
@@ -106,6 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildThemeChangeItem(),
                 const SizedBox(height: 4),
                 _buildLanguageChangeItem(),
+                const SizedBox(height: 4),
+                _buildClearDatabaseItem(),
+                const SizedBox(height: 4),
               ],
             ),
           ),
@@ -260,6 +270,125 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderSide: const BorderSide(color: Colors.blue, width: 0.8),
         borderRadius: BorderRadius.circular(10),
       ),
+    );
+  }
+
+  Widget _buildClearDatabaseItem() {
+    return InkWell(
+      splashColor: AppColors.transparent,
+      highlightColor: AppColors.transparent,
+      onTap: () async {
+        await _openSimpleDialog();
+      },
+      child: Card(
+        elevation: 1,
+        color: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 12,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Clear Data".tr,
+                style: pmedium.copyWith(
+                  fontSize: 16,
+                  color: Theme.of(context).canvasColor,
+                ),
+              ),
+              const Icon(Icons.keyboard_arrow_right, size: 30),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openSimpleDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          surfaceTintColor: AppColors.transparent,
+          backgroundColor: Theme.of(context).cardColor,
+          contentPadding: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            "Are you sure to delete all data ?",
+            style: pmedium.copyWith(
+              fontSize: 18,
+              color: Theme.of(context).canvasColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      await mainCubit.clearDatabase();
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Delete",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 

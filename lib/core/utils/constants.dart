@@ -1,6 +1,8 @@
 import '../../feature/presentation/themes/colors.dart';
 
 class ExpenseFields {
+  static const dbName = "expenses.db";
+
   static const expenseTableName = "expenses";
   static const dayTableName = "days";
   static const monthTableName = "months";

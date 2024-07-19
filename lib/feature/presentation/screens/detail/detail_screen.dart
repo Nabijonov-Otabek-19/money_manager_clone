@@ -75,7 +75,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(80),
                           child: ColoredBox(
-                            color: Color(state.model?.color ?? AppColors.orange),
+                            color:
+                                Color(state.model?.color ?? AppColors.orange),
                             child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: SvgPicture.asset(
@@ -240,8 +241,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         Expanded(
                           child: TextButton(
                             onPressed: () async {
-                              await cubit.deleteModel(state.model!.id ?? -1);
-                              Navigator.pop(context, true);
+                              await _openSimpleDialog(state.model?.id ?? -1);
+                              if (context.mounted) Navigator.pop(context, true);
                             },
                             child: Text(
                               "Delete".tr,
@@ -261,6 +262,88 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _openSimpleDialog(int modelId) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          surfaceTintColor: AppColors.transparent,
+          backgroundColor: Theme.of(context).cardColor,
+          contentPadding: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            "Are you sure to delete ?",
+            style: pmedium.copyWith(
+              fontSize: 18,
+              color: Theme.of(context).canvasColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () async {
+                      await cubit.deleteModel(modelId);
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "Delete",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(45),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "Cancel",
+                      style: pregular.copyWith(
+                        fontSize: 16,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
