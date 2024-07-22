@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../screens.dart';
 import 'cubit/main_cubit.dart';
@@ -57,18 +58,18 @@ class _MainScreenState extends State<MainScreen> {
                 type: BottomNavigationBarType.fixed,
                 currentIndex: state.selectedIndex,
                 onTap: (value) => cubit.onTappedScreen(value),
-                items: const [
+                items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: "Home",
+                    icon: const Icon(Icons.home),
+                    label: "Home".tr,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.add_chart),
-                    label: "Chart",
+                    icon: const Icon(Icons.add_chart),
+                    label: "Chart".tr,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    label: "Profile",
+                    icon: const Icon(Icons.person),
+                    label: "Profile".tr,
                   ),
                 ],
               ),

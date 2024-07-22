@@ -141,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               borderRadius: BorderRadius.circular(15),
             ),
             title: Text(
-              "Change Info",
+              "Change_info".tr,
               style: pmedium.copyWith(
                 fontSize: 20,
                 color: Theme.of(context).canvasColor,
@@ -296,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Clear Data".tr,
+                "Clear_data".tr,
                 style: pmedium.copyWith(
                   fontSize: 16,
                   color: Theme.of(context).canvasColor,
@@ -322,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           title: Text(
-            "Are you sure to delete all data ?",
+            "Attention".tr,
             style: pmedium.copyWith(
               fontSize: 18,
               color: Theme.of(context).canvasColor,
@@ -330,7 +330,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             textAlign: TextAlign.center,
           ),
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+            Text(
+              "Delete_all_data_msg".tr,
+              style: pregular.copyWith(
+                fontSize: 16,
+                color: Theme.of(context).canvasColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -351,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (context.mounted) Navigator.pop(context);
                     },
                     child: Text(
-                      "Delete",
+                      "Delete".tr,
                       style: pregular.copyWith(
                         fontSize: 16,
                         color: Theme.of(context).canvasColor,
@@ -376,7 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pop(context);
                     },
                     child: Text(
-                      "Cancel",
+                      "Cancel".tr,
                       style: pregular.copyWith(
                         fontSize: 16,
                         color: Theme.of(context).canvasColor,

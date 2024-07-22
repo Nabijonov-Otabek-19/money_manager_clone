@@ -277,7 +277,7 @@ class _DetailScreenState extends State<DetailScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           title: Text(
-            "Are you sure to delete ?",
+            "Attention".tr,
             style: pmedium.copyWith(
               fontSize: 18,
               color: Theme.of(context).canvasColor,
@@ -285,7 +285,16 @@ class _DetailScreenState extends State<DetailScreen> {
             textAlign: TextAlign.center,
           ),
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+            Text(
+              "Delete_data_msg".tr,
+              style: pregular.copyWith(
+                fontSize: 16,
+                color: Theme.of(context).canvasColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -306,7 +315,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     child: Text(
-                      "Delete",
+                      "Delete".tr,
                       style: pregular.copyWith(
                         fontSize: 16,
                         color: Theme.of(context).canvasColor,
@@ -331,7 +340,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     child: Text(
-                      "Cancel",
+                      "Cancel".tr,
                       style: pregular.copyWith(
                         fontSize: 16,
                         color: Theme.of(context).canvasColor,
