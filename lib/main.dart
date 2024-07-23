@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:money_manager_clone/feature/presentation/screens/splash/splash_screen.dart';
 import 'package:money_manager_clone/feature/presentation/routes/app_routes.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'core/extensions/my_extensions.dart';
 import 'core/modules/app_module.dart';
@@ -20,6 +21,9 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Only call clearSavedSettings() during testing to reset internal values.
+  //await Upgrader.clearSavedSettings(); // REMOVE this for release builds
 
   await Hive.initFlutter();
   await StorageModule.initBoxes();
@@ -96,7 +100,22 @@ class _MyAppState extends State<MyApp> {
             );
           },
           onGenerateRoute: (settings) => RouteManager.generateRoute(settings),
-          home: const SplashScreen(),
+          home: UpgradeAlert(
+            upgrader: Upgrader(
+              debugLogging: true,
+              debugDisplayAlways: true,
+              languageCode: 'en',
+              messages: UpgraderMessages(code: 'en'),
+              countryCode: "UZ",
+              durationUntilAlertAgain: const Duration(days: 1),
+            ),
+            showLater: true,
+            showIgnore: false,
+            showReleaseNotes: true,
+            shouldPopScope: () => true,
+            dialogStyle: UpgradeDialogStyle.material,
+            child: const SplashScreen(),
+          ),
         );
       },
     );
