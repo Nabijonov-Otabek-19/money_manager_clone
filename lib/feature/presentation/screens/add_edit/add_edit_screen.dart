@@ -302,7 +302,7 @@ class _AddEditScreenState extends State<AddEditScreen>
                                 Icons.camera_alt_outlined,
                                 size: 26,
                                 color: context.isDarkThemeMode
-                                    ? Colors.grey
+                                    ? Colors.white
                                     : Colors.black45,
                               ),
                       ),
@@ -629,12 +629,15 @@ class _AddEditScreenState extends State<AddEditScreen>
       labelText: label,
       labelStyle: pregular.copyWith(
         fontSize: 14,
-        color: Colors.grey,
+        color: context.isDarkThemeMode ? AppColors.white : Colors.grey,
       ),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       filled: true,
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.grey, width: 0.8),
+        borderSide: BorderSide(
+          color: context.isDarkThemeMode ? AppColors.white : Colors.grey,
+          width: 0.8,
+        ),
         borderRadius: BorderRadius.circular(10),
       ),
       focusedBorder: OutlineInputBorder(

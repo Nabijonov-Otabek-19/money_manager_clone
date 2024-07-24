@@ -27,7 +27,6 @@ dependencies:
   animated_digit: ^3.2.3
   image_picker: ^1.1.2
   mat_month_picker_dialog: ^1.1.2
-  upgrader: ^10.3.0
 
 
 dev_dependencies:
